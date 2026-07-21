@@ -78,12 +78,15 @@ reference file(s)".
 | Write client tests and run the dev-loop self-check — unit/component/UI, coverage, screenshot verification | `testing.md` |
 | Internationalize — logical properties, Intl APIs, direction/language, text-expansion resilience | `i18n.md` |
 | Consume a design handoff — read handoff.yaml and DESIGN.md, wire tokens, dark mode | `design-handoff-and-tokens.md` |
+| Structure or restructure a client codebase — folders, feature boundaries, import discipline, token file layout | `client-architecture.md` |
 
 ### Platform overlay
 
 | When the platform is | Read |
 |---|---|
 | The web (default substrate) | `web-platform-css.md` + `web-platform-runtime.md` |
+| The web, polishing or hardening CSS details — scrollbars, stacking, overflow, numeric alignment | `css-craft.md` (supplementary web read) |
+| The web, vanilla DOM/browser-API mechanics — events, observers, clipboard, timing, measurement | `js-dom-craft.md` (supplementary web read) |
 | Native iOS / iPadOS | `swiftui.md` (+ `swift-concurrency-and-testing.md` when async or tests are involved) |
 | Native Android | `compose.md` (+ `kotlin-and-compose-state.md` when state, coroutines, or Flow are involved) |
 | Cross-platform native (React Native) | `react-native.md` |

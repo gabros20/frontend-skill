@@ -60,3 +60,17 @@ relevant web-stack overlay (e.g. `nextjs.md` for image/font primitives) if the f
 layer. **Produces**: a diagnosed root cause per metric, the applied fix (image/font loading,
 code-splitting, virtualization, or rendering-cost fix), and a before/after check against the
 canonical CWV thresholds.
+
+## Restructure a growing client codebase
+
+```
+Our React app's src/ has become a dumping ground — components, hooks, and utils folders with
+cross-imports everywhere. Restructure it around feature boundaries with clean import rules,
+and organize the design-token files while you're at it.
+```
+
+**Routes**: `client-architecture.md` (primary); `react-components-and-state.md` if component
+boundaries move, `design-handoff-and-tokens.md` for token values (file layout lives in the
+architecture ref). **Produces**: a feature-vs-type decision for the codebase's size, the
+unidirectional shared → features → app import layering with per-feature public APIs, colocation
+of tests/stories/styles, and a token-file layout that matches the delivery pipeline.
