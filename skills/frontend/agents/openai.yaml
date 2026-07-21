@@ -1,6 +1,6 @@
 interface:
   display_name: "Frontend Engineering"
-  short_description: "Production client code for web, iOS, and Android surfaces"
-  default_prompt: "Use $frontend to TODO: provide one short, realistic starting request."
+  short_description: "Production frontend for websites, web apps, iOS, and Android"
+  default_prompt: "Use $frontend to build an accessible Next.js signup form with every state and tests."
 policy:
   allow_implicit_invocation: true

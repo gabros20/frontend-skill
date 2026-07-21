@@ -14,3 +14,6 @@ skills-lock.json
 # the installer also symlinks into the published skills/ dir here — keep those out too
 skills/mediabunny
 skills/remotion-*
+
+# orchestration workspace (local only)
+.orchestrate/

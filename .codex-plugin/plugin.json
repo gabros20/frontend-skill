@@ -1,7 +1,7 @@
 {
   "name": "frontend-skill",
   "version": "1.0.0",
-  "description": "Production client code for web, iOS, and Android surfaces",
+  "description": "Implement production frontend code for websites, web apps, iOS, and Android: components, state, data fetching, forms, accessibility, performance, and client tests, consuming a design handoff.",
   "author": {
     "name": "gabros20",
     "url": "https://github.com/gabros20"
@@ -9,17 +9,34 @@
   "homepage": "https://frontend-skill.vercel.app",
   "repository": "https://github.com/gabros20/frontend-skill",
   "license": "MIT",
-  "keywords": ["agent-skill", "frontend"],
+  "keywords": [
+    "agent-skill",
+    "frontend",
+    "react",
+    "nextjs",
+    "tailwind",
+    "shadcn",
+    "swiftui",
+    "jetpack-compose",
+    "react-native",
+    "accessibility",
+    "performance",
+    "testing",
+    "state-management",
+    "design-handoff"
+  ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Frontend Engineering",
-    "shortDescription": "Production client code for web, iOS, and Android surfaces",
-    "longDescription": "Production client code for web, iOS, and Android surfaces",
+    "shortDescription": "Production frontend code for websites, web apps, iOS, and Android",
+    "longDescription": "Implement and review production client code across websites, web apps, iOS, and Android: component and state architecture, routing, data fetching, forms and auth flows, responsive and accessible UI, the full state set, client security, performance, and unit/component/UI tests. Covers React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and React Native, and consumes a design handoff (handoff.yaml and DESIGN.md).",
     "developerName": "gabros20",
     "category": "Productivity",
     "capabilities": [],
     "defaultPrompt": [
-      "Use $frontend to TODO: provide one short starter request."
+      "Use $frontend to build an accessible Next.js signup form with every state and tests.",
+      "Use $frontend to implement a SwiftUI settings screen that conforms to the HIG.",
+      "Use $frontend to wire a design handoff into a React and Tailwind component with tokens."
     ],
     "brandColor": "#0EA5E9"
   }
