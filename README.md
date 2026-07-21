@@ -115,10 +115,10 @@ Documentation may use `/frontend` as shorthand. Other clients may expose a slash
 experience/visual design, system architecture, marketing/SEO, or independent release verification
 unless the request also requires frontend implementation.
 
-## The 22 references
+## The 24 references
 
 The router selects from a primary-job set, a platform overlay, and a web stack overlay. It loads
-the smallest sufficient set — never all 22.
+the smallest sufficient set — never all 24.
 
 **Primary job**
 
@@ -145,6 +145,8 @@ the smallest sufficient set — never all 22.
 | [compose.md](skills/frontend/references/compose.md) | Material 3 conformance in code |
 | [kotlin-and-compose-state.md](skills/frontend/references/kotlin-and-compose-state.md) | Kotlin doctrine and Compose state/recomposition, added when state, coroutines, or Flow are involved |
 | [react-native.md](skills/frontend/references/react-native.md) | React Native as the cross-platform stack under the native mandate |
+| [css-craft.md](skills/frontend/references/css-craft.md) | Defensive CSS craft: scrollbar control, grid stacking, sticky failure causes, aspect-ratio fallbacks, tabular numerals |
+| [js-dom-craft.md](skills/frontend/references/js-dom-craft.md) | Vanilla DOM/browser-API mechanics: delegation, AbortController cleanup, observers, timing, clipboard, measurement |
 
 **Web stack overlay** (only when the platform is web and the project names or uses the stack)
 
@@ -153,7 +155,7 @@ the smallest sufficient set — never all 22.
 | [react-components-and-state.md](skills/frontend/references/react-components-and-state.md) | Composition, hook discipline, you-might-not-need-effect, dependency correctness |
 | [react-rendering-and-rsc.md](skills/frontend/references/react-rendering-and-rsc.md) | Memo-defeat family, RSC serialization boundary, hydration, code-split shape |
 | [nextjs.md](skills/frontend/references/nextjs.md) | File conventions, RSC/server-actions, caching model, image/font/link primitives |
-| [data-fetching-libraries.md](skills/frontend/references/data-fetching-libraries.md) | staleTime/gcTime, optimistic 3-step, loader/action APIs, invalidation discipline |
+| [data-fetching-libraries.md](skills/frontend/references/data-fetching-libraries.md) | The dedup/cache/revalidate principle plus pointers to each library's own docs and shipped skills |
 | [tailwind.md](skills/frontend/references/tailwind.md) | v4 `@theme` canonical (v3 compat), `cn`/twMerge/CVA, the postcss trap |
 | [shadcn.md](skills/frontend/references/shadcn.md) | Registry/CLI/ownership model, composition recipes, official-library selection table, icon discipline |
 
@@ -204,7 +206,7 @@ prose. Full attribution and licenses:
 ```text
 .codex-plugin/plugin.json  Codex plugin and release metadata
 AGENTS.md / CLAUDE.md      repository and client-specific maintainer guidance
-skills/frontend/           portable runtime skill and client metadata (22 references)
+skills/frontend/           portable runtime skill and client metadata (24 references)
 evals/                     activation, traversal, output, and compression fixtures
 docs/                      installation, usage, and recipes
 site/                      visual guide (deployed to frontendengskill.vercel.app)

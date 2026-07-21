@@ -41,7 +41,7 @@ before writing the affected code:
    conventions win.
 
 That "read only what you need" discipline is the whole point. A one-file accessibility fix loads
-`accessibility.md`, not all 22 references.
+`accessibility.md`, not all 24 references.
 
 ### Declared bundles
 
