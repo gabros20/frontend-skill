@@ -20,6 +20,9 @@ Produces:
 - Apache-2.0 (attribution required)
 - Modified MIT
 - MIT (attribution)
+- CC0-1.0 (public domain)
+- CC BY 4.0 (attribution required)
+- WTFPL (no attribution required)
 - No-license (facts re-expressed only)
 - Evaluated, not adopted as a target
 - Underlying standards and references cited
@@ -116,6 +119,36 @@ provenance in more detail.
   `web-platform-runtime.md`.
 - **web-quality-skills / accessibility skill** — WCAG 2.2 new criteria (focus-not-obscured),
   visually-hidden CSS, and live-region re-trigger recipe. Drawn into `accessibility.md`.
+- **yuschick/stylelint-plugin-defensive-css** — `require-scrollbar-gutter` and
+  `require-overscroll-behavior` rule shapes (per-axis, exempt on `overflow: hidden`) and
+  `no-user-select-none`'s narrow-exception framing. Drawn into `css-craft.md`.
+- **phuocng/csslayout** and **phuocng/frontend-tips** — masonry/grid-pattern corroboration and the
+  `currentColor` reuse snippet. Drawn into `css-craft.md`.
+- **camsong/You-Dont-Need-jQuery** — DOM insertion APIs, measurement math (offsetHeight/
+  clientHeight/getBoundingClientRect), `readyState` guard. Drawn into `js-dom-craft.md`.
+- **you-dont-need/You-Dont-Need-Lodash-Underscore** — `Object.groupBy`, optional-chaining deep-get,
+  `Array.prototype.at`/`includes` traps. Drawn into `js-dom-craft.md`.
+- **lydiahallie/javascript-questions** — the microtask/macrotask worked-ordering example. Drawn into
+  `js-dom-craft.md`.
+
+## CC0-1.0 (public domain; verbatim reuse permitted)
+
+- **AllThingsSmitty/css-protips** — `aspect-ratio` plus the legacy padding-top intrinsic-ratio
+  fallback, `pointer-events: none` on disabled controls, `currentColor` reuse. Drawn into
+  `css-craft.md`.
+
+## CC BY 4.0 (attribution required — credit Chalarangelo/30-seconds-of-code)
+
+- **Chalarangelo/30-seconds-of-code** — `structuredClone` vs. JSON/hand-rolled comparison table,
+  `AbortController` fetch-cancellation shape, clipboard write-plus-legacy-fallback,
+  FormData/URLSearchParams one-liners, `textContent` vs. `innerText`, passive-scroll-listener
+  performance note, `ResizeObserver`/`IntersectionObserver`/`MutationObserver` lifecycle shape.
+  Drawn into `js-dom-craft.md`.
+
+## WTFPL (no attribution required)
+
+- **denysdovhan/wtfjs** — `Array.prototype.sort()`'s lexicographic default, `parseInt` without an
+  explicit radix. Drawn into `js-dom-craft.md`.
 
 ## No-license (facts re-expressed only, never verbatim prose or code)
 
@@ -137,6 +170,17 @@ copied.
 - **safari-mobile-optimization**, **transparent-web-video**, **scroll-driven-video** — iOS Safari
   viewport/chrome hardening and web-video encoding/serving facts, re-expressed (scroll-scrub
   choreography routes OUT to animation). Drawn into `web-platform-runtime.md`.
+- **defensivecss.dev (Ahmad Shadeed)** — no license visible; the scrollbar native-overlay default
+  and the `position: sticky`-in-grid `align-self: stretch` failure, re-expressed and credited to
+  Ahmad Shadeed. Drawn into `css-craft.md`.
+- **X/Twitter posts (live search) and their linked blog posts** — proprietary platform content, no
+  open license; every fact re-expressed and cited to the underlying standard or article rather than
+  quoted, short functional CSS/JS snippets reconstructed independently. Convergent corroboration for
+  `overscroll-behavior:contain`, `scrollbar-gutter:stable`, and `tabular-nums` in `css-craft.md`;
+  `AbortSignal.timeout`/`AbortSignal.any`, the `WeakMap` DOM-metadata pattern, `BroadcastChannel` vs.
+  the `storage` event, the `visibilitychange`/`pagehide`/`sendBeacon` reliability framing (citing
+  nicj.net's beaconing study), and the `Intl.Segmenter` grapheme-truncation pattern in
+  `js-dom-craft.md` and `i18n.md`.
 
 ## Evaluated, not adopted as a target
 

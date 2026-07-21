@@ -71,9 +71,15 @@ Add the one substrate the request targets. At most one. Native overrides web def
 | When the platform is | Read | Expected contribution |
 |---|---|---|
 | The web (default substrate) | [Web platform CSS](references/web-platform-css.md) + [Web platform runtime](references/web-platform-runtime.md) | Modern CSS layout and breakpoints; SPA routing, storage, service workers, gestures, Safari/viewport hardening, real-time transport, View Transitions wiring |
+| Polish or harden CSS details — scrollbars, stacking, overflow, numeric alignment, defensive patterns | [CSS craft](references/css-craft.md) | Scrollbar/overscroll/grid single-cell-stacking patterns, sticky-in-grid failure, aspect-ratio fallback and gotcha, tabular numerals, one-line modern layouts |
+| Vanilla DOM and browser-API mechanics — events, observers, clipboard, timing, measurement, cross-tab | [JS DOM craft](references/js-dom-craft.md) | Event delegation, AbortController-as-cleanup, microtask/macrotask/rAF timing, structuredClone matrix, observer gotchas, clipboard/FormData/DOM measurement, cross-tab sync |
 | Native iOS / iPadOS | [SwiftUI](references/swiftui.md) (+ [Swift concurrency and testing](references/swift-concurrency-and-testing.md) when async or tests are involved) | SwiftUI/HIG conformance in code; Swift concurrency correctness and Swift Testing |
 | Native Android | [Compose](references/compose.md) (+ [Kotlin and Compose state](references/kotlin-and-compose-state.md) when state, coroutines, or Flow are involved) | Material 3 conformance in code; Kotlin doctrine and Compose state/recomposition |
 | Cross-platform native (React Native) | [React Native](references/react-native.md) | RN as the cross-platform stack under the native mandate; SwiftUI/Compose remain the canonical native stacks |
+
+`css-craft.md` and `js-dom-craft.md` are supplementary web-substrate reads, not alternate
+substrates — add either alongside the web row (not instead of it) when the request specifically
+needs that craft-level polish; they don't count against the "at most one" substrate rule above.
 
 ### Web stack overlay
 
