@@ -1,0 +1,16 @@
+.DS_Store
+node_modules/
+.vercel
+.env*
+__pycache__/
+*.pyc
+
+# dev-time installs of third-party AI skills used while building the site/animation
+# (e.g. `npx skills add remotion-dev/skills`) — reinstall when needed, remove when done
+.agents/
+skills-lock.json
+.claude/skills/mediabunny
+.claude/skills/remotion-*
+# the installer also symlinks into the published skills/ dir here — keep those out too
+skills/mediabunny
+skills/remotion-*

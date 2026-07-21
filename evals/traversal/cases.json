@@ -1,0 +1,8 @@
+[
+  {
+    "id": "primary-route",
+    "prompt": "TODO: add a request that selects one reference.",
+    "expected_references": ["references/example.md"],
+    "forbidden_references": []
+  }
+]

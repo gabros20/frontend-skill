@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>__SKILL_NAME__ — OG image source</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{
+    background:#12151d;
+    background-image:
+      radial-gradient(circle at 82% 18%, color-mix(in srgb, __ACCENT_DARK__ 16%, transparent), transparent 42%),
+      radial-gradient(circle at 8% 92%, color-mix(in srgb, __ACCENT_DARK__ 10%, transparent), transparent 46%);
+    color:#e6eaf3;
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    position:relative;
+  }
+  .frame{
+    position:absolute; inset:40px;
+    border:1px solid #2b3245;
+    border-radius:18px;
+  }
+  .content{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:0 96px;
+  }
+  .eyebrow{
+    font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif;
+    text-transform:uppercase; letter-spacing:.18em; font-weight:600;
+    font-size:19px; color:#93a0b8; margin-bottom:22px;
+  }
+  h1{
+    font-size:104px; font-weight:500; letter-spacing:-.02em; line-height:1;
+    margin-bottom:26px;
+  }
+  h1 .sl{color:__ACCENT_DARK__}
+  .sub{
+    font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif;
+    font-size:28px; color:#93a0b8; letter-spacing:.01em; margin-bottom:44px;
+  }
+  .chain{display:flex; align-items:center; gap:12px; margin-bottom:16px}
+  .stages{
+    font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif;
+    font-size:17px; color:#5d6a85; letter-spacing:.03em;
+  }
+  .stages b{color:#93a0b8; font-weight:600}
+</style>
+</head>
+<body>
+  <div class="frame"></div>
+  <div class="content">
+    <div class="eyebrow"><!-- TODO: one short descriptor, e.g. "web design · art-direction · frontend-build" --></div>
+    <h1><span class="sl">/</span>__SKILL_NAME__</h1>
+    <div class="sub">__SKILL_TAGLINE__</div>
+    <div class="chain">
+      <svg width="420" height="34" viewBox="0 0 420 34" aria-hidden="true">
+        <circle cx="6" cy="17" r="5" fill="__ACCENT_DARK__"/>
+        <line x1="12" y1="17" x2="66" y2="17" stroke="#5d6a85" stroke-width="1.6"/>
+        <circle cx="72" cy="17" r="5" fill="#5d6a85"/>
+        <line x1="78" y1="17" x2="132" y2="17" stroke="#5d6a85" stroke-width="1.6"/>
+        <circle cx="138" cy="17" r="5" fill="#5d6a85"/>
+        <line x1="144" y1="17" x2="198" y2="17" stroke="#5d6a85" stroke-width="1.6"/>
+        <circle cx="204" cy="17" r="5" fill="#5d6a85"/>
+        <line x1="210" y1="17" x2="264" y2="17" stroke="#5d6a85" stroke-width="1.6"/>
+        <circle cx="270" cy="17" r="5" fill="#5d6a85"/>
+        <line x1="276" y1="17" x2="330" y2="17" stroke="#5d6a85" stroke-width="1.6"/>
+        <circle cx="336" cy="17" r="5" fill="#5d6a85"/>
+      </svg>
+    </div>
+    <!-- TODO: replace with real stage/strategy labels, e.g. <b>direction</b> → <b>structure</b> → … -->
+    <div class="stages">TODO stage 1 → TODO stage 2 → TODO stage 3</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+[
+  {
+    "id": "representative-ablation",
+    "prompt": "TODO: add a request that exercises a load-bearing instruction.",
+    "variants": ["no-skill", "current", "compressed-candidate"],
+    "preserve": ["task success", "safety", "artifact completeness", "required-reference recall"]
+  }
+]

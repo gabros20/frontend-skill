@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# Regression test for safe template rendering and optional publishing profiles.
+set -euo pipefail
+
+root="$(cd "$(dirname "$0")/.." && pwd)"
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
+
+mkdir -p "$tmp/full" "$tmp/core"
+tar -C "$root" --exclude=.git --exclude=node_modules --exclude=.vercel -cf - . | tar -C "$tmp/full" -xf -
+tar -C "$root" --exclude=.git --exclude=node_modules --exclude=.vercel -cf - . | tar -C "$tmp/core" -xf -
+
+(
+  cd "$tmp/full"
+  ./scripts/init sample "Design & Build" "Design / build & ship workflows" \
+    "#336699" "#6699cc" 220 --site --video >/dev/null
+)
+
+critical=(
+  "$tmp/full/skills/sample"
+  "$tmp/full/.codex-plugin"
+  "$tmp/full/evals"
+  "$tmp/full/install.sh"
+  "$tmp/full/CHANGELOG.md"
+  "$tmp/full/AGENTS.md"
+  "$tmp/full/CLAUDE.md"
+)
+if grep -R -nE '__SKILL(_[A-Z]+)?__|__REPO_NAME__|__ACCENT_(LIGHT|DARK|HUE)__|__YEAR__' "${critical[@]}"; then
+  echo "test-init: unresolved token after punctuation-safe rendering" >&2
+  exit 1
+fi
+
+grep -q '"name": "sample-skill"' "$tmp/full/.codex-plugin/plugin.json"
+grep -q "Use \$sample" "$tmp/full/skills/sample/agents/openai.yaml"
+[ -d "$tmp/full/site" ]
+[ -d "$tmp/full/remotion" ]
+
+(
+  cd "$tmp/core"
+  ./scripts/init sample "Core Skill" "Focused agent workflow guidance" \
+    "#336699" "#6699cc" 220 >/dev/null
+)
+[ ! -e "$tmp/core/site" ]
+[ ! -e "$tmp/core/remotion" ]
+[ ! -e "$tmp/core/vercel.json" ]
+
+# Core profile inside a real git work tree. Rendering modifies the tracked
+# site/remotion files before remove_tracked_path runs, so a plain `git rm`
+# would fail with "local modifications" — this exercises that path.
+mkdir -p "$tmp/git"
+tar -C "$root" --exclude=.git --exclude=node_modules --exclude=.vercel -cf - . | tar -C "$tmp/git" -xf -
+(
+  cd "$tmp/git"
+  git init -q
+  git config user.email test@example.com
+  git config user.name test
+  git add -A
+  git commit -qm init
+  ./scripts/init sample "Core Skill" "Focused agent workflow guidance" \
+    "#336699" "#6699cc" 220 >/dev/null
+)
+[ ! -e "$tmp/git/site" ]
+[ ! -e "$tmp/git/remotion" ]
+[ ! -e "$tmp/git/vercel.json" ]
+[ -d "$tmp/git/skills/sample" ]
+
+# count-skill-tokens must NOT be token-rendered: its guard sentinel has to stay
+# the literal __SKILL_NAME__, else it self-rejects any skill named the rendered
+# value. Assert the sentinel survived and the script runs against the pack.
+grep -q '__SKILL_NAME__' "$tmp/git/scripts/count-skill-tokens"
+( cd "$tmp/git" && ./scripts/count-skill-tokens >/dev/null )
+
+echo "test-init: OK — punctuation-safe rendering and core/site/video profiles work"

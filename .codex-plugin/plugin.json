@@ -1,0 +1,26 @@
+{
+  "name": "__REPO_NAME__",
+  "version": "1.0.0",
+  "description": "__SKILL_TAGLINE__",
+  "author": {
+    "name": "gabros20",
+    "url": "https://github.com/gabros20"
+  },
+  "homepage": "https://__REPO_NAME__.vercel.app",
+  "repository": "https://github.com/gabros20/__REPO_NAME__",
+  "license": "MIT",
+  "keywords": ["agent-skill", "__SKILL_NAME__"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "__SKILL_TITLE__",
+    "shortDescription": "__SKILL_TAGLINE__",
+    "longDescription": "__SKILL_TAGLINE__",
+    "developerName": "gabros20",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "Use $__SKILL_NAME__ to TODO: provide one short starter request."
+    ],
+    "brandColor": "__ACCENT_LIGHT__"
+  }
+}

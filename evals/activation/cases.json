@@ -1,0 +1,12 @@
+[
+  {
+    "id": "positive-explicit",
+    "prompt": "Use $__SKILL_NAME__ to TODO: add a realistic in-scope request.",
+    "should_trigger": true
+  },
+  {
+    "id": "negative-near-miss",
+    "prompt": "TODO: add a realistic request owned by the closest neighboring skill.",
+    "should_trigger": false
+  }
+]

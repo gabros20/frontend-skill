@@ -1,0 +1,168 @@
+#!/usr/bin/env bash
+# Instantiate this template into one independently packaged <skill>-skill repository.
+set -euo pipefail
+
+usage() {
+  cat >&2 <<'USAGE'
+usage: scripts/init <skill-name> "<Skill Title>" "<tagline>" \
+  <accent-light-hex> <accent-dark-hex> <oklch-hue> [--site] [--video]
+
+--site   Keep the optional static documentation site and Vercel configuration.
+--video  Keep the Remotion authoring project; implies --site.
+USAGE
+  exit 1
+}
+
+[ "$#" -ge 6 ] || usage
+
+skill_name="$1"
+skill_title="$2"
+skill_tagline="$3"
+accent_light="$4"
+accent_dark="$5"
+accent_hue="$6"
+shift 6
+
+keep_site=0
+keep_video=0
+for flag in "$@"; do
+  case "$flag" in
+    --site) keep_site=1 ;;
+    --video) keep_site=1; keep_video=1 ;;
+    *) usage ;;
+  esac
+done
+
+[[ "$skill_name" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]] || {
+  echo "init: <skill-name> must be kebab-case (got '$skill_name')" >&2
+  exit 1
+}
+[ "${#skill_name}" -le 64 ] || { echo "init: <skill-name> must be 64 characters or fewer" >&2; exit 1; }
+[ -n "$skill_title" ] || { echo "init: <Skill Title> must not be empty" >&2; exit 1; }
+[ -n "$skill_tagline" ] || { echo "init: <tagline> must not be empty" >&2; exit 1; }
+[[ "$skill_title" != *$'\n'* && "$skill_tagline" != *$'\n'* ]] || {
+  echo "init: title and tagline must each be one line" >&2
+  exit 1
+}
+[[ "$accent_light" =~ ^#[0-9a-fA-F]{6}$ ]] || {
+  echo "init: <accent-light-hex> must look like #rrggbb (got '$accent_light')" >&2
+  exit 1
+}
+[[ "$accent_dark" =~ ^#[0-9a-fA-F]{6}$ ]] || {
+  echo "init: <accent-dark-hex> must look like #rrggbb (got '$accent_dark')" >&2
+  exit 1
+}
+[[ "$accent_hue" =~ ^([0-9]|[1-9][0-9]|[12][0-9][0-9]|3[0-5][0-9]|360)$ ]] || {
+  echo "init: <oklch-hue> must be an integer from 0 through 360 (got '$accent_hue')" >&2
+  exit 1
+}
+
+root="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$root"
+
+placeholder_dir="skills/__SKILL_NAME__"
+if [ ! -d "$placeholder_dir" ]; then
+  echo "init: already instantiated — $placeholder_dir does not exist" >&2
+  exit 1
+fi
+
+repo_name="${skill_name}-skill"
+year="$(date +%Y)"
+
+echo "init: $skill_name — moving $placeholder_dir → skills/$skill_name"
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  git mv "$placeholder_dir" "skills/$skill_name"
+else
+  mv "$placeholder_dir" "skills/$skill_name"
+fi
+
+echo "init: rendering tokens safely across text files"
+export TEMPLATE_SKILL_NAME="$skill_name"
+export TEMPLATE_REPO_NAME="$repo_name"
+export TEMPLATE_SKILL_TITLE="$skill_title"
+export TEMPLATE_SKILL_TAGLINE="$skill_tagline"
+export TEMPLATE_ACCENT_LIGHT="$accent_light"
+export TEMPLATE_ACCENT_DARK="$accent_dark"
+export TEMPLATE_ACCENT_HUE="$accent_hue"
+export TEMPLATE_YEAR="$year"
+
+while IFS= read -r -d '' file; do
+  python3 - "$file" <<'PY'
+import os
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+try:
+    text = path.read_text(encoding="utf-8")
+except UnicodeDecodeError:
+    raise SystemExit(0)
+
+replacements = {
+    "__SKILL_NAME__": os.environ["TEMPLATE_SKILL_NAME"],
+    "__REPO_NAME__": os.environ["TEMPLATE_REPO_NAME"],
+    "__SKILL_TITLE__": os.environ["TEMPLATE_SKILL_TITLE"],
+    "__SKILL_TAGLINE__": os.environ["TEMPLATE_SKILL_TAGLINE"],
+    "__ACCENT_LIGHT__": os.environ["TEMPLATE_ACCENT_LIGHT"],
+    "__ACCENT_DARK__": os.environ["TEMPLATE_ACCENT_DARK"],
+    "__ACCENT_HUE__": os.environ["TEMPLATE_ACCENT_HUE"],
+    "__YEAR__": os.environ["TEMPLATE_YEAR"],
+}
+for token, value in replacements.items():
+    text = text.replace(token, value)
+path.write_text(text, encoding="utf-8")
+PY
+done < <(find . \
+  -path ./.git -prune -o \
+  -path ./node_modules -prune -o \
+  -path ./remotion/node_modules -prune -o \
+  -path ./scripts/init -prune -o \
+  -path ./scripts/check-sync -prune -o \
+  -path ./scripts/test-init -prune -o \
+  -path ./scripts/lint-skill -prune -o \
+  -path ./scripts/count-skill-tokens -prune -o \
+  -type f -print0)
+
+remove_tracked_path() {
+  path="$1"
+  [ -e "$path" ] || return 0
+  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    # -f because token rendering already modified these tracked files in the
+    # working tree; without it git rm refuses ("local modifications"). The path
+    # is being deleted unconditionally, so forcing past those edits is correct.
+    git rm -r -f -q "$path"
+  else
+    rm -rf "$path"
+  fi
+}
+
+if [ "$keep_site" -eq 0 ]; then
+  remove_tracked_path site
+  remove_tracked_path remotion
+  remove_tracked_path vercel.json
+elif [ "$keep_video" -eq 0 ]; then
+  remove_tracked_path remotion
+fi
+
+critical_paths=("skills/$skill_name" .codex-plugin evals install.sh CHANGELOG.md)
+if grep -R -nE '__SKILL(_[A-Z]+)?__|__REPO_NAME__|__ACCENT_(LIGHT|DARK|HUE)__|__YEAR__' "${critical_paths[@]}"; then
+  echo "init: unresolved template token remains in a release-critical file" >&2
+  exit 1
+fi
+
+origin="$(git remote get-url origin 2>/dev/null || true)"
+if [ -n "$origin" ] && [[ "$origin" != *"/$repo_name.git" && "$origin" != *"/$repo_name" ]]; then
+  echo "init: warning — repository should be named '$repo_name' (origin is '$origin')" >&2
+fi
+
+cat <<EOF
+
+init: done — runtime skill '$skill_name', repository '$repo_name'.
+
+Next:
+  1. Replace every TODO in skills/$skill_name, agents/openai.yaml, .codex-plugin/plugin.json, and evals/.
+  2. Add only the references, scripts, and assets the skill actually needs.
+  3. Rewrite README.md and the relevant docs for this skill.
+  4. Run scripts/check-sync; it intentionally fails until release-critical placeholders are gone.
+  5. Release through CHANGELOG.md + .codex-plugin/plugin.json + git tag v<version>.
+EOF

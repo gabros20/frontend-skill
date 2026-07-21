@@ -1,0 +1,10 @@
+[
+  {
+    "id": "primary-artifact",
+    "prompt": "TODO: add a representative execution request.",
+    "assertions": [
+      "TODO: name an observable artifact requirement",
+      "TODO: name an objective validation or completion requirement"
+    ]
+  }
+]

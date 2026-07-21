@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Universal repository gate. Skill-specific repositories may run additional checks after this one.
+set -euo pipefail
+
+root="$(cd "$(dirname "$0")/.." && pwd)"
+
+bash -n "$root/install.sh" "$root/scripts/check-sync"
+[ ! -f "$root/scripts/init" ] || bash -n "$root/scripts/init"
+[ ! -f "$root/scripts/test-init" ] || bash -n "$root/scripts/test-init"
+python3 -m py_compile "$root/scripts/lint-skill" "$root/scripts/count-skill-tokens"
+
+if [ -d "$root/skills/__SKILL_NAME__" ]; then
+  repo="${GITHUB_REPOSITORY:-}"
+  if [ "$(basename "$root")" != "skill-template" ] || { [ -n "$repo" ] && [ "$repo" != "gabros20/skill-template" ]; }; then
+    echo "check-sync: FAIL: uninstantiated template in a derived repository; run scripts/init" >&2
+    exit 1
+  fi
+  "$root/scripts/lint-skill"
+  [ ! -x "$root/scripts/test-init" ] || "$root/scripts/test-init"
+  echo "check-sync: OK — source template and initializer regression test passed"
+  exit 0
+fi
+
+"$root/scripts/lint-skill"
+
+while IFS= read -r -d '' script; do
+  if head -1 "$script" | grep -qE '^#!/usr/bin/env bash|^#!/bin/bash'; then
+    bash -n "$script"
+  fi
+done < <(find "$root/skills" -type f -path '*/scripts/*' -print0)
+
+echo "check-sync: OK — package, routes, references, metadata, eval fixtures, and scripts validated"
