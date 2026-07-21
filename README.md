@@ -66,7 +66,7 @@ reference set from three facets and reads only those files before writing code:
 
 Declared bundles encode the common pairings (a Next.js web app, a React SPA, a native iOS or
 Android screen, consuming a design handoff) so no lateral discovery is needed. The runtime router is
-[skills/frontend/SKILL.md](skills/frontend/SKILL.md); it links directly to 22 focused references
+[skills/frontend/SKILL.md](skills/frontend/SKILL.md); it links directly to 25 focused references
 and loads only what the job needs.
 
 ## Install
