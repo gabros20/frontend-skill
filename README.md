@@ -8,6 +8,8 @@ React Native, without re-deciding experience intent.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+**Visual guide:** [frontendengskill.vercel.app](https://frontendengskill.vercel.app)
+
 `frontend` is the **Build**-stage skill of the [Digital Product Skills](https://github.com/gabros20/digital-product-skill)
 family — the capability that turns an approved design or engineering request into shipped client
 code. See that repository for the family architecture and the adjacent stages.
@@ -205,6 +207,7 @@ AGENTS.md / CLAUDE.md      repository and client-specific maintainer guidance
 skills/frontend/           portable runtime skill and client metadata (22 references)
 evals/                     activation, traversal, output, and compression fixtures
 docs/                      installation, usage, and recipes
+site/                      visual guide (deployed to frontendengskill.vercel.app)
 scripts/                   repository validation and token accounting
 ```
 

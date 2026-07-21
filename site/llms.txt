@@ -1,0 +1,73 @@
+# frontend
+
+> Production client code for web, iOS, and Android surfaces. Installs as an agent skill.
+
+frontend turns "build this" into a controlled implementation instead of an improvised one. It covers
+the production frontend surface — component and state architecture, forms and auth flows, the full
+state set in code, accessibility, performance, client security, testing, i18n, and consuming a design
+handoff — across React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and React Native. The
+SKILL.md is a faceted router: one primary job, at most one platform overlay (native overrides web),
+a web stack overlay only when the project names or uses that stack, read those references fully,
+then ship production code with the full state set and the tests that guard it. Claude Code is the
+reference host; it's plain Agent Skills format (agentskills.io), so it installs on Codex, Cursor,
+Antigravity, opencode, Grok Build, and Hermes too.
+
+## Install
+
+- npm/skills.sh: `npx skills add gabros20/frontend-skill`
+- Clone + installer (per-host targets: claude | codex | cursor | antigravity | opencode | grok | hermes | agents | all): `git clone https://github.com/gabros20/frontend-skill && cd frontend-skill && ./install.sh codex`
+- Manual copy: `cp -R skills/frontend ~/.claude/skills/frontend`
+
+## Docs
+
+- [README.md](https://raw.githubusercontent.com/gabros20/frontend-skill/main/README.md): overview, install, the routing model, repo map.
+- [skills/frontend/SKILL.md](https://raw.githubusercontent.com/gabros20/frontend-skill/main/skills/frontend/SKILL.md): the runtime router, universal invariants, artifact contract, and completion rules.
+- [docs/installation.md](https://raw.githubusercontent.com/gabros20/frontend-skill/main/docs/installation.md): step-by-step installation and verification.
+- [docs/usage.md](https://raw.githubusercontent.com/gabros20/frontend-skill/main/docs/usage.md): the routing model, activation boundary, and outputs.
+- [docs/recipes.md](https://raw.githubusercontent.com/gabros20/frontend-skill/main/docs/recipes.md): representative starting prompts for common engineering jobs.
+
+## Reference inventory (`skills/frontend/references/`)
+
+Primary job:
+
+- `state-and-data.md` — model client, server, URL, or form state; wire data fetching, caching, mutations, optimistic updates, retries, client auth-flow shape.
+- `state-completeness.md` — cover every state a UI can be in — loading, empty, error, success, recovery, notifications, undo.
+- `forms.md` — build or fix a form — validation timing, submission, input types, error association.
+- `accessibility.md` — ARIA patterns, focus management, semantic HTML, keyboard support, canonical contrast/target/reduced-motion floors.
+- `performance.md` — Core Web Vitals, bundle/code-split, images, fonts, rendering cost.
+- `client-security.md` — token storage, XSS sinks, CSP consumption, client-reachable-is-public.
+- `testing.md` — client tests and the dev-loop self-check — unit/component/UI, coverage, screenshot verification.
+- `i18n.md` — logical properties, Intl APIs, direction/language, text-expansion resilience.
+- `design-handoff-and-tokens.md` — consume handoff.yaml and DESIGN.md, wire tokens, dark mode.
+
+Platform overlay — web substrate (add at most one platform overlay; native overrides web):
+
+- `web-platform-css.md` — modern CSS layout and content-driven breakpoints.
+- `web-platform-runtime.md` — SPA routing, storage, service workers, gestures, Safari/viewport hardening, real-time transport, View Transitions.
+- `css-craft.md` — scrollbar/overscroll/grid craft-level polish (supplementary, add alongside the web row).
+- `js-dom-craft.md` — vanilla DOM and browser-API mechanics (supplementary, add alongside the web row).
+
+Platform overlay — native cluster:
+
+- `swiftui.md` — native iOS / iPadOS, SwiftUI/HIG conformance.
+- `swift-concurrency-and-testing.md` — Swift concurrency correctness and Swift Testing, added when async or tests are involved.
+- `compose.md` — native Android, Material 3 conformance.
+- `kotlin-and-compose-state.md` — Kotlin doctrine and Compose state/recomposition, added when state, coroutines, or Flow are involved.
+- `react-native.md` — React Native as the cross-platform stack under the native mandate.
+
+Web stack overlay (only when the platform is web and the project names or uses the stack):
+
+- `react-components-and-state.md` — composition, hook discipline, you-might-not-need-effect, dependency correctness.
+- `react-rendering-and-rsc.md` — memo-defeat family, RSC serialization boundary, hydration, code-split shape.
+- `nextjs.md` — file conventions, RSC/server actions, caching model, image/font/link primitives.
+- `data-fetching-libraries.md` — TanStack Query, SWR, React Router data APIs, TanStack Start.
+- `tailwind.md` — v4 `@theme` canonical (v3 compat), `cn`/twMerge/CVA, the postcss trap.
+- `shadcn.md` — registry/CLI/ownership model, composition recipes, official-library selection, icon discipline.
+
+Sources:
+
+- `SOURCES.md` — trace a technique to its source.
+
+## Optional
+
+- [Visual guide](https://frontendengskill.vercel.app): the routing model, the laws, and the full reference map on one page.
