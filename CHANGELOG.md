@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to **__SKILL_NAME__** are documented here.
+All notable changes to **frontend** are documented here.
 
 The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, git tag
 `v<version>`, and the matching GitHub Release. Runtime `SKILL.md` contains no version metadata.
@@ -15,4 +15,4 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ### Added
 - Initial release: TODO.
 
-[1.0.0]: https://github.com/gabros20/__REPO_NAME__/releases/tag/v1.0.0
+[1.0.0]: https://github.com/gabros20/frontend-skill/releases/tag/v1.0.0

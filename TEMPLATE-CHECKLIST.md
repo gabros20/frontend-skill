@@ -9,7 +9,7 @@ release-critical placeholder has been replaced.
 - [ ] Run `scripts/init` once, choosing `--site` and `--video` only when needed.
 - [ ] Confirm `.codex-plugin/plugin.json` uses `<skill>-skill` and `skills/<skill>/SKILL.md` uses
       `<skill>`.
-- [ ] Confirm no unresolved `__SKILL_*__`, `__REPO_NAME__`, color, or year tokens remain outside
+- [ ] Confirm no unresolved `__SKILL_*__`, `frontend-skill`, color, or year tokens remain outside
       the template tooling itself.
 
 ## 2. Build the runtime skill

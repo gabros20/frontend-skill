@@ -3,10 +3,10 @@
 ## Activation
 
 TODO: Document realistic implicit trigger language, explicit client-specific invocation examples,
-and close-neighbor requests that should not activate `__SKILL_NAME__`.
+and close-neighbor requests that should not activate `frontend`.
 
-Use `/__SKILL_NAME__` as documentation shorthand only. Codex explicit invocation is
-`$__SKILL_NAME__`; other clients vary.
+Use `/frontend` as documentation shorthand only. Codex explicit invocation is
+`$frontend`; other clients vary.
 
 ## Mission and boundary
 

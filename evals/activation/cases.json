@@ -1,7 +1,7 @@
 [
   {
     "id": "positive-explicit",
-    "prompt": "Use $__SKILL_NAME__ to TODO: add a realistic in-scope request.",
+    "prompt": "Use $frontend to TODO: add a realistic in-scope request.",
     "should_trigger": true
   },
   {

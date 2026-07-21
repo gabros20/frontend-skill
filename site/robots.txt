@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://__REPO_NAME__.vercel.app/sitemap.xml

@@ -1,26 +1,26 @@
 {
-  "name": "__REPO_NAME__",
+  "name": "frontend-skill",
   "version": "1.0.0",
-  "description": "__SKILL_TAGLINE__",
+  "description": "Production client code for web, iOS, and Android surfaces",
   "author": {
     "name": "gabros20",
     "url": "https://github.com/gabros20"
   },
-  "homepage": "https://__REPO_NAME__.vercel.app",
-  "repository": "https://github.com/gabros20/__REPO_NAME__",
+  "homepage": "https://frontend-skill.vercel.app",
+  "repository": "https://github.com/gabros20/frontend-skill",
   "license": "MIT",
-  "keywords": ["agent-skill", "__SKILL_NAME__"],
+  "keywords": ["agent-skill", "frontend"],
   "skills": "./skills/",
   "interface": {
-    "displayName": "__SKILL_TITLE__",
-    "shortDescription": "__SKILL_TAGLINE__",
-    "longDescription": "__SKILL_TAGLINE__",
+    "displayName": "Frontend Engineering",
+    "shortDescription": "Production client code for web, iOS, and Android surfaces",
+    "longDescription": "Production client code for web, iOS, and Android surfaces",
     "developerName": "gabros20",
     "category": "Productivity",
     "capabilities": [],
     "defaultPrompt": [
-      "Use $__SKILL_NAME__ to TODO: provide one short starter request."
+      "Use $frontend to TODO: provide one short starter request."
     ],
-    "brandColor": "__ACCENT_LIGHT__"
+    "brandColor": "#0EA5E9"
   }
 }

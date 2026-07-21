@@ -1,6 +1,0 @@
-interface:
-  display_name: "__SKILL_TITLE__"
-  short_description: "__SKILL_TAGLINE__"
-  default_prompt: "Use $__SKILL_NAME__ to TODO: provide one short, realistic starting request."
-policy:
-  allow_implicit_invocation: true

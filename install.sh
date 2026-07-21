@@ -4,7 +4,7 @@ set -euo pipefail
 
 here="$(cd "$(dirname "$0")" && pwd)"
 target="${1:-claude}"
-skill_name="__SKILL_NAME__"
+skill_name="frontend"
 source_dir="$here/skills/$skill_name"
 
 [ -f "$source_dir/SKILL.md" ] || { echo "install: missing $source_dir/SKILL.md" >&2; exit 1; }

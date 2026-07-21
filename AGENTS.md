@@ -6,9 +6,9 @@ suffix. Work [TEMPLATE-CHECKLIST.md](TEMPLATE-CHECKLIST.md) top to bottom after 
 
 ## Detect state first
 
-- `skills/__SKILL_NAME__/` exists in the actual `gabros20/skill-template` repository: maintain the
+- `skills/frontend/` exists in the actual `gabros20/skill-template` repository: maintain the
   source template and run `scripts/check-sync` to exercise the initializer regression test.
-- `skills/__SKILL_NAME__/` exists anywhere else: stop and run `scripts/init`; the gate must fail
+- `skills/frontend/` exists anywhere else: stop and run `scripts/init`; the gate must fail
   until this happens.
 - `skills/<real-name>/` exists with the checklist: populate and validate the derived repository.
 - No checklist: treat it as an ordinary released skill repository and follow its local README.
