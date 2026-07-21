@@ -3,8 +3,8 @@
     "id": "optimistic-update-contract",
     "prompt": "Add optimistic updates to a TanStack Query mutation for liking a post.",
     "assertions": [
-      "The mutation implements the three-step onMutate/onError/onSettled shape, in that order.",
-      "onMutate cancels in-flight queries for the affected key (queryClient.cancelQueries) before snapshotting and applying the optimistic value.",
+      "The mutation implements the three-step onMutate/onError/onSettled shape, in that order, matching the cancel-snapshot-write → rollback → invalidate discipline.",
+      "onMutate cancels in-flight queries for the affected key (e.g. via queryClient.cancelQueries) before snapshotting and applying the optimistic value.",
       "onError rolls back to the snapshot taken in onMutate.",
       "onSettled invalidates the query regardless of outcome."
     ]

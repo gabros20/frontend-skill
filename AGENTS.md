@@ -46,6 +46,17 @@ into a lifecycle composer.
 6. Preserve upstream design/product/architecture constraints; report conflicts instead of
    overriding.
 7. Update the affected activation, traversal, output, or compression fixtures when behavior changes.
+8. **Externalize library-API doctrine; keep the principle.** Foundational surfaces (the web
+   platform, React, Next.js, Tailwind, the platform UI frameworks) are written in full here. For
+   everything else, a fact is a KEEP only if it survives the library being swapped out (a
+   transferable principle, or judgment on which library to pick); a fact tied to one library's exact
+   hook names, CLI flags, or config knobs is API doctrine that library's own docs/skill teach better
+   and keep fresher — state the principle once and point to the library instead of copying its
+   surface in. The pointer order, once per library, where its doctrine used to live: check
+   `node_modules/<package>/skills/` first (a packaged skill installed with the library, freshest, no
+   network needed); else `npx skills add <owner/repo@skill>` from the skills.sh registry; else the
+   library's official docs. Never hard-code a version-pinned detail from memory; match whatever the
+   project has installed.
 
 ## Validation and release
 

@@ -1,116 +1,68 @@
 # Data-fetching libraries
 
-Purpose: Configure and use the concrete data-fetching and routing libraries correctly: TanStack
-Query's cache lifecycle, React Router's data APIs, and TanStack Start's server functions, with the
-exact call-sites where the "don't create a waterfall" rule actually applies.
+Purpose: Point to the current API surface for TanStack Query, SWR, React Router's data router, and
+TanStack Start, and state the one transferable principle underneath all four: server state needs a
+dedup/cache/revalidate layer, not a bare `fetch` inside an effect. Each library's exact API — cache
+knobs, hook names, loader/action signatures — is API doctrine the library's own docs and shipped
+skills teach better and keep fresher than a static reference can.
 
 Read when:
 - Wiring up TanStack Query, SWR, React Router's data router, or TanStack Start.
-- A cache is invalidating too late, too often, or not at all.
-- A loader, action, or mutation is racing, over-fetching, or swallowing a redirect.
+- Deciding whether a data-fetching need warrants reaching for one of these libraries at all.
 
 Skip when:
 - The question is component-level state or effect discipline → `react-components-and-state.md`.
 - The question is RSC boundaries, Suspense placement, or hydration → `react-rendering-and-rsc.md`.
 - The question is Next.js-specific caching (`use cache`, `cacheLife`) or file conventions →
   `nextjs.md`.
-- The underlying "why parallelize independent async work" principle → `state-and-data.md`, the
-  canonical home this file only adds library-specific call-sites to.
+- The underlying principles this file only points at — no-waterfalls, cache freshness and
+  invalidation, and the optimistic cancel-snapshot-write → rollback → invalidate discipline →
+  `state-and-data.md`, their canonical home.
+- The redirect-thrown-as-control-flow trap (a loader/action's `redirect()`/`notFound()` swallowed by
+  a bare try/catch) → `nextjs.md`, which states the general shape once.
 
-Inputs: which data-fetching/routing library the project uses (or is choosing between); the
-data-dependency shape (independent vs. sequential, read vs. write).
+Inputs: which data-fetching/routing library the project uses, or is choosing between.
 
-Produces: correct cache configuration (freshness vs. retention), a loader/action structure that
-doesn't waterfall or swallow control-flow errors, and a three-step optimistic-update shape when one
-is warranted.
+Produces: the right pointer to that library's current API, applied on top of the principles homed
+in `state-and-data.md`.
 
 ## Contents
-- TanStack Query fundamentals
-- Optimistic updates
-- SWR as an alternative
-- React Router v6.4+ data APIs
-- TanStack Start server functions
-- The parallel-fetch call-sites
-- The redirect-in-try-catch trap
+- The one durable principle
+- Library specifics live with the library
 
-## TanStack Query fundamentals
+## The one durable principle
 
-`staleTime` (how long data is considered fresh; default `0`) and `gcTime` (how long an inactive
-query stays cached before eviction; default 5 minutes) are different knobs: `gcTime` must be `>=
-staleTime`, and confusing the two is a common cache-behavior bug. Instantiate `QueryClient` outside
-the component tree, at module scope; constructing it inside a component recreates it (and destroys
-the whole cache) on every render. `useSuspenseQuery` requires both a `<Suspense>` boundary and an
-`<ErrorBoundary>` above it, since it throws promises for loading state and errors for failure state
-rather than returning them. Don't rest-destructure or spread the whole query result
-(`const {...rest} = useQuery(...)`); it subscribes the component to every field and over-renders.
-`useQuery` is for reads, `useMutation` for writes; routing a write through `useQuery` bypasses the
-library's invalidation model entirely. A mutation needs an explicit cache-invalidation call after
-it settles; TanStack Query does not infer which queries a mutation should invalidate.
-`mutateAsync()`'s returned promise must be handled (awaited or `.catch()`'d) like any other
-floating promise.
+Don't wrap a raw `fetch` in a bare `useEffect` for anything beyond the simplest case: it can race,
+double-fire on remount, and leak if the component unmounts before it resolves (see
+`react-components-and-state.md`'s effect decision tree). Use a dedup/cache/revalidate layer instead.
+All four libraries below exist to be that layer; which one to reach for is a project/ecosystem
+choice this file doesn't take a side on.
 
-## Optimistic updates
+## Library specifics live with the library
 
-The three-step shape, in order: `onMutate` cancels in-flight queries for the affected key, snapshots
-the current cache value, and writes the optimistic value; `onError` rolls back to the snapshot taken
-in `onMutate`; `onSettled` invalidates the query regardless of outcome so the next read reflects
-server truth. Reserve optimistic updates for actions where success is near-certain, the action is
-reversible, and the stakes are low (like/toggle/rename); never for payments, deletions, or other
-irreversible actions, where the correctness cost of a wrong optimistic write outweighs the perceived
-latency win. This mirrors the state-machine doctrine in `state-and-data.md`; this file adds the
-concrete TanStack Query hook shape.
+Each library's exact API changes across versions faster than a static reference can track, and the
+library's own docs or shipped skill teach it more precisely than a snapshot here could. For any of
+the four, load the current API in this order: check `node_modules/<package>/skills/` first (a
+packaged skill installed with the library, freshest, no network needed); else `npx skills add
+<owner/repo@skill>` from the skills.sh registry; else WebFetch the official docs. Never hard-code a
+version-specific detail from memory; match whatever the project has installed.
 
-## SWR as an alternative
+- **TanStack Query** — cache lifecycle (`staleTime`/`gcTime`), `useQuery`/`useMutation`/
+  `useSuspenseQuery`, and the optimistic-update hooks (`onMutate`/`onError`/`onSettled`). The
+  cancel-snapshot-write → rollback → invalidate discipline these hooks implement is homed in
+  `state-and-data.md`'s Optimistic UI section; this pointer is only for the hooks' exact shape.
+  Docs: https://tanstack.com/query/latest
+- **SWR** — `useSWR`/`useSWRMutation`, its immutable variant, and `useSWRSubscription` for shared
+  subscriptions. Docs: https://swr.vercel.app
+- **React Router (data APIs)** — `createBrowserRouter`/`RouterProvider`, `loader`/`action`,
+  `defer`/`Await`, `<Form>`, and `setSearchParams` batching. Docs: https://reactrouter.com
+- **TanStack Start** — server functions and the `.middleware()` → `.validator()` → `.client()` →
+  `.server()` → `.handler()` chain order. Runtime input validation and secret handling for a server
+  function follow the same "client-reachable is public, the network is a trust boundary" doctrine
+  as any other client-callable function — see `client-security.md`.
+  Docs: https://tanstack.com/start/latest
 
-`useSWR`/`useSWRMutation` (and the immutable variant) provide the same automatic cross-instance
-request dedup, cache, and revalidation TanStack Query does, contrasted against a raw `fetch` inside
-a `useEffect`. Dedup global event-listener subscriptions across multiple hook instances of the same
-subscription via `useSWRSubscription` backed by a module-level `Map<key, Set<callback>>` fan-out,
-instead of attaching one native listener per hook instance.
-
-## React Router v6.4+ data APIs
-
-The data-router API (`createBrowserRouter` + `RouterProvider`) is the only pattern supporting
-`loader`/`action`/lazy routes; the legacy `<BrowserRouter>` + `<Routes>` pattern cannot run them.
-Loaders and actions receive `{params, request}` and run outside component lifecycle, not as closures
-over component scope. `defer()` paired with `<Suspense>`/`<Await>` splits a route's critical
-(awaited) data from its non-critical (deferred, streamed-in-later) data. `<Form>` (the router's
-component, not a native `<form>`) is required for the router to intercept a submission into an
-`action`. A loader-based redirect (`return redirect(...)` from the loader) is the preferred
-protected-route pattern over a wrapper `<RequireAuth><Outlet/></RequireAuth>` component, since it
-redirects before any render rather than after a flash of the protected content. Batch multiple
-`setSearchParams` calls in the same tick; unbatched, unsynchronized search-param mutations across
-renders can silently drop updates.
-
-## TanStack Start server functions
-
-The method-chain order on a server function is type-inference-load-bearing: `.middleware()` →
-`.validator()` → `.client()` → `.server()` → `.handler()`. Server functions cross the network, so
-they need runtime input validation even when the caller is fully typed; type safety at the call
-site doesn't protect against a malicious or malformed request body. Loaders are isomorphic (they
-can run on the client too), so a secret must be wrapped in `createServerFn()`, never read directly
-inside a loader body, which mirrors the "anything client-reachable is public" principle in
-`client-security.md`.
-
-## The parallel-fetch call-sites
-
-The core principle, "independent awaits in any data-loading context must use `Promise.all`, not a
-sequential chain," is homed in `state-and-data.md`. Four concrete call-sites where it recurs in
-this file's stack: a React Router loader awaiting two independent resources in sequence instead of
-via `Promise.all`; a TanStack Start loader doing the same; an API route/Server Action starting
-unrelated async operations one after another instead of kicking them off immediately and awaiting
-late; and a `for`/`while` loop awaiting each iteration's async call instead of collecting the
-promises and awaiting them together. Each is the same waterfall, just triggered by a different
-router or runtime.
-
-## The redirect-in-try-catch trap
-
-Both React Router and TanStack Start's `redirect()`/`notFound()` throw a special control-flow error
-that the router catches internally to perform the navigation. A surrounding `try/catch` in the
-loader or action swallows that throw and breaks the redirect/not-found behavior silently, no error,
-just a navigation that doesn't happen. Never wrap a call to either function in a try/catch that
-isn't specifically re-throwing router control-flow errors.
-
-<!-- sources: millionco/react-doctor (Modified MIT, tanstack-query/tanstack-start/server categories, recommendation-string quotes attributed);
-Vercel react-best-practices plugin (Apache-2.0, waterfalls/async-data-fetching section);
-OpenAEC-Foundation/React-Claude-Skill-Package (MIT, react-impl-data-fetching, react-impl-routing) -->
+<!-- sources: millionco/react-doctor (Modified MIT, tanstack-query/tanstack-start/server categories,
+recommendation-string quotes attributed); Vercel react-best-practices plugin (Apache-2.0,
+waterfalls/async-data-fetching section); OpenAEC-Foundation/React-Claude-Skill-Package (MIT,
+react-impl-data-fetching, react-impl-routing) -->

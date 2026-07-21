@@ -58,13 +58,17 @@ This is the canonical home for this principle. Framework-specific call-sites (Se
 
 This is a large and repeatedly convergent effect: measured differences between a waterfalled and a parallelized version of the same requests run roughly 2 to 10x, and the identical principle recurs for route loaders, server-rendered components, and effects alike. Establish it once per feature rather than re-deriving it per call-site.
 
+The same waterfall recurs in four common shapes regardless of which router or runtime is involved: a route loader awaiting two independent resources one after another instead of via `Promise.all`; a server-rendered loader or component doing the same; an API route, Server Action, or route handler starting unrelated async operations one after another instead of kicking them all off immediately and awaiting late; and a `for`/`while` loop awaiting each iteration's async call instead of collecting the promises and awaiting them together. Each is the identical mistake wearing a different router's clothes.
+
 ## Cache freshness and invalidation
 
-Treat client-cached data as having a freshness window, not a permanent copy: define how long a cached value is considered fresh versus how long it's retained before eviction, and explicitly invalidate (not merely refetch) the affected cache entries after a mutation changes them. Prefer per-request dedup (the same data requested twice within one render pass resolves from a single call) over cross-request caching, unless the data is genuinely reused across separate requests within a short window.
+Treat client-cached data as having a freshness window, not a permanent copy: define how long a cached value is considered fresh versus how long it's retained before eviction, and explicitly invalidate (not merely refetch) the affected cache entries after a mutation changes them. No caching layer infers which entries a given write touched; the mutation site must name the affected keys/tags itself. Prefer per-request dedup (the same data requested twice within one render pass resolves from a single call) over cross-request caching, unless the data is genuinely reused across separate requests within a short window.
 
 ## Optimistic UI and rollback
 
-Update the UI immediately, assuming the action will succeed, only when the action's success rate is very high (roughly greater than 99%), it's reversible, and it's low-stakes: like/toggle/favorite, rename, reorder. Roll back to the prior state and surface an error only if the call actually fails. Never apply this to payments, deletions, or any other irreversible or high-consequence action; those wait for the real result before updating.
+Update the UI immediately, assuming the action will succeed, only when the action's success rate is very high (roughly greater than 99%), it's reversible, and it's low-stakes: like/toggle/favorite, rename, reorder. Never apply this to payments, deletions, or any other irreversible or high-consequence action; those wait for the real result before updating.
+
+The three-step shape, in order: cancel any in-flight request for the same key first, so a late response can't clobber the optimistic write; snapshot the current value before mutating, so there's something to roll back to; then write the optimistic value. On failure, roll back to the snapshot taken in the first step and surface an error. Regardless of outcome, reconcile with the server afterward, refetch or invalidate the affected data so the next read reflects truth rather than the optimistic guess. This sequence is the transferable part; a library's exact hook names for these three moments (TanStack Query's `onMutate`/`onError`/`onSettled`, or an equivalent) live with that library's own docs.
 
 ## Retry, backoff, and conflict recovery
 

@@ -25,7 +25,7 @@ consistently used icon library, and working dark-mode wiring.
 - Setup and CLI
 - Composition mechanics
 - Reach for this first: component selection
-- Two gotchas worth checking before shipping
+- One gotcha worth checking before shipping
 - Dark mode wiring
 - Icon libraries
 - Choosing a component-library stack for non-shadcn projects
@@ -34,26 +34,22 @@ consistently used icon library, and working dark-mode wiring.
 
 ## Setup and CLI
 
-Order is load-bearing: `npx shadcn@latest init` before `npx shadcn@latest add <component>`.
-Non-interactive/CI use needs `-d` (skips every prompt, including the base-primitive choice);
-`-y`/`--yes` alone still prompts for that one. `--base radix` (the default) vs `--base base-ui`:
-stay on `radix` if the project uses, or may ever use, AI Elements, which has type errors against
-Base UI. CLI v4 deprecates several init flags (`--style`, `--base-color`, `--src-dir`,
-`--no-base-style`, `--css-variables`, now errors rather than silently no-oping) and renames two
-registry types to `registry:base`/`registry:font`.
+Order is load-bearing: initialize (`init`) before adding a component (`add <component>`); stay on
+the Radix base rather than the Base UI base if the project uses, or may ever use, AI Elements, which
+has type errors against Base UI. Beyond that ordering call, CLI flags, registry-type names, prompt
+behavior, and `components.json` shape rotate release to release faster than a static reference can
+track — this is the fastest-rotting content in the whole pack.
 
-Command surface beyond init/add: `search`, `build`, `view`, `info`, `docs <component>` (returns
-agent-friendly code, API, and examples inline), and `migrate` (below). Custom registries are
-namespaced in `components.json` (`registries.<name>.url`, with `Authorization` header support for
-private registries). `components.json` also carries `baseColor` (`gray`, `neutral`, `slate`,
-`stone`, `zinc`, `mauve`, `olive`, `mist`, `taupe`) and the CLI v4 radius scale, which is
-multiplicative (`--radius-sm: calc(var(--radius) * 0.75)`), not additive.
+> **External library — shadcn/ui CLI.** This pack carries composition doctrine only; the current
+> CLI surface lives with the CLI itself. To load it: check `node_modules/shadcn/skills/` first
+> (packaged skill, if installed); else `npx skills add <owner/repo@skill>`; else run `npx shadcn
+> docs <component>` / `view` (returns current code, API, and examples inline) or WebFetch
+> https://ui.shadcn.com/docs. Match whatever CLI version the project has installed, never a
+> version-pinned flag from memory.
 
-Two CLI migrations worth knowing exist: `npx shadcn@latest migrate radix` moves individual
-`@radix-ui/react-*` imports onto the unified `radix-ui` package, then prune the now-unused
-per-package dependencies. `npx shadcn@latest migrate rtl` converts directional utility classes
-(`ml-4`, `left-2`) to logical properties (`ms-4`, `start-2`) at install time, rather than a manual
-authoring pass.
+The same rule covers the CLI's `migrate radix` (unifies per-package `@radix-ui/react-*` imports onto
+the `radix-ui` package) and `migrate rtl` (directional-to-logical utility class conversion) commands:
+run the CLI's own migration rather than hand-authoring it.
 
 ## Composition mechanics
 
@@ -87,19 +83,14 @@ restyled `Dialog`. Destructive-action confirm: `AlertDialog` specifically, never
 Notifications: `Sonner`'s `toast()`, not a hand-rolled toast component. A data table with
 sort/filter/pagination: `Table` plus TanStack Table (`useReactTable`), not a hand-built grid.
 
-## Two gotchas worth checking before shipping
+## One gotcha worth checking before shipping
 
-`shadcn init` on Tailwind v4 plus Next.js can inject a circular `--font-sans: var(--font-sans)`
-inside `@theme inline`, because `@theme inline` resolves CSS custom properties at parse time while
-Next injects the actual font variable at runtime via a layout `className`. This silently breaks the
-configured font. Fix with literal font-family names in `@theme inline`, and move the font-variable
-classNames from `<body>` to `<html>` in the root layout (full mechanics in `tailwind.md`).
-
-A new shadcn project's post-bootstrap baseline: install a fixed primitive set in one call (`button
-card input label textarea select switch tabs dialog alert-dialog sheet dropdown-menu badge
-separator skeleton table`) before starting feature work, confirm the shell uses `bg-background`/
-`text-foreground` tokens rather than hardcoded colors, and apply the Geist-font fix above if the
-project uses Geist.
+A new shadcn project's post-bootstrap baseline: confirm the shell uses `bg-background`/
+`text-foreground` tokens rather than hardcoded colors before starting feature work, and install
+components as the feature actually needs them rather than front-loading a fixed list. The
+Tailwind-v4-plus-Next `@theme inline` font-circularity trap (relevant whenever the project uses
+Geist or another `next/font` variable) is a build-tooling gotcha, not a shadcn one — its mechanics
+and fix live in `tailwind.md`.
 
 ## Dark mode wiring
 

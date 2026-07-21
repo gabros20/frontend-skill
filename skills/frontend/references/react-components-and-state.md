@@ -141,9 +141,14 @@ One principle underlies Zustand, Redux, Jotai, MobX, and Valtio selector code: a
 return a referentially stable value, or every subscriber re-renders regardless of whether the data
 it cares about changed. Never destructure a whole store; a selector that constructs a fresh
 array/object every call defeats the equality check the same way an inline object literal defeats
-`memo()`. Replace state, never mutate it. Read a Valtio proxy through `useSnapshot()` during render
-and the raw proxy only in callbacks. A MobX `reaction`/`autorun` disposer must be kept and invoked
-on cleanup, the same cleanup-completeness rule as effects and observers.
+`memo()`. Replace state, never mutate it.
+
+Beyond that convergent shape, each store library has its own read-in-render rule (Valtio's
+`useSnapshot()` versus its raw proxy) and its own disposer-cleanup obligation (MobX's
+`reaction`/`autorun`) — that's the library's own API surface, not a transferable principle; follow
+its docs or shipped skill for the exact shape. The one library-agnostic piece worth keeping: a
+subscription-style disposer follows the same cleanup-completeness rule as any effect or observer
+teardown, whichever store library it comes from.
 
 ## Context value stability
 

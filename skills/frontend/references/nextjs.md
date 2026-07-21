@@ -113,7 +113,11 @@ App-Router-specific traps live in `react-rendering-and-rsc.md` — read that for
 `redirect()`/`permanentRedirect()`/`notFound()`/`forbidden()`/`unauthorized()` in try/catch** —
 each throws a special control-flow signal Next.js handles internally, and a surrounding catch
 silently swallows the navigation. If a catch block must exist for another reason, call
-`unstable_rethrow()` inside it first.
+`unstable_rethrow()` inside it first. The same trap recurs in any router or framework whose
+loader/action API signals a redirect or not-found by throwing (React Router's and TanStack Start's
+`redirect()`/`notFound()` included): a bare try/catch around the call swallows the throw and the
+navigation silently never happens. This is the canonical statement of that trap; other references
+should point here rather than restate it.
 
 ## Suspense boundary requirements
 

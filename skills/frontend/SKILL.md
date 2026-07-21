@@ -91,7 +91,7 @@ Add only when the platform is web and the project names or uses the stack. Skip 
 | React components, hooks, effects, state placement | [React components and state](references/react-components-and-state.md) | Composition, hook discipline, you-might-not-need-effect, dependency correctness |
 | React rendering, RSC/client boundary, hydration, memoization | [React rendering and RSC](references/react-rendering-and-rsc.md) | Memo-defeat family, RSC serialization boundary, hydration, code-split shape |
 | Next.js App Router, server actions, caching, next/* primitives | [Next.js](references/nextjs.md) | File conventions, RSC/server-actions, caching model, image/font/link primitives |
-| Data-fetching libraries — TanStack Query, React Router data APIs | [Data fetching libraries](references/data-fetching-libraries.md) | staleTime/gcTime, optimistic 3-step, loader/action APIs, invalidation discipline |
+| Data-fetching libraries — TanStack Query, SWR, React Router data APIs, TanStack Start | [Data fetching libraries](references/data-fetching-libraries.md) | Current-API pointers per library; the cache/optimistic/no-waterfall principles themselves are homed in `state-and-data.md` |
 | Tailwind CSS — theme, utilities, responsive variants | [Tailwind](references/tailwind.md) | v4 `@theme` canonical (v3 compat), `cn`/twMerge/CVA, the postcss trap |
 | shadcn/ui and component-library selection | [shadcn](references/shadcn.md) | Registry/CLI/ownership model, composition recipes, official-library selection table, icon discipline |
 
@@ -106,7 +106,7 @@ Add when the request involves it, on any platform.
 Read these together — the router encodes the pairing so no lateral hop is required:
 
 - **Next.js web app** → [Next.js](references/nextjs.md) + [React components and state](references/react-components-and-state.md) + [React rendering and RSC](references/react-rendering-and-rsc.md) + [Tailwind](references/tailwind.md) (+ [shadcn](references/shadcn.md) when the project uses it).
-- **React SPA (Vite/React Router)** → [React components and state](references/react-components-and-state.md) + [Data fetching libraries](references/data-fetching-libraries.md) + [Web platform runtime](references/web-platform-runtime.md) for client routing + [Tailwind](references/tailwind.md).
+- **React SPA (Vite/React Router)** → [React components and state](references/react-components-and-state.md) + [State and data](references/state-and-data.md) for the fetch/cache/optimistic doctrine + [Data fetching libraries](references/data-fetching-libraries.md) for the current library API + [Web platform runtime](references/web-platform-runtime.md) for client routing + [Tailwind](references/tailwind.md).
 - **Native iOS screen** → [SwiftUI](references/swiftui.md) (+ [Swift concurrency and testing](references/swift-concurrency-and-testing.md) when async or tests are involved). This overrides the web-platform substrate.
 - **Native Android screen** → [Compose](references/compose.md) + [Kotlin and Compose state](references/kotlin-and-compose-state.md). This overrides the web-platform substrate.
 - **Consume a design handoff** → [Design handoff and tokens](references/design-handoff-and-tokens.md) + the relevant primary job ref + the target platform/stack overlay.
