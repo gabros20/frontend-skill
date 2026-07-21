@@ -1,8 +1,105 @@
 [
   {
-    "id": "primary-route",
-    "prompt": "TODO: add a request that selects one reference.",
-    "expected_references": ["references/example.md"],
-    "forbidden_references": []
+    "id": "optimistic-update-tanstack-nextjs",
+    "prompt": "Add optimistic updates to a TanStack Query mutation for liking a post in this Next.js app.",
+    "expected_references": [
+      "references/state-and-data.md",
+      "references/data-fetching-libraries.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md",
+      "references/react-native.md"
+    ]
+  },
+  {
+    "id": "swiftui-form-accessibility",
+    "prompt": "Make this SwiftUI form accessible for VoiceOver users.",
+    "expected_references": [
+      "references/accessibility.md",
+      "references/swiftui.md"
+    ],
+    "forbidden_references": [
+      "references/forms.md",
+      "references/compose.md",
+      "references/web-platform-css.md"
+    ]
+  },
+  {
+    "id": "cls-marketing-page",
+    "prompt": "Fix layout shift (CLS) in the hero section of our marketing page.",
+    "expected_references": [
+      "references/performance.md",
+      "references/web-platform-css.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md",
+      "references/react-native.md"
+    ]
+  },
+  {
+    "id": "compose-settings-handoff",
+    "prompt": "Implement the approved design handoff for a Compose settings screen.",
+    "expected_references": [
+      "references/design-handoff-and-tokens.md",
+      "references/compose.md",
+      "references/kotlin-and-compose-state.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/web-platform-css.md",
+      "references/tailwind.md"
+    ]
+  },
+  {
+    "id": "react-router-auth-gate",
+    "prompt": "Add auth-gated protected routes using React Router's data APIs.",
+    "expected_references": [
+      "references/state-and-data.md",
+      "references/data-fetching-libraries.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md",
+      "references/nextjs.md"
+    ]
+  },
+  {
+    "id": "janky-list-compose",
+    "prompt": "Our Jetpack Compose LazyColumn is janky when scrolling through a long list — fix it.",
+    "expected_references": [
+      "references/compose.md",
+      "references/kotlin-and-compose-state.md"
+    ],
+    "forbidden_references": [
+      "references/react-native.md",
+      "references/swiftui.md"
+    ]
+  },
+  {
+    "id": "realtime-updates-web-dashboard",
+    "prompt": "Add real-time updates to this web dashboard using server-sent events.",
+    "expected_references": [
+      "references/web-platform-runtime.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md",
+      "references/react-native.md"
+    ]
+  },
+  {
+    "id": "token-consumption-tailwind-dark-mode",
+    "prompt": "Wire the design tokens from handoff.yaml into our Tailwind theme, including dark mode.",
+    "expected_references": [
+      "references/design-handoff-and-tokens.md",
+      "references/tailwind.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md",
+      "references/react-native.md"
+    ]
   }
 ]

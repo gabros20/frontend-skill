@@ -1,8 +1,30 @@
 [
   {
-    "id": "representative-ablation",
-    "prompt": "TODO: add a request that exercises a load-bearing instruction.",
+    "id": "ablation-touch-target-table",
+    "prompt": "Set the tap target sizes for this mobile settings list.",
     "variants": ["no-skill", "current", "compressed-candidate"],
-    "preserve": ["task success", "safety", "artifact completeness", "required-reference recall"]
+    "preserve": ["task success", "safety", "artifact completeness", "required-reference recall"],
+    "load_bearing": "The exact per-platform touch-target floors — 24px WCAG 2.2 SC 2.5.8, 44pt HIG, 48dp Material 3 — rather than a single rounded 'make it big enough' number."
+  },
+  {
+    "id": "ablation-rsc-serialization-dedup",
+    "prompt": "Pass this server-fetched data down through several client components in a Next.js app.",
+    "variants": ["no-skill", "current", "compressed-candidate"],
+    "preserve": ["task success", "safety", "artifact completeness", "required-reference recall"],
+    "load_bearing": "The RSC serialization-boundary rule: props crossing server-to-client must be plain serializable data, and identical data should be deduplicated at the fetch layer rather than re-passed down multiple client boundaries."
+  },
+  {
+    "id": "ablation-tailwind-theme-postcss-trap",
+    "prompt": "Set up Tailwind v4 custom theme tokens in this project.",
+    "variants": ["no-skill", "current", "compressed-candidate"],
+    "preserve": ["task success", "safety", "artifact completeness", "required-reference recall"],
+    "load_bearing": "The @theme namespace and @tailwindcss/postcss configuration trap — tokens declared outside a recognized @theme namespace, or the plugin left unconfigured, silently fail to generate utilities."
+  },
+  {
+    "id": "ablation-predictive-back-handler",
+    "prompt": "Wire predictive back gesture support into this Compose screen.",
+    "variants": ["no-skill", "current", "compressed-candidate"],
+    "preserve": ["task success", "safety", "artifact completeness", "required-reference recall"],
+    "load_bearing": "PredictiveBackHandler is a standalone composable (androidx.activity.compose) taking a Flow<BackEventCompat>, not a Modifier extension, and the system back-preview animation must not be suppressed."
   }
 ]

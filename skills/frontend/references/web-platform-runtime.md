@@ -69,10 +69,9 @@ whose `fetch` handler actually responds (registration alone is not sufficient). 
 deliberately — `standalone` is the default for an installed-app feel, `fullscreen` suits
 games/media, avoid `browser` if the point is to hide browser chrome.
 
-Give the service worker distinct `install` (pre-cache) and `activate` (evict stale caches on a
-version bump) lifecycle handlers, and pick an explicit per-resource-type strategy: cache-first for
-immutable built assets, network-first for frequently-changing data, stale-while-revalidate as the
-middle ground. A repeat-visit load-time win of 50-90% is typical once this is wired correctly.
+For the service worker's caching lifecycle (install/activate handlers, per-resource-type strategy,
+repeat-visit gains), see `performance.md`'s Caching strategy section — this file owns only the
+installability facts above.
 
 ## Real-time transport
 

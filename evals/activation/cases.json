@@ -1,12 +1,102 @@
 [
   {
-    "id": "positive-explicit",
-    "prompt": "Use $frontend to TODO: add a realistic in-scope request.",
+    "id": "positive-web-app-build",
+    "prompt": "Build a responsive web app dashboard shell with routing and a collapsible sidebar nav.",
     "should_trigger": true
   },
   {
-    "id": "negative-near-miss",
-    "prompt": "TODO: add a realistic request owned by the closest neighboring skill.",
+    "id": "positive-nextjs-feature",
+    "prompt": "Add a Next.js App Router route with a server action that revalidates a tag on submit.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-react-state-bug",
+    "prompt": "This React component re-renders on every keystroke — find the cause and fix it.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-tailwind-theming",
+    "prompt": "Set up Tailwind v4 theme tokens for our design system and wire dark mode.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-shadcn-install",
+    "prompt": "Install and customize a shadcn/ui data table component for our admin panel.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-swiftui-screen",
+    "prompt": "Build a SwiftUI settings screen that conforms to the Human Interface Guidelines.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-compose-screen",
+    "prompt": "Implement a Jetpack Compose onboarding screen that adapts across window size classes.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-react-native-perf",
+    "prompt": "Our React Native FlashList is janky scrolling through 500 items — diagnose and fix it.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-a11y-implementation",
+    "prompt": "Implement keyboard navigation and ARIA roles for this custom combobox component.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-form-validation",
+    "prompt": "Build a signup form with inline validation timing and screen-reader-friendly error messages.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-client-perf",
+    "prompt": "Our product page's LCP is 4.2s — diagnose the render-blocking resources and fix it.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-client-security",
+    "prompt": "Review how we store the auth token on the client and close any XSS exposure.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-testing",
+    "prompt": "Write component tests for this checkout form using React Testing Library.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-design-handoff-consumption",
+    "prompt": "Consume this handoff.yaml and DESIGN.md to implement the approved checkout screens in React.",
+    "should_trigger": true
+  },
+  {
+    "id": "negative-visual-direction",
+    "prompt": "Our dashboard looks generic and templated. Set a visual direction that makes it feel distinctive.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-motion-choreography",
+    "prompt": "Choreograph the menu-open animation: pick the durations, easing curves, and stagger between items.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-seo-strategy",
+    "prompt": "Write a keyword and meta-description strategy to grow organic search traffic to our marketing site.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-wcag-audit-evidence",
+    "prompt": "Audit this shipped build against WCAG 2.2 and produce a scored, sign-off-ready compliance report.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-api-database-design",
+    "prompt": "Design the database schema and the API contract for storing user preferences.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-deploy-pipeline",
+    "prompt": "Set up the CI/CD pipeline and canary deployment strategy for shipping the frontend build.",
     "should_trigger": false
   }
 ]

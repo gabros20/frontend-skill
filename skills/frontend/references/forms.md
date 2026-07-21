@@ -11,6 +11,8 @@ Skip when:
 - The question is the submission's state machine, retry behavior, or optimistic update (`state-and-data.md`).
 - The question is touch-target sizing or focus-ring treatment (`accessibility.md`).
 - The question is text-expansion allowance or locale-correct formatting (`i18n.md`).
+- The form is native (SwiftUI or Compose): its input types, validation-surface, and submit-state
+  mechanics live in `swiftui.md` / `compose.md` — this file's autocomplete/aria wiring is web-only.
 
 Inputs: the field set, its constraints, and whether submission is idempotent or reversible.
 

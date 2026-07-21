@@ -71,9 +71,10 @@ and window class) lives in `surface-android.md`; this file owns only the composa
 
 ## Predictive back
 
-Opt in via manifest `android:enableOnBackInvokedCallback="true"` (Android 13+). Code API:
-`Modifier.predictiveBackHandler(enabled) { progress: Flow<BackEventCompat> -> ... }`
-(`androidx.activity:activity-compose` 1.8+). Do not suppress the system-provided back preview
+Opt in via manifest `android:enableOnBackInvokedCallback="true"` (Android 13+). Code API: the
+standalone composable `PredictiveBackHandler(enabled) { progress: Flow<BackEventCompat> -> ... }`
+(`androidx.activity.compose`, `androidx.activity:activity-compose` 1.8+) — not a `Modifier`
+extension. Do not suppress the system-provided back preview
 animation. If implementing a custom transition, interpolate using `BackEventCompat.progress`
 (0.0 to 1.0) and respect `BackEventCompat.swipeEdge` (`EDGE_LEFT`/`EDGE_RIGHT`) so the exiting
 screen tracks the initiating edge; the specific scale/offset math is a choreography value (OUT to

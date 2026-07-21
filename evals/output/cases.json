@@ -1,10 +1,46 @@
 [
   {
-    "id": "primary-artifact",
-    "prompt": "TODO: add a representative execution request.",
+    "id": "optimistic-update-contract",
+    "prompt": "Add optimistic updates to a TanStack Query mutation for liking a post.",
     "assertions": [
-      "TODO: name an observable artifact requirement",
-      "TODO: name an objective validation or completion requirement"
+      "The mutation implements the three-step onMutate/onError/onSettled shape, in that order.",
+      "onMutate cancels in-flight queries for the affected key (queryClient.cancelQueries) before snapshotting and applying the optimistic value.",
+      "onError rolls back to the snapshot taken in onMutate.",
+      "onSettled invalidates the query regardless of outcome."
+    ]
+  },
+  {
+    "id": "accessible-form-error-contract",
+    "prompt": "Build an accessible form with an inline validation error on the email field.",
+    "assertions": [
+      "The error message is associated with its input via aria-describedby, and aria-invalid is set while the error is showing.",
+      "The submit button stays enabled while the form is invalid; validation runs on submit rather than disabling the button preemptively.",
+      "Focus moves to the first invalid field (or a focusable error summary) after a failed submission."
+    ]
+  },
+  {
+    "id": "swiftui-typography-contract",
+    "prompt": "Style the headline and body text on this SwiftUI screen.",
+    "assertions": [
+      "Text uses semantic text styles (.font(.headline), .font(.body), etc.) rather than .font(.system(size:)) with a hardcoded point value.",
+      "The layout is described as reflowing at large accessibility Dynamic Type sizes rather than truncating or clipping."
+    ]
+  },
+  {
+    "id": "cls-fix-contract",
+    "prompt": "Fix layout shift caused by an image and a web font loading late on this landing page.",
+    "assertions": [
+      "The image fix reserves layout space up front via explicit width/height or aspect-ratio rather than letting the image load in without dimensions.",
+      "The font-loading fix names an explicit font-display value (or an equivalent matched-fallback strategy) chosen for its CLS risk, not left at the browser default."
+    ]
+  },
+  {
+    "id": "design-token-dark-mode-contract",
+    "prompt": "Wire the handoff.yaml tokens into this component, including a dark-mode variant.",
+    "assertions": [
+      "Tokens are consumed from the generated token layer; the generated output file itself is not hand-edited.",
+      "Dark mode is implemented via a single, stated token strategy rather than ad hoc per-component overrides.",
+      "The dark-mode variant is called out as needing its own verification rather than assumed correct because light mode passed."
     ]
   }
 ]

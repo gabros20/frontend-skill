@@ -150,9 +150,10 @@ key (build ID + function ID + serializable args + closure variables).
 
 Invalidation: `cacheTag()` tags content; `updateTag()` invalidates immediately and is visible
 within the same request (Server Actions only); `revalidateTag(tag, profile)` invalidates in the
-background (stale-while-revalidate), usable from Server Actions and Route Handlers. **Single-arg
-`revalidateTag(tag)` is deprecated in Next 16** — a `cacheLife` profile is now required as the
-second argument, e.g. `revalidateTag('posts', 'max')`.
+background (stale-while-revalidate), usable from Server Actions and Route Handlers. In Next 16,
+single-arg `revalidateTag(tag)` is reported deprecated in favor of a required second `cacheLife`
+profile argument, e.g. `revalidateTag('posts', 'max')` — this is version-gated; verify the exact
+signature against the installed Next version before relying on it.
 
 Non-deterministic values (`Math.random()`, `Date.now()`) execute exactly once, at build time,
 inside a `'use cache'` scope — use `await connection()` from `next/server` to defer evaluation to
