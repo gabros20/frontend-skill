@@ -5,8 +5,14 @@ Install the `frontend` runtime pack from the independently versioned
 
 ## Prerequisites
 
-- An Agent Skills-compatible client.
-- TODO: Add only real skill-specific tools, credentials, or runtime requirements.
+- An Agent Skills-compatible client (Codex, Claude Code, or any cross-agent host).
+- No external CLI is required to route, implement, or write tests for covered stacks.
+- The `testing.md` dev-loop self-check (serve the build, screenshot every route at two viewports
+  with reduced motion emulated, interact with it) requires a runnable dev server and screenshot
+  capability. Without it, the skill states precisely what validation ran and what remains rather
+  than claiming a green build looks correct.
+- Consuming a design handoff requires the upstream `handoff.yaml` and `DESIGN.md` files from
+  [design-skill](https://github.com/gabros20/design-skill); frontend works standalone without them.
 
 ## Install with skills.sh
 
@@ -53,6 +59,12 @@ For Codex, verify the installed files directly:
 test -f "${CODEX_HOME:-$HOME/.codex}/skills/frontend/SKILL.md"
 ```
 
+Then run a small route-specific request, for example:
+
+```text
+Use $frontend to fix Core Web Vitals on this product page — LCP, CLS, and bundle size.
+```
+
 ## Update
 
 ```bash
@@ -61,8 +73,8 @@ git pull --ff-only
 ./install.sh codex
 ```
 
-Review `CHANGELOG.md` and GitHub Releases for version history. Version metadata intentionally stays
-outside runtime `SKILL.md`.
+Review [CHANGELOG.md](../CHANGELOG.md) and GitHub Releases for version history. Version metadata
+intentionally stays outside runtime `SKILL.md`.
 
 ## Uninstall
 

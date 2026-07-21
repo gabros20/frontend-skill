@@ -24,6 +24,7 @@ Produces: a state machine with no impossible states, a fetch plan with no accide
 - Cache freshness and invalidation
 - Optimistic UI and rollback
 - Retry, backoff, and conflict recovery
+- Offline behavior
 - Client auth-flow shape
 - Component teardown discipline
 - Analytics: emit, don't define
@@ -75,6 +76,10 @@ Match the recovery mechanism to the failure class:
 - **Server error** (5xx): surface a clear, generic message; don't retry indefinitely against a server that's genuinely failing.
 
 Map an API's status code to the right client behavior rather than treating every non-2xx response the same: 400 to validation errors on the relevant fields, 401 to the session-expiry handling above, 403 to a permission-denied state (not a generic error), 404 to a not-found state, 429 to a rate-limit message paired with backoff before retrying, 500 to the generic server-error handling above.
+
+## Offline behavior
+
+`navigator.onLine` and the `online`/`offline` events report the network interface, not real reachability; verify with a lightweight request before trusting either. Queue mutations made while offline and replay them on reconnect, keyed by an idempotency key per mutation, so a double-replay can't double-apply. Surface the queued-not-synced state to the user, a pending/syncing badge, never a silent success; reuse `state-completeness.md`'s autosave "stored locally, will retry" pattern rather than inventing a new one. TanStack Query: `networkMode` plus paused mutations resume automatically on reconnect (see `data-fetching-libraries.md` for the concrete API). Offline shell and asset caching live in `web-platform-runtime.md`.
 
 ## Client auth-flow shape
 

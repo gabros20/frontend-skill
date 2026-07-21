@@ -1,33 +1,62 @@
-# Agent guide — creating an independent skill repository
+# Agent guide — frontend-skill
 
-This repository is the source template for one `<skill>-skill` repository. The runtime skill name
-remains short and lives under `skills/<skill>/`; repository and plugin names use the `-skill`
-suffix. Work [TEMPLATE-CHECKLIST.md](TEMPLATE-CHECKLIST.md) top to bottom after initialization.
+This repository packages one independently versioned runtime skill: `frontend`. The GitHub and
+plugin package name is `frontend-skill`; the runtime identifier and Codex invocation remain
+`frontend` and `$frontend`. It is the Build-stage skill of the Digital Product Skills family.
 
-## Detect state first
+## Ownership boundary
 
-- `skills/frontend/` exists in the actual `gabros20/skill-template` repository: maintain the
-  source template and run `scripts/check-sync` to exercise the initializer regression test.
-- `skills/frontend/` exists anywhere else: stop and run `scripts/init`; the gate must fail
-  until this happens.
-- `skills/<real-name>/` exists with the checklist: populate and validate the derived repository.
-- No checklist: treat it as an ordinary released skill repository and follow its local README.
+`frontend` owns the production client — component and state architecture, routing, data fetching
+and API integration, forms and auth flows, responsive and accessible UI, the full state set in
+code, client-side security, frontend performance, and the tests that guard it — across websites,
+web apps, iOS, and Android. It consumes design's intent (a `handoff.yaml` and `DESIGN.md`) rather
+than re-deciding it, and never presents prototype or unverified code as production-ready. It does
+not absorb experience intent and visual direction (design), system decisions and API/event
+contracts (architecture), server behavior and databases (backend) — though SSR/RSC runtime inside
+the client framework is in scope — independent audits and release gates (quality), or deployment
+and store delivery (operate) — though client build config is in scope. When an adjacent capability
+is required, preserve the approved artifacts and emit a handoff. Do not silently expand this skill
+into a lifecycle composer.
 
-## Required behavior
+## Invariants
 
-1. Run the generic `scripts/check-sync` gate before specialized repository checks. Never replace
-   packaging and navigation validation with domain-specific assertions.
-2. Keep runtime frontmatter to `name` and `description`. Keep versions and repository metadata in
-   `.codex-plugin/plugin.json`, `CHANGELOG.md`, tags, and releases.
-3. Keep `SKILL.md` as the direct router. References are flat, directly linked, self-describing, and
-   loaded only when their observable conditions apply.
-4. Keep repository documentation, evaluation data, release files, and optional site assets outside
-   `skills/<name>/`.
-5. Make standalone behavior complete. Recommend adjacent skills without silently invoking them.
-6. Add deterministic scripts only for fragile or repeated mechanics and execute them in tests.
-7. Treat README as the primary storefront. Site and Remotion profiles are optional publishing work.
-8. Release through matching plugin version, changelog entry, tag, and GitHub Release. Do not put a
-   version string back into `SKILL.md`.
+- **Production code, not a prototype.** Never present untested or unverified code as complete.
+  State what validation ran and what remains rather than signing off on an unrun check.
+- **A green build is not a correct screen.** The `testing.md` dev-loop self-check (serve, screenshot
+  every route at two viewports with reduced motion emulated, interact) gates completion claims.
+- **Canonical homes — one source of truth, others point to it, never restate.** The two-layer state
+  model lives in `state-completeness.md`. Universal accessibility floors (contrast, target sizes,
+  focus, zoom, reduced-motion) live in `accessibility.md`. Design-handoff token acceptance lives in
+  `design-handoff-and-tokens.md`. TypeScript strict baseline lives in `testing.md`.
 
-Do not mark the repository complete merely because structural lint passes. Activation, traversal,
-and representative output evaluations must also show that the skill changes agent behavior usefully.
+## Change rules
+
+1. Put universal behavior in `SKILL.md`; put conditional depth in the smallest owning reference.
+2. Every reference stays directly linked from `SKILL.md` and begins with `Purpose`, `Read when`,
+   `Skip when`, `Inputs`, `Produces`; add an early `## Contents` when it exceeds 100 lines. No
+   nested reference directories or discovery chains.
+3. Keep every reference near its token target (`scripts/count-skill-tokens`). The ceiling is soft:
+   never cut capability-delta content to satisfy a number, but padding and restated canon still get
+   removed.
+4. Keep runtime frontmatter to `name` and `description` only. Versions and repository URLs belong in
+   plugin metadata, changelog, tags, and releases — never in `SKILL.md`.
+5. Route load stays capped: one primary job, at most one platform overlay (native overrides web),
+   at most one web stack overlay per axis, only material concerns. Add a declared bundle to the
+   router rather than a reference-to-reference chain.
+6. Preserve upstream design/product/architecture constraints; report conflicts instead of
+   overriding.
+7. Update the affected activation, traversal, output, or compression fixtures when behavior changes.
+
+## Validation and release
+
+Run before handoff:
+
+```bash
+scripts/check-sync
+scripts/count-skill-tokens
+```
+
+Structural success is necessary but not sufficient: representative evals must show useful
+activation, minimal traversal, and better outputs. Release by synchronizing
+`.codex-plugin/plugin.json`, `CHANGELOG.md`, tag `v<version>`, and the GitHub Release. Never add the
+version to runtime `SKILL.md`.
