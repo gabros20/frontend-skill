@@ -90,7 +90,10 @@ A new shadcn project's post-bootstrap baseline: confirm the shell uses `bg-backg
 components as the feature actually needs them rather than front-loading a fixed list. The
 Tailwind-v4-plus-Next `@theme inline` font-circularity trap (relevant whenever the project uses
 Geist or another `next/font` variable) is a build-tooling gotcha, not a shadcn one — its mechanics
-and fix live in `tailwind.md`.
+and fix live in `tailwind.md`. Folder convention worth defaulting to: `components/ui/` holds the
+untouched shadcn primitives so upstream re-syncs stay low-friction; `components/custom/` (or
+`components/patterns/`) holds wrapper/composed components built from them — see
+`client-architecture.md` for the broader ownership-boundary rationale.
 
 ## Dark mode wiring
 

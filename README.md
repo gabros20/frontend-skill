@@ -116,10 +116,10 @@ Documentation may use `/frontend` as shorthand. Other clients may expose a slash
 experience/visual design, system architecture, marketing/SEO, or independent release verification
 unless the request also requires frontend implementation.
 
-## The 24 references
+## The 25 references
 
 The router selects from a primary-job set, a platform overlay, and a web stack overlay. It loads
-the smallest sufficient set — never all 24.
+the smallest sufficient set — never all 25.
 
 **Primary job**
 
@@ -134,6 +134,7 @@ the smallest sufficient set — never all 24.
 | [testing.md](skills/frontend/references/testing.md) | Test doctrine, RTL query ladder, TS strict baseline, green-build-is-not-looks-right dev-loop |
 | [i18n.md](skills/frontend/references/i18n.md) | Logical-property mapping, Intl usage, dir/lang wiring, text-expansion budget |
 | [design-handoff-and-tokens.md](skills/frontend/references/design-handoff-and-tokens.md) | handoff.yaml acceptance, 3-tier token model, never-edit-generated, dark-mode token strategy |
+| [client-architecture.md](skills/frontend/references/client-architecture.md) | Feature-vs-type decision rule, unidirectional import layering, colocation doctrine, barrel-vs-public-API reconciliation, token file layout |
 
 **Platform overlay** (the web substrate by default, native when named or implied — native overrides web)
 
@@ -207,7 +208,7 @@ prose. Full attribution and licenses:
 ```text
 .codex-plugin/plugin.json  Codex plugin and release metadata
 AGENTS.md / CLAUDE.md      repository and client-specific maintainer guidance
-skills/frontend/           portable runtime skill and client metadata (24 references)
+skills/frontend/           portable runtime skill and client metadata (25 references)
 evals/                     activation, traversal, output, and compression fixtures
 docs/                      installation, usage, and recipes
 site/                      visual guide (deployed to frontendengskill.vercel.app)

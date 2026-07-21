@@ -137,7 +137,7 @@ must return referentially stable data or it infinite-loops.
 
 ## Selector/derivation stability across state libraries
 
-One principle underlies Zustand, Redux, Jotai, MobX, and Valtio selector code: a selector must
+One principle underlies Zustand, Redux (Toolkit), Jotai, MobX, and Valtio selector code: a selector must
 return a referentially stable value, or every subscriber re-renders regardless of whether the data
 it cares about changed. Never destructure a whole store; a selector that constructs a fresh
 array/object every call defeats the equality check the same way an inline object literal defeats

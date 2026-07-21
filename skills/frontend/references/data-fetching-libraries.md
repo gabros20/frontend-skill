@@ -52,10 +52,15 @@ version-specific detail from memory; match whatever the project has installed.
   cancel-snapshot-write → rollback → invalidate discipline these hooks implement is homed in
   `state-and-data.md`'s Optimistic UI section; this pointer is only for the hooks' exact shape.
   Docs: https://tanstack.com/query/latest
-- **SWR** — `useSWR`/`useSWRMutation`, its immutable variant, and `useSWRSubscription` for shared
-  subscriptions. Docs: https://swr.vercel.app
+- **SWR** — the smaller-footprint #2 to TanStack Query's cache-lifecycle depth, still actively
+  maintained by Vercel; `useSWR`/`useSWRMutation`, its immutable variant, and `useSWRSubscription`
+  for shared subscriptions. Docs: https://swr.vercel.app
 - **React Router (data APIs)** — `createBrowserRouter`/`RouterProvider`, `loader`/`action`,
-  `defer`/`Await`, `<Form>`, and `setSearchParams` batching. Docs: https://reactrouter.com
+  `defer`/`Await`, `<Form>`, and `setSearchParams` batching. Docs: https://reactrouter.com. **TanStack
+  Router** is the type-safety-first alternative when a project prioritizes fully-typed route trees
+  and search params over React Router's larger ecosystem and lower migration friction — a project
+  choice, not a currency correction; TanStack Start (below) builds on it. Docs:
+  https://tanstack.com/router/latest
 - **TanStack Start** — server functions and the `.middleware()` → `.validator()` → `.client()` →
   `.server()` → `.handler()` chain order. Runtime input validation and secret handling for a server
   function follow the same "client-reachable is public, the network is a trust boundary" doctrine

@@ -65,6 +65,7 @@ useful; do not invoke them automatically unless the user requested a composition
 | Write client tests and run the dev-loop self-check — unit/component/UI, coverage, screenshot verification | [Testing](references/testing.md) | Test doctrine, RTL query ladder, TS strict baseline, and the green-build-is-not-looks-right loop |
 | Internationalize — logical properties, Intl APIs, direction/language, text-expansion resilience | [i18n](references/i18n.md) | Logical-property mapping, Intl usage, dir/lang wiring, text-expansion budget |
 | Consume a design handoff — read handoff.yaml and DESIGN.md, wire tokens, dark mode | [Design handoff and tokens](references/design-handoff-and-tokens.md) | handoff.yaml acceptance, 3-tier token model, never-edit-generated, dark-mode token strategy |
+| Structure or restructure a client codebase — folders, feature boundaries, import discipline, token file layout | [Client architecture](references/client-architecture.md) | Feature-vs-type decision rule, unidirectional import layering, colocation doctrine, barrel-vs-public-API reconciliation, token file layout |
 
 ### Platform overlay
 

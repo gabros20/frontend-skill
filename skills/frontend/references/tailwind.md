@@ -26,6 +26,7 @@ class-merge usage, and a breakpoint choice consistent with the rest of the codeb
 - v4 vs v3: which config surface
 - `@theme` namespaces and full coverage
 - The container-token collision (and other build traps)
+- Sharing a theme across projects
 - Breakpoints: Tailwind's px scale
 - `cn()`, `clsx`, `tailwind-merge`, CVA
 - Utility conventions worth defaulting to
@@ -92,6 +93,17 @@ And a literal `*` inside a CSS comment near a `@theme` block can make some minif
 entire token block while only printing a soft warning; treat any such parser warning as a hard
 failure and verify computed styles directly rather than trusting a green build.
 
+## Sharing a theme across projects
+
+Tailwind v4 does support splitting `@theme` declarations across multiple imported CSS files, and
+multiple `@theme` blocks do merge correctly — this is the official pattern for a shareable or
+monorepo-packaged token file, not an unsupported edge case. Shape: a dedicated `theme.css` uses
+`--*: initial;` to reset inherited defaults, then declares the project's own token scale; it's
+imported into the main stylesheet after `@import "tailwindcss";` so its `@theme` block merges with
+any locally-declared one. File-layout mechanics for a `tokens/` directory feeding this file (DTCG
+multi-file sets, Style Dictionary's directory-is-cosmetic merge) live in `client-architecture.md`,
+not here.
+
 ## Breakpoints: Tailwind's px scale
 
 Tailwind's default breakpoints are px-based, not the content-driven rem scale: `sm 640px`,
@@ -112,7 +124,9 @@ always wins.
 Class Variance Authority (`cva`, package `class-variance-authority`) is the declarative variant API.
 Define the `cva()` call at module scope, outside the component body, so it isn't recreated on every
 render. Extend an existing component's variants by adding to its `cva` config rather than layering
-ad hoc conditional classes on top of it.
+ad hoc conditional classes on top of it. Tailwind Variants (`tv()`, package `tailwind-variants`) is
+the Tailwind-native alternative when CVA's slots, compound variants, or responsive variants don't
+cover the case — reach for it there, not as a default replacement for CVA.
 
 ## Utility conventions worth defaulting to
 
@@ -138,7 +152,9 @@ Component composition mechanics that consume these classes (compound components,
 component-level Tailwind wiring, including its CSS-variable shape and dark-mode toggle, lives in
 `shadcn.md`. The content-driven rem breakpoint doctrine this file's px scale maps onto lives in
 `web-platform-css.md`. Consuming DESIGN.md/handoff.yaml tokens into this theme is
-`design-handoff-and-tokens.md`.
+`design-handoff-and-tokens.md`. Token *file* organization (a `tokens/` directory shape, DTCG
+multi-file sets, Style Dictionary project layout) that this shared `theme.css` typically gets
+generated from or imports lives in `client-architecture.md`.
 
 <!-- sources: webdesign tailwind-v4-theme.md (Tamás Gábor, MIT, wholesale import) — miner-webdesign.md;
 nextlevelbuilder ui-ux-pro-max-skill ui-styling/references/{tailwind-customization,tailwind-responsive}.md

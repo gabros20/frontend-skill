@@ -126,9 +126,12 @@ scroll-event polling.
 ## Virtualization and content-visibility
 
 Virtualize lists once they run past a few hundred items: render only the visible range plus a small
-overscan buffer. `content-visibility: auto` skips the entire rendering pipeline for off-screen
-content and is the single biggest lever for long off-screen lists; `contain: layout style paint` (or
-`strict`) isolates a component so its internal changes cannot force layout recalculation outside it.
+overscan buffer. In React, `@tanstack/react-virtual` is the current headless default; `react-virtuoso`
+is the batteries-included alternative when dynamic-height, sticky-header, or infinite-scroll behavior
+should come pre-built rather than hand-wired on top of a headless primitive. `content-visibility:
+auto` skips the entire rendering pipeline for off-screen content and is the single biggest lever for
+long off-screen lists; `contain: layout style paint` (or `strict`) isolates a component so its
+internal changes cannot force layout recalculation outside it.
 Virtualization has an accessibility contract, not just a DOM-count one: it must preserve item sizing,
 keyboard access, and screen-reader semantics (see `accessibility.md`). Windowing that breaks Tab
 order or drops off-screen items from the accessibility tree is a regression, not just an

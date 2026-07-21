@@ -101,5 +101,17 @@
       "references/compose.md",
       "references/react-native.md"
     ]
+  },
+  {
+    "id": "project-restructure-feature-folders",
+    "prompt": "This React codebase's components/hooks/services folders are a mess and imports go every which way — restructure it into feature folders with a real import boundary.",
+    "expected_references": [
+      "references/client-architecture.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md",
+      "references/react-native.md"
+    ]
   }
 ]

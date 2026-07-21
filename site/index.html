@@ -239,7 +239,9 @@
   skips the empty/error/loading states, mishandles tokens, and ships with no tests. <b>frontend</b>
   replaces that with a router: route to the primary job and the platform it targets, read the
   reference completely, then ship production code with the full state set, accessibility floors met,
-  and the tests that guard it. Production client code for web, iOS, and Android.</p>
+  and the tests that guard it. Production client code for web, iOS, and Android, spanning the whole
+  register: bringing a distinctive, art-directed website design to pixel-perfect life is as much the
+  job as dense application UI.</p>
   <div class="term" style="margin-top:22px"><span class="c"># that's the whole start</span>
 <span class="p">/frontend</span> build an accessible Next.js signup form with every state and tests</div>
   <p class="hosts"><span class="hl">runs on</span><span class="ref">Claude Code</span><span>Codex</span><span>Cursor</span><span>Antigravity</span><span>opencode</span><span>Grok Build</span><span>Hermes</span></p>
@@ -303,6 +305,7 @@
     <tr><td>Write client tests and run the dev-loop self-check — unit/component/UI, coverage, screenshot verification</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/testing.md">testing.md</a></code></td></tr>
     <tr><td>Internationalize — logical properties, Intl APIs, direction/language, text-expansion resilience</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/i18n.md">i18n.md</a></code></td></tr>
     <tr><td>Consume a design handoff — read handoff.yaml and DESIGN.md, wire tokens, dark mode</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/design-handoff-and-tokens.md">design-handoff-and-tokens.md</a></code></td></tr>
+    <tr><td>Structure or restructure a client codebase — folders, feature boundaries, import discipline, token file layout</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/client-architecture.md">client-architecture.md</a></code></td></tr>
   </table></div>
   <p style="margin-top:12px">Full table — plus the platform and web stack overlays: <a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/SKILL.md#route-before-acting">SKILL.md</a>.</p>
   <div class="note"><b>Complementary, not duplicated:</b> experience intent and visual direction (<code>design-skill</code>), system decisions and API/event contracts (<code>architecture-skill</code>), server behavior and databases (<code>backend-skill</code>), independent audits and release gates (<code>quality-skill</code>), and deployment, CI/CD, and store delivery (<code>operate-skill</code>) are separate skills in the <a href="https://github.com/gabros20/digital-product-skill">digital-product-skill</a> family that this one hands off to and from.</div>
@@ -310,13 +313,13 @@
 
 <section id="refs">
   <h2><svg class="lu" aria-hidden="true"><use href="#lu-files"/></svg>Reference map</h2>
-  <p>25 references, grouped by facet — primary jobs, the platform overlay, and the web stack overlay.
+  <p>26 references, grouped by facet — primary jobs, the platform overlay, and the web stack overlay.
   Every one is copy-pasteable rather than abstract — the whole point of the router is that you never
   read all of them at once.</p>
   <dl class="refmap">
     <div class="refrow">
-      <dt class="reflabel"><svg class="lu" aria-hidden="true"><use href="#lu-clipboard-list"/></svg>primary job<span class="ct">9</span></dt>
-      <dd class="refchips"><span class="ref"><code>state-and-data.md</code></span><span class="ref"><code>state-completeness.md</code></span><span class="ref"><code>forms.md</code></span><span class="ref"><code>accessibility.md</code></span><span class="ref"><code>performance.md</code></span><span class="ref"><code>client-security.md</code></span><span class="ref"><code>testing.md</code></span><span class="ref"><code>i18n.md</code></span><span class="ref"><code>design-handoff-and-tokens.md</code></span></dd>
+      <dt class="reflabel"><svg class="lu" aria-hidden="true"><use href="#lu-clipboard-list"/></svg>primary job<span class="ct">10</span></dt>
+      <dd class="refchips"><span class="ref"><code>state-and-data.md</code></span><span class="ref"><code>state-completeness.md</code></span><span class="ref"><code>forms.md</code></span><span class="ref"><code>accessibility.md</code></span><span class="ref"><code>performance.md</code></span><span class="ref"><code>client-security.md</code></span><span class="ref"><code>testing.md</code></span><span class="ref"><code>i18n.md</code></span><span class="ref"><code>design-handoff-and-tokens.md</code></span><span class="ref"><code>client-architecture.md</code></span></dd>
     </div>
     <div class="refrow">
       <dt class="reflabel"><svg class="lu" aria-hidden="true"><use href="#lu-split"/></svg>platform · web substrate<span class="ct">4</span></dt>
@@ -377,7 +380,7 @@ git clone https://github.com/gabros20/frontend-skill && cd frontend-skill
   <details class="disc">
     <summary>what's in the repo</summary>
     <div>
-      <div class="files"><span class="hl">skills/frontend/</span>          <span class="d">the skill: SKILL.md (router) + references/ (25 files)</span>
+      <div class="files"><span class="hl">skills/frontend/</span>          <span class="d">the skill: SKILL.md (router) + references/ (26 files)</span>
 <span class="hl">docs/</span>                      <span class="d">installation · usage · recipes</span>
 <span class="hl">site/</span>                      <span class="d">this page — deploys to frontendengskill.vercel.app</span>
 install.sh                 <span class="d">installer (claude | codex | cursor | antigravity | opencode | grok | hermes | agents | all)</span>

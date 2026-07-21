@@ -39,6 +39,7 @@ Primary job:
 - `testing.md` — client tests and the dev-loop self-check — unit/component/UI, coverage, screenshot verification.
 - `i18n.md` — logical properties, Intl APIs, direction/language, text-expansion resilience.
 - `design-handoff-and-tokens.md` — consume handoff.yaml and DESIGN.md, wire tokens, dark mode.
+- `client-architecture.md` — structure or restructure a client codebase — folders, feature boundaries, import discipline, token file layout.
 
 Platform overlay — web substrate (add at most one platform overlay; native overrides web):
 
