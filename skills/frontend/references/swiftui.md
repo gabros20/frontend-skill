@@ -71,7 +71,7 @@ HIG-conformant accessibility wiring.
 
 ## Layout, targets, and safe area
 
-- Touch targets: `accessibility.md`'s table sets the floor (24×24 CSS px WCAG AA) and iOS's comfortable standard (44×44pt). Implement via `.frame(minWidth: 44, minHeight: 44)` — enforce strictly.
+- Touch targets: `accessibility.md`'s table sets the floor and iOS's comfortable standard (44×44pt). Implement via `.frame(minWidth: 44, minHeight: 44)` — enforce strictly.
 - `.ignoresSafeArea()` only for decorative/background fills, never text or controls.
 - Never `UIScreen.main.bounds`; prefer `containerRelativeFrame()`/`visualEffect()`, `GeometryReader` last resort.
 - `ContentUnavailableView` for empty/missing states. `RoundedRectangle`'s default corner style is already `.continuous`.

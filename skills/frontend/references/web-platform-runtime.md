@@ -195,7 +195,7 @@ motion values and route to the animation skill; this file owns only the mechanis
 
 <!-- sources: ehmo_platform-design-skills web/SKILL.md + rules/_sections.md (MIT, attribution
 required) — triage-cuellarfr-dembrandt-ehmo.md, triage-pbakaus-ehmo-web.md; dembrandt-skills
-(MIT) semantic-html-and-seo, sticky-and-fixed-elements — triage-cuellarfr-dembrandt-ehmo.md;
+(no license, facts re-expressed; MDN/WCAG/web.dev cited) semantic-html-and-seo, sticky-and-fixed-elements — triage-cuellarfr-dembrandt-ehmo.md;
 safari-mobile-optimization, transparent-web-video, scroll-driven-video (no license, re-expressed)
 — miner-local.md; emilkowalski/emil-design-eng + apple-design, ibelick/baseline-ui (MIT) —
 miner-ext-b.md -->

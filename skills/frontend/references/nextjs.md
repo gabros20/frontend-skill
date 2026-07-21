@@ -42,7 +42,8 @@ Produces:
 
 Special files: `layout`, `page`, `loading`, `error`, `global-error`, `not-found`, `template`,
 `default`, `route`, `proxy.ts` (see rename below), `opengraph-image.tsx`/`twitter-image.tsx` (run
-at the Edge). Route segment syntax: `[id]` dynamic, `[...slug]` catch-all, `[[...slug]]` optional
+at the Edge; their metadata content is seo's domain, frontend wires the convention only). Route
+segment syntax: `[id]` dynamic, `[...slug]` catch-all, `[[...slug]]` optional
 catch-all, `(group)` route group (no URL segment), `@slot` parallel route slot. A `_prefix` folder
 is excluded from routing entirely (private folder, safe for co-located helpers).
 
