@@ -1,13 +1,13 @@
 ---
 name: frontend
 description: >-
-  Implement and review production frontend code for websites, web apps, iOS, and Android:
-  components, state, data fetching, forms, auth flows, routing, responsive and accessible UI,
-  performance, client security, and unit/component/UI tests. Covers
-  React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and React Native, and consumes a
-  design handoff (handoff.yaml plus DESIGN.md). Do not use for design direction, motion or
-  animation implementation, SEO strategy, backend or system architecture, or independent QA audits
-  unless the request also requires frontend implementation.
+  Implement production frontend code for websites, web apps, iOS, and Android, from creative
+  website builds to dense product UI: components, state, data fetching, forms, auth flows, routing,
+  responsive accessible interfaces, performance, client security, and tests. Covers React, Next.js,
+  Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and React Native, and consumes a design handoff
+  (handoff.yaml, DESIGN.md). Do not use for design direction, motion or animation implementation,
+  SEO strategy, backend or system architecture, or QA audits unless the request also requires
+  frontend implementation.
 ---
 
 # Frontend Engineering
@@ -15,10 +15,12 @@ description: >-
 ## Mission and boundary
 
 Implement the production client — the code people actually run — across websites, web apps, iOS,
-and Android: component and state architecture, routing, data fetching and API integration, forms
-and auth flows, responsive and accessible UI, the full state set in code, client-side security,
-frontend performance, and the tests that guard it. Own the implementation and its craft; consume
-design's intent rather than re-deciding it.
+and Android. That spans the whole register: bringing a distinctive, art-directed website design to
+pixel-perfect life is as much this skill's job as dense application UI. It covers component and
+state architecture, routing, data fetching and API integration, forms and auth flows, responsive
+and accessible interfaces, the full state set in code, client-side security, frontend performance,
+and the tests that guard it. Own the implementation and its craft; consume design's intent rather
+than re-deciding it.
 
 Adjacent work this pack does not own: experience intent, visual direction, tokens-as-decisions, and
 look-and-feel critique (design); motion and animation beyond wiring reduced-motion and consuming

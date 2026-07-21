@@ -1,10 +1,11 @@
 # Frontend
 
-Implement and review production frontend code for websites, web apps, iOS, and Android. `frontend`
-owns the production client — component and state architecture, data fetching, forms and auth flows,
-responsive and accessible UI, the full state set in code, client-side security, performance, and
-the tests that guard it — across React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and
-React Native, without re-deciding experience intent.
+Implement and review production frontend code for websites, web apps, iOS, and Android — from
+bringing a distinctive, art-directed website design to pixel-perfect life to building dense
+application UI. `frontend` owns the production client — component and state architecture, data
+fetching, forms and auth flows, responsive and accessible interfaces, the full state set in code,
+client-side security, performance, and the tests that guard it — across React, Next.js, Tailwind,
+shadcn/ui, SwiftUI, Jetpack Compose, and React Native, without re-deciding experience intent.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
