@@ -247,7 +247,7 @@ where a reference needs the extra room to preserve capability-delta content.
 
 Each release synchronizes `.codex-plugin/plugin.json`, the newest `CHANGELOG.md` release, git tag
 `v<version>`, and the matching GitHub Release. Runtime `SKILL.md` intentionally carries no version
-or repository metadata. Current release: **v0.2.1**.
+or repository metadata. Current release: **v0.2.2**.
 
 ## Contributing
 

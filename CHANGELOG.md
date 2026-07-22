@@ -7,6 +7,13 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 
 ## [Unreleased]
 
+## [0.2.2] — 2026-07-22
+
+### Changed
+- Site hero intro: plain scope for websites, creative/marketing sites, web apps, product UI, and
+  native iOS/Android (no defensive phrasing).
+- Safari SVG trap wording: agent-facing facts only — no incident or project-specific narrative.
+
 ## [0.2.1] — 2026-07-22
 
 ### Added
@@ -15,8 +22,8 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   `removeViewBox: false` — `css-craft.md` + cross-refs.
 
 ### Changed
-- Site framing matches docs: creative websites and web apps, not “UI only”
-  (`site/index.html`, `llms.txt`, `og-source.html`).
+- Site framing matches docs: creative websites and web apps (`site/index.html`, `llms.txt`,
+  `og-source.html`).
 
 ## [0.2.0] — 2026-07-22
 
@@ -81,6 +88,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 - Evaluation fixtures across four dimensions — activation, traversal, output, and
   compression-ablation — replacing the placeholder sets.
 
+[0.2.2]: https://github.com/gabros20/frontend-skill/releases/tag/v0.2.2
 [0.2.1]: https://github.com/gabros20/frontend-skill/releases/tag/v0.2.1
 [0.2.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.2.0
 [0.1.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.1.0
