@@ -243,10 +243,9 @@ force a mass layout of deferred sections — use a plausible section height, not
 force layout recalculation outside it.
 
 **WebKit + inline SVG:** after a skipped subtree becomes relevant, Safari may repaint HTML but
-**not invalidate inline SVG paint** — the SVG box has correct layout, paths never draw. Chromium is
-fine. Do **not** put `content-visibility` on sections that contain critical inline SVG (logos in
-footers/heroes). Prefer list virtualization for long content; see `css-craft.md` Inline SVG Safari
-paint traps for the full stacked failure mode.
+**not invalidate inline SVG paint** (layout OK, paths blank). Do not put `content-visibility` on
+ancestors of critical inline SVG. Prefer list virtualization for long content; stacked SVG traps in
+`css-craft.md`.
 
 Virtualization has an accessibility contract, not just a DOM-count one: it must preserve item sizing,
 keyboard access, and screen-reader semantics (see `accessibility.md`). Windowing that breaks Tab

@@ -103,9 +103,8 @@ Treat this as the acceptance gate for any UI-affecting change, before reporting 
 5. Fix and re-shoot only the affected routes; cap this at a few rounds rather than iterating
    indefinitely.
 6. Do an interactive pass (hover states, nav, forms) via a real or CDP-based browser tool, not
-   screenshots alone. **Inline SVG logos / brand marks:** Chromium-only capture can miss WebKit paint
-   bugs (empty box, correct layout). Spot-check **macOS Safari or WebKit** after logo/SVGO/svgr
-   changes — see `css-craft.md` Inline SVG Safari paint traps.
+   screenshots alone. **Inline SVG:** Chromium-only checks miss WebKit paint-no-draw; spot-check
+   Safari/WebKit after SVG or SVGO/svgr changes (`css-craft.md`).
 7. Tear down the server when done.
 
 **Coverage-as-a-blocker**: confirm every component or section a spec calls for is actually wired up

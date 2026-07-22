@@ -279,8 +279,7 @@ Primary-source web research (MDN, web.dev, Josh Comeau, SiteLint, WebKit bugs, V
 - **SiteLint iOS video poster / `#t=0.001` / preload ladder (2025)** — Reduce Motion autoplay refusal, no Gzip on video, poster vs fragment cost. Drawn into `web-platform-runtime.md`.
 - **VisualViewport + keyboard (MDN, bram.us, WebKit 265578)** — layout vs visual viewport under OSK; fixed bottom chrome offset. Drawn into `web-platform-runtime.md`.
 - **MDN/web.dev content-visibility** — `contain-intrinsic-size: auto` remembers size after first paint. Drawn into `performance.md`.
-- **Production Safari 26 / macOS 26 footer logo postmortem** (practitioner; re-expressed) — stacked
-  WebKit traps: `content-visibility` + inline SVG paint invalidation; Tailwind v4 `@layer` vs SVG
-  presentation attributes; `<g transform>` paint-no-draw; duplicate `url(#id)` clip across inlined
-  SVGs; SVGO `removeViewBox`. Drawn into `css-craft.md` (primary), `performance.md`, `tailwind.md`,
-  `nextjs.md`.
+- **WebKit inline SVG paint traps** (re-expressed) — `content-visibility` + SVG paint invalidation;
+  Tailwind v4 `@layer` vs presentation attributes; `<g transform>` paint-no-draw; duplicate
+  `url(#id)` clips; SVGO `removeViewBox`. Drawn into `css-craft.md`, `performance.md`,
+  `tailwind.md`, `nextjs.md`, `testing.md`.

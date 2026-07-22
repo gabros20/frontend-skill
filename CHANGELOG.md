@@ -10,10 +10,9 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [0.2.1] — 2026-07-22
 
 ### Added
-- **Safari inline SVG paint traps** (Safari 26 / macOS 26 production postmortem):
-  `content-visibility` + SVG paint invalidation; Tailwind v4 `@layer` vs presentation attributes;
-  flat paths (no `<g transform>`); unique clip IDs; SVGO `removeViewBox: false` — `css-craft.md`
-  primary, cross-refs in `performance.md`, `tailwind.md`, `nextjs.md`, `testing.md`.
+- **Safari inline SVG paint traps:** `content-visibility` + SVG paint invalidation; Tailwind v4
+  `@layer` vs presentation attributes; flat paths (no `<g transform>`); unique clip IDs; SVGO
+  `removeViewBox: false` — `css-craft.md` + cross-refs.
 
 ### Changed
 - Site framing matches docs: creative websites and web apps, not “UI only”

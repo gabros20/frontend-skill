@@ -216,23 +216,19 @@ ms per frame; see `performance.md` for paint long-task verification. Never leave
 
 ## Inline SVG Safari paint traps
 
-**Symptom class (macOS/iOS Safari, including Safari 26):** SVG box is in the DOM with correct
-geometry (`getBBox` / layout size OK); neighboring text paints; **paths never draw** (looks like
-color/`currentColor`/black-on-black). Neighboring **flat** icon SVGs may still work. Chromium often
-tolerates every trap below — **QA real Safari**, not headless Chrome alone. Bugs stack: fixing one
-can unmask the next.
+**Symptom (WebKit):** SVG has correct layout/`getBBox`; HTML siblings paint; **paths do not draw**.
+Flat icon SVGs may still work. Chromium often fine — verify real Safari, not headless Chrome only.
 
-| Trap | WebKit failure | Do this |
+| Trap | WebKit failure | Rule |
 |---|---|---|
-| Ancestor `content-visibility: auto` | After skip → relevant, HTML repaints; **inline SVG paint not invalidated** — empty box | Do **not** put `content-visibility` / `contain-intrinsic-size` on sections that hold inline SVG (footer/hero logos). Perf win is tiny; paint is zero. Depth in `performance.md` |
-| SVG `width`/`height` (or `fill`) **presentation attributes** + Tailwind v4 utilities | WebKit treats attrs as **unlayered** author CSS; unlayered beats `@layer utilities` → utilities lose (huge intrinsic size / wrong fill). Spec: attrs sort below author styles; Chrome/FF mostly do | **No** `width`/`height`/`fill` attrs on SVGs you size/color with utilities. Size with **CSS** `aspect-ratio` + `h-*`/`w-*`; color with CSS `fill` utilities |
-| `<g transform="…">` wrappers (scale/translate lockups) | Correct bbox; **group contents never paint** | Flatten transforms into path coordinates (bake absolute coords). Prefer flat `<svg><path/>…` like working social icons — no transform groups on critical logos |
-| Shared `clip-path="url(#id)"` / `url(#…)` across multiple inlined SVGs | Duplicate IDs (header+footer svgr); WebKit resolves to **first** id in document (often wrong root) → **empty clip** | Unique IDs per instance, or drop redundant full-viewBox clip groups |
-| SVGO/svgr `removeViewBox` while attrs present | viewBox dropped → paths unscaled/clipped | Keep **`removeViewBox: false`** in SVGO defaults (Next: Turbopack **and** webpack svgr rules — Next 16 build is Turbopack-first). See `nextjs.md` |
+| Ancestor `content-visibility: auto` | After skip → relevant, HTML repaints; **inline SVG paint not invalidated** | No `content-visibility` / `contain-intrinsic-size` on ancestors of critical inline SVG. See `performance.md` |
+| SVG `width`/`height`/`fill` **presentation attributes** + Tailwind v4 utilities | WebKit treats attrs as **unlayered** author CSS; unlayered beats `@layer utilities` → utilities lose | No sizing/fill presentation attrs when utilities own size/color. Use CSS `aspect-ratio` + `h-*`/`w-*` / `fill-*` |
+| `<g transform="…">` | Correct bbox; **group contents never paint** | Flatten transforms into path data. Prefer flat `<svg><path/>…` |
+| Shared `clip-path="url(#id)"` across multiple inlined SVGs | Duplicate IDs → WebKit resolves to **first** in document → empty clip | Unique IDs per instance, or drop redundant full-viewBox clips |
+| SVGO/svgr strips `viewBox` | Paths unscaled/clipped | Keep `removeViewBox: false` (Turbopack + webpack svgr). See `nextjs.md` |
 
-**Hardened logo shape:** static flat inline SVG (or one hardened component): no `content-visibility`
-ancestor, no transform groups, no width/height attrs, stable viewBox, explicit fills when
-`currentColor` is not required. Verify **macOS Safari + iOS Safari** after any logo/SVGO change.
+**Default inline mark:** flat paths, no transform groups, no width/height attrs, stable viewBox;
+explicit fills when `currentColor` is not required.
 
 ## Paint and texture craft
 
@@ -370,6 +366,5 @@ glass budget thresholds, grain opacity band, clip-path vs mask-image, layered sh
 tax); Graffino/WebDong Safari filter:blur force-GPU; SiteLint blur stay-within-container;
 Josh Comeau backdrop-filter. -->
 ; fold-wave-2b: Josh Comeau backdrop-filter frosted-glass near-edge mask craft + Firefox sticky glass bugs;
-Safari 26 / macOS 26 footer logo postmortem (production): content-visibility + inline SVG paint
-invalidation; Tailwind v4 @layer vs SVG presentation attributes; <g transform> paint-no-draw;
-duplicate url(#clip) ids; SVGO removeViewBox — folded as Inline SVG Safari paint traps -->
+WebKit inline SVG: content-visibility paint invalidation; @layer vs presentation attrs; g transform
+paint-no-draw; url(#id) clip collision; SVGO removeViewBox -->
