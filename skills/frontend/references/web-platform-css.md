@@ -6,6 +6,9 @@ the content-driven breakpoint doctrine every web stack inherits.
 Read when:
 - Choosing a breakpoint set, a fluid-sizing formula, or a modern CSS layout mechanism (grid,
   subgrid, container queries, `:has()`).
+- Debugging margin collapse, stacking contexts / z-index locality, or dark-mode CSS mechanism
+  (`light-dark()` vs dual token blocks, `color-scheme` meta/CSS match).
+- Authoring OKLCH / Display-P3 tokens, gamut gates, or a consistent image color-management pipeline.
 - Writing a browser-support claim in any reference or code comment.
 - A neighboring reference needs the rem-breakpoint doctrine or a CSS-layout mechanism and should
   cite this file.
@@ -13,9 +16,10 @@ Read when:
 Skip when:
 - Tailwind's px breakpoint scale or its `@theme` token wiring: use `tailwind.md`.
 - Responsive-image markup (`srcset`/`sizes`/`picture`) and CWV-driven image rules: use
-  `performance.md`.
+  `performance.md` (color-management for tagged rasters stays here).
 - CSS logical properties' full mapping table and RTL specifics: use `i18n.md`.
 - SPA routing, service workers, safe-area, View Transitions wiring: use `web-platform-runtime.md`.
+- Safari compositor / glass / grain paint craft: use `css-craft.md`.
 
 Inputs: the layout or breakpoint problem being solved and the project's actual browser-support bar.
 
@@ -26,9 +30,10 @@ Produces: working modern CSS with a stated fallback where support is uncertain.
 - Breakpoints and fluid CSS
 - Modern layout (grid, subgrid, container queries, `:has()`, `@property`, containment, cascade
   layers)
-- Stacking and z-index
+- Margin collapse
+- Stacking contexts and z-index
 - Dark mode (CSS mechanism)
-- Color: OKLCH
+- Color (OKLCH, gamut, color-management)
 - CSS craft baseline
 
 ## Perishable browser-support rule
@@ -95,8 +100,37 @@ a full-width one need different internal layout at the same viewport width.
   render-isolated, so its internal changes cannot force a layout recalculation outside it;
   `content-visibility: auto` goes further and skips the whole rendering pipeline for off-screen
   content (see `performance.md` for the virtualization use case this enables).
+- **Defensive multi-column grid:** never ship a bare fixed-track split like
+  `grid-template-columns: 250px 1fr` without a min-width media/container query. On narrow viewports
+  the fixed track plus content forces horizontal scroll. Gate the multi-column template behind a
+  min-width breakpoint (or use `minmax(0, 1fr)` / auto-fit RAM patterns from `css-craft.md`) so
+  single-column is the default under the gate.
 
-## Stacking and z-index
+## Margin collapse
+
+Vertical margins collapse under block layout; horizontal never do. Collapse is a common source of
+"why is my section not flush?" and "why is this gap half what I set?" bugs.
+
+Rules of thumb (Comeau):
+1. **Vertical only** — left/right margins never collapse.
+2. **Adjacent in the box tree** — intervening content (even an empty `<br>`) blocks collapse.
+3. **Bigger wins** when both are positive; not additive. More than two margins can share one gap
+   (parent bottom + child bottom + next parent top + next child top); the largest positive wins.
+4. **Nesting does not prevent collapse** — a child's margin can "escape" through its parent. Margins
+   control sibling distance, not parent padding. Classic trap: parent `margin-top: 0` still collapses
+   with the first child's top margin (0 is a collapsible margin), so the child's top margin pulls
+   the parent down.
+5. **Barriers that stop collapse:** padding or border between the two margins; a fixed height that
+   creates empty space; any `overflow` other than `visible` (scroll containers).
+6. **Negative margins:** most significant positive + most significant negative (signed sum); mixed
+   signs cancel rather than "bigger absolute wins."
+7. **Flex, grid, and out-of-flow: margins never collapse.** Prefer `gap` for spacing in flex/grid
+   instead of vertical margins between items.
+
+When you need a guaranteed non-collapsing gap between a parent and its first/last child, use padding
+on the parent (or a border/overflow barrier), not a margin you hope will "hold."
+
+## Stacking contexts and z-index
 
 Maintain one named z-index token scale for the whole project rather than ad hoc numbers per
 component. Prefer `position: sticky` over `position: fixed` when the element should still
@@ -104,9 +138,29 @@ participate in document flow until it needs to pin; compensate a sticky header's
 padding on the content below it, and combine top and left sticky on a single cell for sticky table
 headers.
 
-Stacking-context gotchas: `isolation: isolate` is required, not decorative, to scope a
-`mix-blend-mode` or `backdrop-filter` effect to one section; without it, the effect leaks across
-sibling sections. Ship `-webkit-backdrop-filter` alongside the standard property, plus a
+**z-index is local to a stacking context, not global.** Children are flattened with their
+ancestor: a `z-index: 9999` inside a lower context cannot paint above a sibling context with a
+higher ancestor. Giving an element a z-index both lifts it *and* creates a context that traps its
+descendants — intentional side effect.
+
+Common context creators agents forget (no exhaustive list; verify current CSS):
+- `opacity` less than 1
+- `position: fixed` or `sticky` (z-index not required)
+- `transform`, `filter`, `clip-path`, `perspective`, `will-change: opacity|transform`
+- `mix-blend-mode`, `isolation: isolate`
+- Flex or grid *child* with a z-index
+
+**z-index does not require `position` on flex/grid children** — those layout algorithms honor
+z-index independently of Positioned layout. Requiring `position: relative` everywhere is a
+positioned-layout habit that does not apply inside flex/grid.
+
+**`isolation: isolate` for component airtightness:** seal a reusable component's internal z-index
+layers without baking a global `z-index: 1` into the component API. Prefer isolate over inventing
+token numbers for every nested chrome piece. Still required (not decorative) to scope
+`mix-blend-mode` or `backdrop-filter` to one section; without it, the effect leaks across sibling
+sections.
+
+Ship `-webkit-backdrop-filter` alongside the standard property, plus a
 `@supports not (backdrop-filter: blur())` solid-background fallback. `background-attachment: fixed`
 is broken on iOS Safari; prefer a transform-based or `animation-timeline: scroll()` approach for any
 parallax-adjacent effect instead (the parallax effect itself is design/animation's call; this is a
@@ -115,20 +169,71 @@ isolate the stacking context, or use the breakout-grid method above instead of a
 
 ## Dark mode (CSS mechanism)
 
-`prefers-color-scheme: dark` gates a set of CSS custom properties redefined per theme; a
-`data-theme` attribute plus `localStorage` layers a manual override on top of the OS-preference
-default. `<picture>` plus `media="(prefers-color-scheme: dark)"` swaps theme-specific images.
-Declare `color-scheme: light dark` (mechanism only; the `prefers-contrast`/`forced-colors` a11y
-semantics are `accessibility.md`'s). Re-verify contrast in the dark palette explicitly; it is not
-just an inversion of the light one (see `accessibility.md`'s contrast table).
+Two viable paths; pick one per project and do not mix styles casually.
 
-## Color: OKLCH
+**Dual custom-property blocks (classic):** `prefers-color-scheme: dark` gates a set of CSS custom
+properties redefined per theme; a `data-theme` attribute plus `localStorage` layers a manual
+override on top of the OS-preference default. `<picture>` plus
+`media="(prefers-color-scheme: dark)"` swaps theme-specific images.
 
-`oklch(L C H)` is the practical perceptually-uniform color space for a CSS design-token system:
-equal steps in `L` look equal to the eye regardless of hue or chroma, unlike HSL, where the same
-lightness delta reads very differently per hue. `@media (color-gamut: p3)` serves a wider-gamut
-variant where supported. This is converging across independent CSS-token systems as the default
-recommendation; treat it as the default choice for a new token system rather than hex or HSL.
+**`light-dark()` + root `color-scheme` (modern path):** declare `color-scheme: light dark` on
+`:root` (or `html`) and set colors with `color: light-dark(<light>, <dark>)` (and the same for
+backgrounds/borders). The browser owns OS sync, and native form controls/scrollbars follow
+`color-scheme`. A manual theme toggle becomes: override `color-scheme` to `light` or `dark` (plus
+persist the preference) rather than redefining every token block. Best for palettes that are simple
+paired light/dark values; complex multi-brand token graphs still fit the dual-block path better.
+Verify current support (caniuse/MDN) per the perishable rule above; progressive-enhance by keeping
+a single-theme fallback outside `light-dark()`.
+
+**`color-scheme` must match the painted palette.** Page CSS can go fully dark while native
+controls, scrollbars, and system colors stay light if `color-scheme` / the meta tag is missing or
+wrong — unreadable inputs on dark pages. Set `<meta name="color-scheme" content="light dark">`
+early in `<head>` and mirror with `:root { color-scheme: light dark; }` (or the single scheme the
+page actually paints). Pair `theme-color` media variants with the same scheme. **`only dark` is
+invalid** — browsers ignore it and fall back to light. Declare `color-scheme` either path
+(mechanism only; `prefers-contrast` / `forced-colors` a11y semantics are `accessibility.md`'s).
+Re-verify contrast in the dark palette explicitly; it is not just an inversion of the light one
+(see `accessibility.md`'s contrast table).
+
+## Color (OKLCH, gamut, color-management)
+
+**OKLCH tokens:** `oklch(L C H)` is the practical perceptually-uniform color space for a CSS
+design-token system: equal steps in `L` look equal to the eye regardless of hue or chroma, unlike
+HSL, where the same lightness delta reads very differently per hue. Treat OKLCH as the default
+choice for a new token system rather than hex or HSL.
+
+**Wide-gamut gate:** write brand-critical wide colors inside `@media (color-gamut: p3)` as
+`color(display-p3 …)` or higher-chroma OKLCH, with **sRGB fallbacks outside** the query. Writing
+`color(display-p3 …)` without the gate still "works" on non-P3 displays by mapping/clamping
+differently across engines → **Safari-vs-Chrome hue mismatch** when one path is tagged P3 and the
+other is sRGB hex. Never assume CSS hex equals a photo's P3 grade. Verify with
+`matchMedia('(color-gamut: p3)')` and the same swatch on a P3 Mac Safari vs an sRGB external
+monitor.
+
+**Gamut map vs channel clip:** when publishing P3 tokens or design-tool colors down to sRGB
+fallbacks, **do not naive-clip** R/G/B channels (hue shifts and neon collapse). Map gamut
+(perceptual/colorimetric intent in the design tool or a library) or author dual tokens under the
+`color-gamut: p3` query. Prefer an `inGamut()`-style check before shipping a value into a smaller
+space; preserve round-trip fidelity in the design export path.
+
+**Raster color-management pipeline — pick one; don't mix naively:**
+
+| Pipeline | Rule |
+|---|---|
+| **A — strip-to-sRGB** | Untag / convert assets to sRGB; consistent web chrome + photos across engines |
+| **B — intentional P3** | Embed Display-P3 profile; serve under P3-aware `<picture>` / CSS only |
+
+Untagged JPEG/PNG are assumed **sRGB**. P3-tagged assets render wider on color-managed
+Safari/macOS; Chrome may match or clip depending on format/profile → hero photo "more vivid on
+Safari." WebP/AVIF P3 tagging remains flaky on some Safari paths. Do not mix untagged sRGB UI
+chrome with P3 photos without an intentional grade. Verify: same file in Preview vs Safari vs
+Chrome; strip-profile A/B on the hero.
+
+**Display-P3 SVG as repeating background desaturates (Chrome/Safari):** an SVG that uses
+Display-P3 fills, used as a **repeating** CSS `background-image`, is forced to sRGB — colors
+silently dull. Non-repeating may still be wide-gamut. Avoid `background-repeat` for P3 SVG; use
+inline SVG, a single non-repeat tile, or a raster with an explicit profile. Verify fill in the DOM
+vs the same SVG as a repeating background on a P3 display.
 
 ## CSS craft baseline
 
@@ -148,4 +253,4 @@ recommendation; treat it as the default choice for a new token system rather tha
   remove that block, or layout collapses site-wide (see `tailwind.md`'s `@theme` mechanics for the
   Tailwind-specific version of this gotcha).
 
-<!-- sources: ehmo_platform-design-skills (MIT) - content-driven breakpoints, fluid CSS/clamp, container queries; pbakaus_impeccable (Apache-2.0) - breakpoint conflict note; thedaviddias/Front-End-Checklist (no license, re-expressed; MDN/web.dev cited) - container-queries, @property, containment, :has(), subgrid, specificity, dark-mode-css, color-oklch; miner-webdesign (MIT, ours) - breakout/bento/subgrid grid mechanisms, stacking-context gotchas (isolation, backdrop-filter fallback, background-attachment:fixed), container-token collision, minifier-comment gotcha, text-truncation cookbook; dembrandt_dembrandt-skills (no license, facts re-expressed; MDN/WCAG/web.dev cited) - z-index scale, sticky/fixed decision rule; wondelai_skills web-typography (MIT) - clamp() fluid-typography formula. -->
+<!-- sources: ehmo_platform-design-skills (MIT) - content-driven breakpoints, fluid CSS/clamp, container queries; pbakaus_impeccable (Apache-2.0) - breakpoint conflict note; thedaviddias/Front-End-Checklist (no license, re-expressed; MDN/web.dev cited) - container-queries, @property, containment, :has(), subgrid, specificity, dark-mode-css, color-oklch; miner-webdesign (MIT, ours) - breakout/bento/subgrid grid mechanisms, stacking-context gotchas (isolation, backdrop-filter fallback, background-attachment:fixed), container-token collision, minifier-comment gotcha, text-truncation cookbook; dembrandt_dembrandt-skills (no license, facts re-expressed; MDN/WCAG/web.dev cited) - z-index scale, sticky/fixed decision rule; wondelai_skills web-typography (MIT) - clamp() fluid-typography formula; authors-architecture Josh Comeau margin-collapse + stacking-context full model; Ahmad Shadeed defensive multi-column grid gate; x-bookmarks #9 light-dark() + color-scheme modern dark-mode path; research-sweep-2 web-media-perf C-web-9–12 (color-scheme meta/CSS match + only-dark invalid, color-gamut:p3 gate, untagged rasters sRGB vs P3-tagged divergence, Display-P3 SVG background-repeat desaturate bug); web.dev color-scheme; MDN meta color-scheme / color-gamut; WebKit wide-gamut P3; Chrome HD color guide; tylergaw.com Display-P3 background-repeat bug (2026). -->

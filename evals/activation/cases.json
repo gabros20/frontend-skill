@@ -11,7 +11,7 @@
   },
   {
     "id": "positive-react-state-bug",
-    "prompt": "This React component re-renders on every keystroke — find the cause and fix it.",
+    "prompt": "This React component re-renders on every keystroke \u2014 find the cause and fix it.",
     "should_trigger": true
   },
   {
@@ -36,7 +36,7 @@
   },
   {
     "id": "positive-react-native-perf",
-    "prompt": "Our React Native FlashList is janky scrolling through 500 items — diagnose and fix it.",
+    "prompt": "Our React Native FlashList is janky scrolling through 500 items \u2014 diagnose and fix it.",
     "should_trigger": true
   },
   {
@@ -51,7 +51,7 @@
   },
   {
     "id": "positive-client-perf",
-    "prompt": "Our product page's LCP is 4.2s — diagnose the render-blocking resources and fix it.",
+    "prompt": "Our product page's LCP is 4.2s \u2014 diagnose the render-blocking resources and fix it.",
     "should_trigger": true
   },
   {
@@ -71,7 +71,17 @@
   },
   {
     "id": "positive-folder-structure",
-    "prompt": "Our features/ and components/ folders have cyclic imports and no clear boundary — restructure this client codebase's folder layout.",
+    "prompt": "Our features/ and components/ folders have cyclic imports and no clear boundary \u2014 restructure this client codebase's folder layout.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-spa-session-wiring",
+    "prompt": "Wire a single-flight silent token refresh on 401, multi-tab logout fanout, and a shared fetch client with credentials for our SPA.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-csrf-credentials",
+    "prompt": "Our SPA uses cookie sessions across an API subdomain \u2014 fix credentialed CORS, CSRF, and the OAuth set-cookie-on-redirect bug.",
     "should_trigger": true
   },
   {
@@ -103,5 +113,30 @@
     "id": "negative-deploy-pipeline",
     "prompt": "Set up the CI/CD pipeline and canary deployment strategy for shipping the frontend build.",
     "should_trigger": false
+  },
+  {
+    "id": "positive-transparent-video-safari",
+    "prompt": "Hero has a transparent looping video that looks broken in Safari but fine in Chrome \u2014 fix encode/serving so it works cross-browser.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-css-blur-jank-safari",
+    "prompt": "Cards with filter:blur and a glass navbar make Safari scroll janky and the frosted panel sometimes shows no blur \u2014 diagnose and fix.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-scroll-scrub-video-freeze",
+    "prompt": "Our scroll-scrubbed product video freezes on Safari when the section locks; Chrome is fine. Fix the runtime traps.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-lcp-responsive-preload",
+    "prompt": "LCP hero uses srcset but preload always fetches the 2000w image on mobile \u2014 fix resource hints and image loading.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-color-gamut-mismatch",
+    "prompt": "Brand colors and hero photo look more vivid on Safari than Chrome \u2014 set a proper color-management pipeline for the site.",
+    "should_trigger": true
   }
 ]

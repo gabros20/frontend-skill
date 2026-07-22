@@ -27,6 +27,7 @@ class-merge usage, and a breakpoint choice consistent with the rest of the codeb
 - `@theme` namespaces and full coverage
 - The container-token collision (and other build traps)
 - Sharing a theme across projects
+- Multi-entry CSS: `@source` isolation
 - Breakpoints: Tailwind's px scale
 - `cn()`, `clsx`, `tailwind-merge`, CVA
 - Utility conventions worth defaulting to
@@ -104,6 +105,35 @@ any locally-declared one. File-layout mechanics for a `tokens/` directory feedin
 multi-file sets, Style Dictionary's directory-is-cosmetic merge) live in `client-architecture.md`,
 not here.
 
+## Multi-entry CSS: `@source` isolation
+
+When a route or feature ships its own CSS entry (so its utilities should not bloat the main
+stylesheet's CSSOM), split Tailwind sources explicitly:
+
+**Main bundle** (`global.css`) — scan the app, exclude the internal route tree:
+
+```css
+@import "tailwindcss";
+@source not "./internal";
+```
+
+**Route/feature bundle** (e.g. `internal.css` loaded only on that route) — start with an empty
+source set, then add only that tree:
+
+```css
+@import "tailwindcss" source(none);
+@source "./internal";
+```
+
+`source(none)` prevents the route entry from re-pulling the full app scan; `@source not` keeps
+route-only utilities out of the main sheet. Measured win is not just network bytes — large unused
+utility sets cost runtime CSSOM work. Pair each entry with the matching HTML/JS import so the route
+sheet loads only when that subtree mounts. Do not use this split for a single-entry app; it is for
+multi-entry builds where internal/admin/heavy-feature CSS should stay off the critical path.
+
+Theme tokens still follow the shared-`theme.css` merge pattern above: import shared theme into both
+entries so `@theme` stays consistent without duplicating token authoring.
+
 ## Breakpoints: Tailwind's px scale
 
 Tailwind's default breakpoints are px-based, not the content-driven rem scale: `sm 640px`,
@@ -161,4 +191,6 @@ nextlevelbuilder ui-ux-pro-max-skill ui-styling/references/{tailwind-customizati
 (MIT) — miner-ext-a.md; ibelick baseline-ui SKILL.md (MIT) — miner-ext-b.md; Vercel shadcn skill
 (claude-plugins-official/vercel, Apache-2.0, attribution required) — miner-vercel.md; building-components
 (no license, re-expressed) — miner-local.md; Leonxlnx taste-skill SKILL.md postcss trap, Nutlope/hallmark
-export-formats.md spacing-key trap (both MIT) — miner-ext-c.md -->
+export-formats.md spacing-key trap (both MIT) — miner-ext-c.md; x-bookmarks.md #5 (@diegohaz) —
+Tailwind v4 multi-entry: @import "tailwindcss"; @source not "./internal" vs @import "tailwindcss"
+source(none); @source "./internal" for unused utility drop from main bundle / CSSOM cost -->

@@ -24,8 +24,12 @@ on top of it.
 
 `frontend` is the Build-stage skill of the
 [Digital Product Skills](https://github.com/gabros20/digital-product-skill) family: production
-client implementation across websites, web apps, iOS, and Android. This repository is
-independently versioned as `frontend-skill`; the runtime identifier remains `frontend`.
+client implementation across websites, web apps, iOS, and Android — including dense craft for
+Safari/video, CWV/media loading, SPA session wiring, full UI state sets, and **Expo-first** React
+Native (with optional deeper Expo skills + [docs.expo.dev](https://docs.expo.dev)). This repository
+is independently versioned as `frontend-skill`; the runtime identifier remains `frontend`.
+
+Visual guide: [frontendengskill.vercel.app](https://frontendengskill.vercel.app).
 
 Maintainers should read [AGENTS.md](../AGENTS.md) for repository invariants and
 [CONTRIBUTING.md](../CONTRIBUTING.md) for validation and release steps.

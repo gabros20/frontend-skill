@@ -17,6 +17,7 @@ Inputs: the feature's states and transitions, its data dependencies, and its fai
 Produces: a state machine with no impossible states, a fetch plan with no accidental waterfalls, and a defined recovery and retry behavior per failure class.
 
 ## Contents
+- Server state ≠ client state
 - Model state as a machine
 - Derive, don't store
 - URL as state
@@ -28,6 +29,20 @@ Produces: a state machine with no impossible states, a fetch plan with no accide
 - Client auth-flow shape
 - Component teardown discipline
 - Analytics: emit, don't define
+- Production wiring (pointer)
+
+## Server state ≠ client state
+
+**Server state** is data the backend owns that the client *borrows* as a cached view (lists, detail
+records, permissions from the API). It needs a dedup/cache/revalidate layer, explicit invalidation
+after mutations, and a freshness window — not a permanent copy in a global client store.
+**Client state** is UI-only: selection, open/closed panels, draft form fields before submit, wizard
+step, theme preference. Treating server entities as long-lived Redux/Zustand truth (and syncing them
+by hand) is the historical category error that produces stale UI and double sources of truth.
+
+Put server reads/writes through the data-fetching layer (`data-fetching-libraries.md`); put
+ephemeral UI in local/component or intentional client stores (`react-components-and-state.md`).
+Shared "is this feature's data server or client?" is decided once per field, not per component.
 
 ## Model state as a machine
 
@@ -62,7 +77,7 @@ The same waterfall recurs in four common shapes regardless of which router or ru
 
 ## Cache freshness and invalidation
 
-Treat client-cached data as having a freshness window, not a permanent copy: define how long a cached value is considered fresh versus how long it's retained before eviction, and explicitly invalidate (not merely refetch) the affected cache entries after a mutation changes them. No caching layer infers which entries a given write touched; the mutation site must name the affected keys/tags itself. Prefer per-request dedup (the same data requested twice within one render pass resolves from a single call) over cross-request caching, unless the data is genuinely reused across separate requests within a short window.
+Treat client-cached data as having a freshness window, not a permanent copy: define how long a cached value is considered fresh versus how long it's retained before eviction, and explicitly invalidate (not merely refetch) the affected cache entries after a mutation changes them. Freshness (`staleTime`-class) and unused retention (`gcTime`-class) are different knobs — see `data-fetching-libraries.md` for the portable traps (default immediate-stale, `initialData` blocking fetch, keys as deps). No caching layer infers which entries a given write touched; the mutation site must name the affected keys/tags itself. Prefer per-request dedup (the same data requested twice within one render pass resolves from a single call) over cross-request caching, unless the data is genuinely reused across separate requests within a short window.
 
 ## Optimistic UI and rollback
 
@@ -74,8 +89,8 @@ The three-step shape, in order: cancel any in-flight request for the same key fi
 
 Match the recovery mechanism to the failure class:
 
-- **Network or timeout error**: retry automatically with exponential backoff, rather than failing immediately or retrying at a fixed interval.
-- **Session expiry** (a 401 mid-session): refresh the token silently and replay the original request; return the user to the exact state they were in, not to a login screen that discards their place.
+- **Network or timeout error**: retry automatically with exponential backoff, rather than failing immediately or retrying at a fixed interval. On **mutating** retries (and first-shot unsafe POSTs that may be replayed), attach a **client-generated idempotency key** per logical action (UUID or equivalent in a request header the API agrees on) so a double-send cannot double-apply — same key discipline as the offline queue below, not only for offline.
+- **Session expiry** (a 401 mid-session): refresh the token silently and replay the original request; return the user to the exact state they were in, not to a login screen that discards their place. **Single-flight the refresh:** concurrent 401s must share one in-flight refresh (mutex / shared promise), not each fire their own — uncoordinated refresh under token rotation invalidates siblings and thrash-logs the user out. Cross-tab: only one tab should refresh, then broadcast the new session (or "logged out") to the others; see Client auth-flow shape. Concrete API-client interceptors and mutex wiring: `client-app-wiring.md`.
 - **Edit conflict** (a concurrent write collision): show both versions side by side and let the user resolve it; never silently overwrite either side.
 - **Server error** (5xx): surface a clear, generic message; don't retry indefinitely against a server that's genuinely failing.
 
@@ -89,6 +104,8 @@ Map an API's status code to the right client behavior rather than treating every
 
 Model authentication as its own state machine (see above): logged-out, authenticating, logged-in, logging-out, with session expiry handled as the silent-refresh recovery case above, not as a hard redirect that discards the user's place. Whichever auth provider's SDK is in use, its client-side hook and provider-component API are framework-specific (see `nextjs.md`); never persist the session token itself in `localStorage` or `sessionStorage` regardless of provider (`client-security.md` is the canonical home for why: anything reachable from client storage is public). Pick a provider based on what the product actually needs, a fast prebuilt UI, passwordless/flow-builder flexibility, or enterprise SSO, rather than defaulting to whichever is best known.
 
+**Multi-tab session fanout:** logout, forced re-auth, and successful silent refresh are product events that must reach every open tab of the same origin, or tab A logs out while tab B keeps a live UI against a dead session (or holds a revoked access token after rotation). Broadcast a small session message (`logged-out` / `session-updated`) via `BroadcastChannel` (or `storage` event when a new tab must learn state on load). Mechanism choice and API live in `js-dom-craft.md`; this file owns the product requirement: one logout clears all tabs; one refresh does not race-invalidate other tabs' tokens. Full bootstrap/interceptor shape: `client-app-wiring.md`.
+
 ## Component teardown discipline
 
 Whatever a component's life created (a subscription, a timer, an event listener, an in-flight request) must be undone on teardown: remove event listeners, cancel subscriptions, clear timers and intervals, and abort pending requests (`AbortController`) on unmount. This is a framework-agnostic completeness rule: a dangling timer or an unaborted request outlives the UI it was serving. The framework-specific hook mechanics for wiring this cleanup belong in `react-components-and-state.md`.
@@ -97,4 +114,8 @@ Whatever a component's life created (a subscription, a timer, an event listener,
 
 The client's job is to emit well-named events at the point of genuine user intent, a completed action, not to define what the event means for the business or where it gets reported. Emit from the event handler that performs the action, not from an effect reacting to a resulting state change; emitting from a reactive effect risks firing the same event twice if the effect re-runs. Metric definitions, dashboards, and analysis pipelines are out of scope here; this file owns only the instrumentation point.
 
-<!-- sources: triage-owl-listener.md (owl-listener state-machine/SKILL.md skeletons); triage-cuellarfr-dembrandt-ehmo.md (cuellarfr interaction-design/state-and-transitions.md, ehmo web/SKILL.md URL/history/scroll-restoration, dembrandt loading-states-and-perceived-performance optimistic UI); triage-pbakaus-ehmo-web.md (pbakaus harden.md API-status-to-UI-state mapping, memory-leak teardown checklist); miner-vercel.md (react-best-practices async-*/server-* rules: Promise.all/waterfalls, RSC parallel fetching, client-auth-flows Clerk/Descope decision matrix, client-passive-event-listeners); miner-react-doctor.md (state-and-effects: no-derived-state family, no-fetch-in-effect, cleanup-completeness family; tanstack-start/react-router four-way Promise.all convergence) -->
+## Production wiring (pointer)
+
+API client shape (`baseURL`, `credentials`), single-flight 401 interceptors, feature-flag bootstrap, error boundaries + reporters, and public runtime config are production *wiring*, not pure state modeling — home is `client-app-wiring.md`. This file owns the state-machine, recovery-class, and multi-tab *requirements* those seams implement.
+
+<!-- sources: triage-owl-listener.md (owl-listener state-machine/SKILL.md skeletons); triage-cuellarfr-dembrandt-ehmo.md (cuellarfr interaction-design/state-and-transitions.md, ehmo web/SKILL.md URL/history/scroll-restoration, dembrandt loading-states-and-perceived-performance optimistic UI); triage-pbakaus-ehmo-web.md (pbakaus harden.md API-status-to-UI-state mapping, memory-leak teardown checklist); miner-vercel.md (react-best-practices async-*/server-* rules: Promise.all/waterfalls, RSC parallel fetching, client-auth-flows Clerk/Descope decision matrix, client-passive-event-listeners); miner-react-doctor.md (state-and-effects: no-derived-state family, no-fetch-in-effect, cleanup-completeness family; tanstack-start/react-router four-way Promise.all convergence); fold-wave research-extend: TkDodo/KCD server-state≠client-state; authors-architecture single-flight 401 mutex + multi-tab logout fanout + client idempotency-key headers; js-dom-craft BroadcastChannel mechanism cite; GAP_MAP P0 #1 wiring, P1 state/idempotency -->

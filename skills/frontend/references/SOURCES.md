@@ -169,7 +169,34 @@ copied.
   `tailwind.md`.
 - **safari-mobile-optimization**, **transparent-web-video**, **scroll-driven-video** — iOS Safari
   viewport/chrome hardening and web-video encoding/serving facts, re-expressed (scroll-scrub
-  choreography routes OUT to animation). Drawn into `web-platform-runtime.md`.
+  choreography routes OUT to animation). Drawn into `web-platform-runtime.md`. **Consolidation
+  (2026-07-22):** full client-side surface of `transparent-web-video` + `safari-mobile-optimization`
+  is merged into `web-platform-runtime.md` (patterns A–D, encode-breaking triad/bitrate bands,
+  decorative video contract, chrome three layers + PWA verify checklist, input-zoom trade-off).
+  Full ffmpeg command matrix remains optional in the specialist skill for encode-only tasks.
+- **Production marketing-site dual-codec video (anonymous production app)** — Pattern A with
+  `bowser@^2.13`/`2.14`, SSR-null detect, dual-codec asset matrix under `public/videos/`; Safari
+  `matchMedia` source swap when `<source media>` fails; dual-codec→single bt709 H.264 migration
+  when transparency not required. Report:
+  `.orchestrate/research-sweep-2/reports/production-transparent-video.md`. Drawn into
+  `web-platform-runtime.md`.
+- **expo/skills** (official, skills.sh) — `building-native-ui`, `expo-router`, `expo-ui` /
+  `expo-ui-swiftui` / `expo-native-ui`, `expo-dev-client`, `upgrading-expo`, `expo-deployment`,
+  `expo-cicd-workflows`, `expo-api-routes`, `eas-*` — **optional deeper dives** linked from
+  `react-native.md` (not vendored into this pack). Also **vercel-labs/agent-skills**
+  `vercel-react-native-skills` and **callstackincubator/agent-skills** `react-native-best-practices`
+  / `upgrading-react-native` for RN perf and upgrade playbooks.
+- **Next / TanStack / Astro / Remix deeper dives (skills.sh, not vendored)** — Next: `vercel-labs`
+  react best-practices + view-transitions, `wshobson` app-router patterns, `mohamed-hossam1` cache
+  architecture, `vercel/next.js` cache-components + dev-loop, `clerk` nextjs-patterns; official
+  docs prefer `/docs/app/getting-started/*` + `/guides/*` (not legacy `building-your-application`).
+  TanStack: `deckardger/tanstack-agent-skills` query/start/router; docs
+  tanstack.com/{query,router,start}/latest. Astro (uncovered): `astrolicious/agent-skills@astro`,
+  `clerk-astro-patterns`; docs [docs.astro.build](https://docs.astro.build) (SSR → on-demand
+  rendering). Remix lineage: official `remix-run/agent-skills@react-router-framework-mode`; new
+  work → [reactrouter.com framework mode](https://reactrouter.com/start/framework/installation).
+  Tables: `nextjs.md`, `data-fetching-libraries.md`, SKILL.md uncovered-frameworks. Research:
+  `.orchestrate/research-sweep-2/reports/framework-skills-ranked.md` + `framework-docs-skills.md`.
 - **defensivecss.dev (Ahmad Shadeed)** — no license visible; the scrollbar native-overlay default
   and the `position: sticky`-in-grid `align-self: stretch` failure, re-expressed and credited to
   Ahmad Shadeed. Drawn into `css-craft.md`.
@@ -189,8 +216,66 @@ copied.
   decision it documents (native `<dialog>` vs the Popover API for modals) was cross-checked and
   re-expressed in `accessibility.md`.
 
+## Fold-wave research corpus (2026-07-22, capability-delta extend)
+
+Synthesized from `.orchestrate/research-extend/` (skills.sh fan-out, github-relay 1182-repo corpus,
+X/bookmarks, expert deep-reads). Load-bearing facts re-expressed; no unlicensed verbatim prose.
+
+- **vercel-labs/agent-skills** (`vercel-react-view-transitions`, residual `react-best-practices`,
+  `composition-patterns`) — React `<ViewTransition>` silent failures; residual perf/composition
+  bullets. Apache-2.0 attribution chain. Drawn into `web-platform-runtime.md`,
+  `react-components-and-state.md`, `performance.md`.
+- **deckardger/tanstack-agent-skills** + **TkDodo Practical React Query** — durable staleTime/gcTime,
+  placeholder vs initialData, key = deps principles (not full API dump). Drawn into
+  `data-fetching-libraries.md`, `state-and-data.md`.
+- **OWASP CheatSheetSeries** (CC BY-SA 4.0 facts re-expressed) — SPA CSRF ladder, DOM clobbering,
+  clickjacking header rules. Drawn into `client-security.md`.
+- **Josh Comeau / Ahmad Shadeed / Sara Soueidan** — margin collapse, stacking contexts, hover media,
+  generated-content a11y. Drawn into `web-platform-css.md`, `css-craft.md`, `accessibility.md`.
+- **Addy Osmani / web.dev** — third-party facades, adaptive loading, speculation eagerness.
+  Drawn into `performance.md`.
+- **alan2207/bulletproof-react**, **feature-sliced/documentation** (MIT) — ESLint zones, FSD layers,
+  multi error boundaries. Drawn into `client-architecture.md`, `client-app-wiring.md`.
+- **Practitioner X threads** (devongovett iOS 26 fixed clip; Rich Harris Safari filter+Vite;
+  content-visibility + contain-intrinsic-size; OAuth redirect cookies) — re-expressed. Drawn into
+  `web-platform-runtime.md`, `css-craft.md`, `performance.md`, `client-security.md`.
+
+## Fold-wave-2 research corpus (2026-07-22, craft/media/perf sweep)
+
+Synthesized from `.orchestrate/research-sweep-2/` (local specialist skills, web research, bookmarks,
+github-relay digests). Load-bearing facts re-expressed.
+
+- **transparent-web-video / safari-mobile-optimization / scroll-driven-video** (ours) — production
+  pattern matrix, iOS chrome edge cases, scrub/runtime media traps. Drawn into
+  `web-platform-runtime.md`.
+- **webdesign frontend-build-patterns / depth-and-texture / imagery** (ours) — section registry,
+  visual QA, glass/grain/shadow budgets (procedural). Drawn into `client-architecture.md`,
+  `css-craft.md`.
+- **web.dev / TuneTheWeb / DebugBear** — responsive preload `imagesrcset`/`imagesizes`,
+  `fetchpriority`, Early Hints limits, image `decoding` paint semantics. Drawn into `performance.md`.
+- **Josh Comeau backdrop-filter; Safari blur GPU promote notes** — backdrop roots, filter CPU path.
+  Drawn into `css-craft.md`.
+- **addyosmani/web-quality-skills** (MIT) — `scheduler.yield` priority, LoAF INP attribution.
+  Drawn into `performance.md`.
+- **Rethink-JS/alpha-video-cli**, **descriptinc/transparent-video-support** — `canPlayType` ladder,
+  dual-track alpha escape hatch. Drawn into `web-platform-runtime.md`.
+- **wilsonpage/fastdom**, **GoogleChromeLabs/idlize + quicklink** — dual-queue thrash prevention,
+  idle-until-urgent + viewport idle prefetch. Drawn into `performance.md`.
+- **color-js gamut mapping**, Display-P3 SVG repeat bug reports — gamut map vs clip, pipeline table.
+  Drawn into `web-platform-css.md`.
+
 ## Underlying standards and references cited (not copied)
 
 MDN Web Docs · WCAG 2.2 (W3C) · web.dev / Core Web Vitals · React documentation · Apple Human
 Interface Guidelines · Material 3 (m3.material.io) · ECMA-402 Intl / Unicode CLDR · W3C Design Tokens
-Community Group (DTCG) format · Can I Use (for current browser-support verification).
+Community Group (DTCG) format · Can I Use (for current browser-support verification) · OWASP
+CheatSheetSeries (client half, re-expressed).
+
+## Fold-wave-2b web-search pass (2026-07-22)
+
+Primary-source web research (MDN, web.dev, Josh Comeau, SiteLint, WebKit bugs, VisualViewport docs):
+
+- **Josh Comeau "Next-level frosted glass with backdrop-filter" (2024, updated 2026)** — near-edge sample via extended child + mask-image (not overflow), pointer-events, top flicker gradient, Firefox sticky+overflow+radius. Drawn into `css-craft.md`.
+- **SiteLint iOS video poster / `#t=0.001` / preload ladder (2025)** — Reduce Motion autoplay refusal, no Gzip on video, poster vs fragment cost. Drawn into `web-platform-runtime.md`.
+- **VisualViewport + keyboard (MDN, bram.us, WebKit 265578)** — layout vs visual viewport under OSK; fixed bottom chrome offset. Drawn into `web-platform-runtime.md`.
+- **MDN/web.dev content-visibility** — `contain-intrinsic-size: auto` remembers size after first paint. Drawn into `performance.md`.

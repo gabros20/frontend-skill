@@ -6,10 +6,10 @@ plugin package name is `frontend-skill`; the runtime identifier and Codex invoca
 
 ## Ownership boundary
 
-`frontend` owns the production client — component and state architecture, routing, data fetching
-and API integration, forms and auth flows, responsive and accessible UI, the full state set in
-code, client-side security, frontend performance, and the tests that guard it — across websites,
-web apps, iOS, and Android. It consumes design's intent (a `handoff.yaml` and `DESIGN.md`) rather
+`frontend` owns the production client — component and state architecture, SPA wiring (API client,
+session refresh, flags, error reporting), routing, data fetching and API integration, forms and
+auth flows, responsive and accessible UI, the full state set in code, client-side security,
+frontend performance, and the tests that guard it — across websites, web apps, iOS, and Android. It consumes design's intent (a `handoff.yaml` and `DESIGN.md`) rather
 than re-deciding it, and never presents prototype or unverified code as production-ready. It does
 not absorb experience intent and visual direction (design), system decisions and API/event
 contracts (architecture), server behavior and databases (backend) — though SSR/RSC runtime inside

@@ -35,8 +35,12 @@ Produces:
 - Suspense boundary requirements
 - Hydration mismatches (Next-specific causes)
 - Cache Components and `use cache`
+- Day-one cache architecture (tags + revalidate)
+- `after()` for non-blocking work
 - Images, fonts, scripts, navigation
 - Turbopack and build configuration
+- Optional deeper skills (install when the task is Next-heavy)
+- Official Next.js docs (latest)
 
 ## App Router file conventions and route segment syntax
 
@@ -159,6 +163,11 @@ single-arg `revalidateTag(tag)` is reported deprecated in favor of a required se
 profile argument, e.g. `revalidateTag('posts', 'max')` — this is version-gated; verify the exact
 signature against the installed Next version before relying on it.
 
+**`cacheTag` hard limits (silent failure mode):** max **128 tags per `cacheTag()` call**, max
+**256 characters per tag**. Oversize tags or over-limit lists are **silently dropped** (console
+warn at best). Agents miss this and ship wrong-freshness with a green build — keep tag strings
+short and centralized (registry below); never interpolate unbounded user input into a tag.
+
 Non-deterministic values (`Math.random()`, `Date.now()`) execute exactly once, at build time,
 inside a `'use cache'` scope — use `await connection()` from `next/server` to defer evaluation to
 request time when per-request randomness is actually needed. Edge runtime and static export are
@@ -167,6 +176,49 @@ not supported with Cache Components enabled.
 Migrating from `unstable_cache`: the manual `keyParts` array is gone (the key is auto-derived from
 args and closures); `options.tags` becomes `cacheTag()`; `options.revalidate` becomes
 `cacheLife({ revalidate: N })`.
+
+## Day-one cache architecture (tags + revalidate)
+
+Three load-bearing pieces on day one — not after the first stale-list bug:
+
+| Piece | Role | Rule |
+|---|---|---|
+| `lib/cache/tags.ts` | Tag **registry** | Named constants only; **no raw tag strings** at call sites |
+| `lib/cache/revalidate.ts` | All `updateTag` / `revalidateTag` helpers | Mutations import helpers only; never call invalidation APIs ad hoc from random actions |
+| `"use cache"` placement | On **data functions** / cached children | Pages **orchestrate** Suspense only — do not fetch or tag inside page/layout orchestration bodies |
+
+```ts
+// lib/cache/tags.ts
+export const tags = {
+  posts: 'posts',
+  post: (id: string) => `post:${id}`,
+} as const;
+
+// lib/cache/revalidate.ts
+import { updateTag } from 'next/cache';
+import { tags } from './tags';
+
+export function revalidatePost(id: string) {
+  updateTag(tags.post(id));
+  updateTag(tags.posts); // entity invalidation also invalidates parent collection
+}
+```
+
+**Entity → collection:** invalidating one entity **must** also invalidate its parent collection tag
+(else detail updates while list stays stale). Encode that pairing inside the revalidate helper so
+call sites cannot forget.
+
+Personalized data: never read `cookies()` / `headers()` / `auth()` **inside** a `"use cache"`
+scope — read outside, pass primitives as args (they become part of the auto cache key).
+`"use cache: private"` only when compliance forbids the props pattern.
+
+## `after()` for non-blocking work
+
+Use `after()` from `next/server` for logging, analytics, and other side effects that must not block
+the response. Schedule the work after the response is sent so it does not inflate TTFB. Do not
+`await` heavy analytics inside the Server Action / Route Handler body when the client only needs
+the mutation result. Keep `after()` callbacks free of user-facing control flow (errors there do not
+rewrite the already-sent response).
 
 ## Images, fonts, scripts, navigation
 
@@ -223,6 +275,61 @@ Server Actions must self-authenticate exactly like a public API endpoint — see
 provider wiring (Clerk/Descope-style `<Provider>` + hooks) lives in `state-and-data.md`. Core Web
 Vitals thresholds and the responsive-image/font-loading doctrine underlying the primitives above
 live in `performance.md`. Independent-verification/screenshot-based acceptance checks live in
-`testing.md`.
+`testing.md`. View Transitions: enable Next's `experimental.viewTransition` flag when using the
+platform VT path — mechanics and React `ViewTransition` caveats live in `web-platform-runtime.md`;
+do not install canary React solely for VT on a stable Next release.
 
-<!-- sources: Vercel react-best-practices + nextjs skills (claude-plugins-official/vercel, Apache-2.0, attribution required) — miner-vercel.md -->
+## Optional deeper skills (install when the task is Next-heavy)
+
+This file owns **Next-specific conventions and traps** (App Router, cache, boundaries, assets).
+For product-surface depth (auth product kits, full upgrade playbooks, upstream perf catalogs),
+install a specialist skill. Prefer high-install / official sources; re-check
+[skills.sh](https://skills.sh/) counts.
+
+| When the job is… | Install (skills.sh) | Why |
+|---|---|---|
+| React/Next performance & data-fetching catalog | `npx skills add vercel-labs/agent-skills@vercel-react-best-practices` | Vercel Engineering (~571K) — complements `performance.md` / RSC waterfalls |
+| React View Transitions deep dive | `npx skills add vercel-labs/agent-skills@vercel-react-view-transitions` | Placement/silent-failure recipes beyond this pack's VT wiring |
+| App Router patterns playbook | `npx skills add wshobson/agents@nextjs-app-router-patterns` | Route/layout pattern library (~25K) |
+| Day-one cache tag registry / invalidation architecture | `npx skills add mohamed-hossam1/nextjs-cache-architecture@nextjs-cache-architecture` | Tags + revalidate helpers (this file states the rules; skill is fuller scaffolding) |
+| Cache Components adoption / optimizer | `npx skills add vercel/next.js@next-cache-components-adoption` · `npx skills add vercel/next.js@next-cache-components-optimizer` | Official-adjacent Cache Components migration aids |
+| Next dev-loop tooling | `npx skills add vercel/next.js@next-dev-loop` | Upstream Next repo skill for dev workflow |
+| Clerk on Next | `npx skills add clerk/skills@clerk-nextjs-patterns` | Product auth patterns (~27K) — not a substitute for `client-security.md` |
+
+**Rule:** stay here for day-to-day App Router / cache / asset work. Install a row above when the
+task is mostly that product or migration surface.
+
+## Official Next.js docs (latest)
+
+**Canonical site:** [https://nextjs.org/docs](https://nextjs.org/docs) — prefer over blog posts when
+APIs conflict. Match the project's **Next major** (docs version selector / installed
+`next/package.json`). Prefer **`/docs/app/getting-started/*`** and **`/docs/app/guides/*`** over
+legacy `/building-your-application/*` paths (those still redirect but are not canonical).
+
+| Topic | Latest docs |
+|---|---|
+| Docs home | [nextjs.org/docs](https://nextjs.org/docs) |
+| App Router | [nextjs.org/docs/app](https://nextjs.org/docs/app) |
+| Routing (layouts & pages) | [nextjs.org/docs/app/getting-started/layouts-and-pages](https://nextjs.org/docs/app/getting-started/layouts-and-pages) |
+| Fetching data | [nextjs.org/docs/app/getting-started/fetching-data](https://nextjs.org/docs/app/getting-started/fetching-data) |
+| Caching (getting started) | [nextjs.org/docs/app/getting-started/caching](https://nextjs.org/docs/app/getting-started/caching) |
+| Caching without Cache Components | [nextjs.org/docs/app/guides/caching-without-cache-components](https://nextjs.org/docs/app/guides/caching-without-cache-components) |
+| Server Actions | [nextjs.org/docs/app/guides/server-actions](https://nextjs.org/docs/app/guides/server-actions) · intro [mutating-data](https://nextjs.org/docs/app/getting-started/mutating-data) |
+| Server & Client Components | [nextjs.org/docs/app/getting-started/server-and-client-components](https://nextjs.org/docs/app/getting-started/server-and-client-components) |
+| `next/image` | [nextjs.org/docs/app/api-reference/components/image](https://nextjs.org/docs/app/api-reference/components/image) |
+| `next/font` | [nextjs.org/docs/app/api-reference/components/font](https://nextjs.org/docs/app/api-reference/components/font) |
+| Turbopack | [nextjs.org/docs/app/api-reference/config/next-config-js/turbopack](https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack) |
+| Proxy (was middleware) | [nextjs.org/docs/app/api-reference/file-conventions/proxy](https://nextjs.org/docs/app/api-reference/file-conventions/proxy) |
+| Upgrading | [nextjs.org/docs/app/guides/upgrading](https://nextjs.org/docs/app/guides/upgrading) |
+| API reference | [nextjs.org/docs/app/api-reference](https://nextjs.org/docs/app/api-reference) |
+
+**Agent habit:** perishable flags and Cache Component APIs → open live docs for the installed major
+first; this pack holds capability-delta traps, not a full Next manual.
+
+<!-- sources: Vercel react-best-practices + nextjs skills (claude-plugins-official/vercel, Apache-2.0,
+attribution required) — miner-vercel.md; mohamed-hossam1/nextjs-cache-architecture (skills.sh) —
+day-one tags.ts registry, revalidate.ts helpers, use cache on data functions not page orchestration,
+entity+collection invalidation pairing, cacheTag 128 tags/call + 256 char silent drop limits;
+vercel-labs/agent-skills @vercel-react-best-practices residual — after() for non-blocking
+logging/analytics; View Transition Next flag cross-ref — skills-finder / CANDIDATES #10;
+optional deeper skills + nextjs.org/docs table (canonical getting-started/guides paths; install counts as of fold; re-check skills.sh) -->

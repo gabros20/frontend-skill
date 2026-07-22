@@ -58,8 +58,33 @@ Diagnose the causes, apply the fix ladder, and verify against the thresholds aft
 **Routes**: `performance.md` (primary); pull `web-platform-css.md`/`web-platform-runtime.md` or the
 relevant web-stack overlay (e.g. `nextjs.md` for image/font primitives) if the fix touches that
 layer. **Produces**: a diagnosed root cause per metric, the applied fix (image/font loading,
-code-splitting, virtualization, or rendering-cost fix), and a before/after check against the
-canonical CWV thresholds.
+responsive preload, code-splitting, virtualization, or rendering-cost fix), and a before/after
+check against the canonical CWV thresholds.
+
+## Dual-codec transparent hero video (Safari + Chrome)
+
+```
+Add a transparent-looking looping hero video that works on Safari/iOS and Chrome. Page background
+is a solid dark hex. Prefer the production dual-codec Pattern A (bowser + SSR-null) unless a
+simpler stacked-source Pattern B is enough. Include mobile variants and autoplay insurance.
+```
+
+**Routes**: `web-platform-runtime.md` (primary web substrate) + `performance.md` if LCP/poster
+budget matters. **Produces**: pattern decision (A/B/C), encode-breaking checklist (hvc1 / type /
+bake hex), React client mount with SSR-null detect, responsive sources, verification on real Safari
+and Chrome.
+
+## iOS Safari chrome tint + app shell
+
+```
+This dark app shows white iOS URL/status bars and the full-height shell jumps when the address bar
+collapses. Fix chrome tint for current iOS Safari (including Liquid Glass) and switch the shell to
+stable svh with the right viewport meta.
+```
+
+**Routes**: `web-platform-runtime.md` (+ `css-craft.md` if input 16px / form font inherit is
+involved). **Produces**: three-layer chrome tint (edge strips + body bg + theme-color), `svh`
+shell, PWA status-bar meta, device/simulator verify checklist.
 
 ## Restructure a growing client codebase
 
@@ -74,3 +99,32 @@ boundaries move, `design-handoff-and-tokens.md` for token values (file layout li
 architecture ref). **Produces**: a feature-vs-type decision for the codebase's size, the
 unidirectional shared → features → app import layering with per-feature public APIs, colocation
 of tests/stories/styles, and a token-file layout that matches the delivery pipeline.
+
+## Expo app screen (default RN path)
+
+```
+Build the profile screen in this Expo app — Expo Router file under app/, load the avatar with
+expo-image, keep the session token in SecureStore, and make the list of posts use FlashList.
+Don't assume Expo Go if we need a native module.
+```
+
+**Routes**: `react-native.md` (native overlay; Expo-first) + `react-components-and-state.md` +
+`state-completeness.md` if empty/error/loading are in scope. For heavy Expo UI kits, EAS, or SDK
+upgrades, the agent should also install the matching optional skill from the table in
+`react-native.md` and consult [docs.expo.dev](https://docs.expo.dev). **Produces**: route file in
+the Expo Router tree, Expo-correct image/storage choices, virtualized list, and an explicit call on
+Expo Go vs development build if native deps appear.
+
+## Wire a production SPA session + API client
+
+```
+Our Vite SPA talks to an API on a subdomain with cookie sessions. 401s redirect everyone to login
+even when refresh would work, two tabs thrash refresh tokens, and logout in one tab leaves the
+other tab "signed in." Wire a shared client, single-flight silent refresh, multi-tab logout, and
+the credentialed CORS / CSRF client half.
+```
+
+**Routes**: `client-app-wiring.md` (primary) + `client-security.md` + `state-and-data.md`.
+**Produces**: one API surface with credentials mode, 401 single-flight mutex, multi-tab session
+fanout, CSRF/credentials checklist applied, and clear stop conditions when the backend half is
+missing.

@@ -17,6 +17,8 @@ Skip when:
   file adds only the platform divergences).
 - Framework-agnostic state modeling (derive-don't-store, URL-as-state, state machines) →
   `state-and-data.md`, which this file's React-specific rules sit underneath.
+- Provider placement across routes / folder import layering → `client-architecture.md`.
+- App-shell error reporting, multi-boundary placement → `client-app-wiring.md`.
 
 Inputs: the component/hook/state shape in question; the target React version; any state library
 already in the project.
@@ -26,22 +28,29 @@ state via effect" anti-patterns, and correct hook dependencies.
 
 ## Contents
 - Composition patterns
+- Compound components and Context DI shape
 - Controlled vs. uncontrolled inputs
 - The "you might not need an effect" decision tree
 - Effect chains, event handlers, and cleanup
+- Effects as synchronization; per-render closures
+- Before `memo`: structural fixes
 - State-updater purity and stability
 - Dependency-array correctness
 - Selector/derivation stability across state libraries
 - Context value stability
 - React 19 API deltas
 - Continuous values: state vs. a motion value
+- Isolation pointers
 
 ## Composition patterns
 
-Prefer explicit variant components (`<PrimaryButton/>`, `<ThreadComposer/>`) over one component
-switched by a pile of boolean props or a `renderXxx` slot prop; boolean-prop combinations are hard
-to test and multiply silently. Reach for a slot prop only when the caller genuinely needs to inject
-arbitrary content, not as a default composition style.
+Prefer explicit variant components (`<PrimaryButton/>`, `<ThreadComposer/>`, `<EditComposer/>`) over
+one component switched by a pile of boolean props (`isThread` / `isEditing` / `isDM`) or a
+`renderXxx` slot prop. Each boolean doubles the state space; combinations multiply silently, are hard
+to test, and force every call site to reason about flags it does not own. Extract shared parts into
+small pieces and compose them inside each named variant. Reach for a slot/`renderX` prop only when
+the parent must inject **data into** a call-site callback, not as a default composition style —
+prefer `children` otherwise.
 
 Never define a component inside another component's render body, including one wrapped by a HOC:
 React treats it as a new component type every parent render, unmounting and remounting it (lost
@@ -57,7 +66,29 @@ memoization for that subtree; render as JSX instead.
 `cn()` (typically `twMerge(clsx(inputs))`) resolves both conditional classes and conflicting
 Tailwind utility classes; plain `clsx` alone does not dedupe conflicting utilities. An explicit
 `undefined` prop spread over a default still clobbers it; reapply defaults with `??` at the use
-site rather than trusting spread order.
+site rather than trusting spread order. Memoized components must not use default params `= []` /
+`= {}` — each call creates a new reference; extract a module-level constant instead.
+
+## Compound components and Context DI shape
+
+For compound UIs (tabs, composer, multi-step frame), subcomponents read shared state from Context —
+not a prop-drilled god-object. Consumers compose only the pieces they need:
+
+```tsx
+<Composer.Root>
+  <Composer.Input />
+  <Composer.Submit />
+</Composer.Root>
+```
+
+**Context as a DI contract:** expose a stable shape `{ state, actions, meta }` (names can vary; the
+partition matters). Leaf UI never knows whether the provider is `useState`, Zustand, or server-synced
+— swap the provider, same leaves. Lift state into the provider so siblings *outside* the visual frame
+(e.g. an external Forward/Submit toolbar) can act without refs or prop-drill. Context is for
+low-velocity data (theme, user, compound-widget state); high-velocity values belong in a store with
+selectors or `useSyncExternalStore` (see Context value stability below). Folder-level placement of
+providers lives in `client-architecture.md` (composition → Context → store ladder; provider-per-
+route-subtree).
 
 ## Controlled vs. uncontrolled inputs
 
@@ -68,21 +99,22 @@ cannot be set programmatically for security reasons. React 19 async submission u
 submission, and it degrades to working without JS when the action is a Server Function.
 `<button formAction={otherFn}>` lets one form expose multiple distinct submit actions (publish vs.
 save-draft) without separate forms. One `useState` per field for 1-4 unrelated fields; a single
-state object once a form has 5+ or genuinely related fields.
+state object once a form has 5+ or genuinely related fields. Form library thresholds and upload
+pipeline live in `forms.md`.
 
 ## The "you might not need an effect" decision tree
 
 Before writing a `useEffect`, work down this list; each rung replaces the effect with something
 that doesn't need one:
 1. **Derive during render.** A value computed purely from props/state belongs in the render body or
-   a `useMemo`, never mirrored into state via an effect that copies a prop in.
+   a `useMemo`, never mirrored into state via an effect that copies a prop in. Copying a prop into
+   state once is valid only as an *initial seed* that is never expected to stay in sync with later
+   prop updates.
 2. **Reset via `key`.** Resetting all of a component's state when an identifying prop changes is a
    `key` change on the component, not an effect that manually resets every field.
 3. **Handle it in the event handler that starts the chain.** State updates that always happen
    together (submit → loading → result → done) belong in one event handler, not a relay of effects
-   each watching the previous effect's output. An effect synchronizes with a truly *external* system
-   (a subscription, the DOM, a request tied to a changing input); it does not orchestrate the
-   component's own state.
+   each watching the previous effect's output.
 4. **Fetch through a data layer, not a bare effect.** A `useEffect` fetch can race, double-fire on
    Strict Mode, or leak into an unmounted component; use TanStack Query/SWR or a Server Component
    instead (see `data-fetching-libraries.md`).
@@ -91,6 +123,9 @@ Render itself must stay pure: no `setState`, ref writes, context/store construct
 `URL.createObjectURL()` call in the component body, since React can replay or discard a render at
 any time. The one carve-out is lazy one-time initialization guarded by
 `if (ref.current === null) ref.current = expensiveThing()` directly in the render body.
+
+App-wide init that must run once belongs in a module-level guard or entry module — not
+`useEffect([])` on a remountable component (Strict Mode double-fires it).
 
 ## Effect chains, event handlers, and cleanup
 
@@ -112,6 +147,31 @@ function, so a stale response from a superseded request can't overwrite fresher 
 Never pass an `async` function directly as an effect callback; wrap the async work in an inner
 function instead.
 
+## Effects as synchronization; per-render closures
+
+An effect **synchronizes with an external system** (DOM, network subscription, third-party widget,
+browser API) — it is not a lifecycle alias. `componentDidMount` ≠ `useEffect(fn, [])`: empty deps
+capture the *initial* props/state and will not see later values.
+
+Mental model (Dan): each render has its own props, state, handlers, and effects. A "stale closure"
+is that model working correctly, not a React bug. To read the latest value without resubscribing,
+use a ref, redesign so the value is a dependency, or `useEffectEvent` (below). Don't lie about
+dependencies to "run once" — omit/force `[]` causes bugs; fix with hoist, `useReducer`, put the
+function inside the effect, or Effect Events. Infinite loops come from a missing deps array *or*
+unstable deps that change every render — fix the source, not the symptom.
+
+## Before `memo`: structural fixes
+
+Before sprinkling `memo` / `useMemo` / `useCallback`:
+
+1. **Move state down** so only the leaf that reads it re-renders on change.
+2. **Lift static content into `children`** (or slots) so parent state updates do not re-render the
+   static subtree — the parent re-renders; the children element identity stays stable when passed
+   from above.
+
+These structural fixes often beat memoization. With the React Compiler enabled, most manual
+`useMemo`/`useCallback`/`memo` calls become unnecessary anyway (see React 19 API deltas).
+
 ## State-updater purity and stability
 
 Use the functional updater (`setCount(c => c + 1)`) whenever a new value depends on the prior one,
@@ -129,9 +189,12 @@ a re-render when it changes, so listing it as a dependency is a no-op, and a `Na
 never be seen as "changed." Never list an object/array/JSX *literal* as a dependency; extract the
 primitive it depends on. For a continuously-changing raw value (scroll offset, viewport width),
 depend on a derived boolean computed outside the effect, not the raw value, or the effect refires
-on every intermediate step. `useEffectEvent` (React 19.2+) wraps a callback so an effect always
-reads the latest props/state without listing them as dependencies or resubscribing on every render;
-it must never itself appear in a dependency array. `useSyncExternalStore` replaces a hand-rolled
+on every intermediate step.
+
+`useEffectEvent` (React 19.2+) wraps a callback so an effect always reads the latest props/state
+without listing them as dependencies or resubscribing on every render. **Never put an Effect Event
+function in a dependency array** — its identity changes every render by design; listing it forces
+the effect to re-run every time and defeats the API. `useSyncExternalStore` replaces a hand-rolled
 subscribe-effect for reading external stores correctly under concurrent rendering; its `getSnapshot`
 must return referentially stable data or it infinite-loops.
 
@@ -153,11 +216,12 @@ teardown, whichever store library it comes from.
 ## Context value stability
 
 A context value passed as an object literal directly to `Provider value={...}` forces every
-consumer to re-render on every parent render; wrap it in `useMemo` keyed on the fields that change.
-Split state and dispatch into two contexts when dispatch-only consumers shouldn't re-render on
-state changes (`dispatch` from `useReducer` is referentially stable). Never put a value that
-changes more than roughly once a second (mouse position, scroll, per-keystroke input) into context;
-reach for `useSyncExternalStore` instead, and avoid one mega-context holding many unrelated fields.
+consumer to re-render on every parent render; wrap it in `useMemo` keyed on the fields that change
+— or structure the contract as `{ state, actions, meta }` with stable `actions` references. Split
+state and dispatch into two contexts when dispatch-only consumers shouldn't re-render on state
+changes (`dispatch` from `useReducer` is referentially stable). Never put a value that changes more
+than roughly once a second (mouse position, scroll, per-keystroke input) into context; reach for
+`useSyncExternalStore` instead, and avoid one mega-context holding many unrelated fields.
 `createContext<T | null>(null)` plus a hook that throws on `null` is the standard "provider is
 mandatory" guard; use a real default only when the provider is genuinely optional.
 
@@ -185,8 +249,27 @@ motion-value primitive (`useMotionValue`/`useTransform`/`useScroll`) that update
 render cycle when the value must drive visual output. Treat imperative scroll tracking (a raw
 `scroll` listener, mirroring `window.scrollY` into state, or a `requestAnimationFrame` loop that
 writes state) as a hard ban, not a preference; use a motion value, `IntersectionObserver`, or native
-CSS `animation-timeline: view()` instead.
+CSS `animation-timeline: view()` instead. Distinguish human vs. programmatic scroll when auto-
+scrolling lists (e.g. chat): only pin-to-bottom when the user is already near the bottom; do not
+drive that decision through a `useEffect` that fights the user's scroll.
+
+## Isolation pointers
+
+- **Children as isolation:** pass static subtrees as `children` from above so parent-local state
+  updates do not re-render them (same structural fix as before-memo #2).
+- **Multiple error boundaries:** prefer route/feature-local boundaries over one app-wide catch-all
+  so one slice fails closed. Boundaries catch render errors only — async/event-handler errors need
+  explicit try/report. Placement, recovery UI, and reporter wiring: `client-app-wiring.md`.
 
 <!-- sources: millionco/react-doctor (Modified MIT, state-and-effects/react-builtins/architecture);
 OpenAEC-Foundation/React-Claude-Skill-Package (MIT, react-syntax/react-core/react-errors);
-Leonxlnx/taste-skill (MIT, client-architecture/state-management) -->
+Leonxlnx/taste-skill (MIT, client-architecture/state-management); Kent C. Dodds Application State
+Management + colocation (personal blog, re-expressed) — composition ladder, multi-provider;
+Dan Abramov, overreacted.io/a-complete-guide-to-useeffect (personal blog, re-expressed) — effects
+as sync, per-render closures, before-memo structural fixes; vercel-labs/agent-skills
+@vercel-composition-patterns (258K) — boolean→variants, {state,actions,meta} DI contract, children
+over renderX; vercel-labs/agent-skills @vercel-react-best-practices residual — useEffectEvent never
+in deps, module-level init once, memo default-param reference trap; alan2207/bulletproof-react —
+children isolation, multi error boundaries; TkDodo + @_nikhilsnayak_ auto-scroll without effect
+(human vs programmatic) — via authors-architecture.md, skills-finder.md, github-relay.md,
+x-bookmarks.md -->

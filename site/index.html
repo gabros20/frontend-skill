@@ -7,14 +7,14 @@
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f7fa">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#12151d">
 <title>frontend — Production client code for web, iOS, and Android surfaces</title>
-<meta name="description" content="frontend is a Claude Code skill for production frontend implementation across websites, web apps, iOS, and Android — component and state architecture, forms, accessibility, performance, client security, testing, i18n, and design-handoff-and-tokens consumption across React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and React Native. A router that loads only the reference each job needs.">
+<meta name="description" content="Faceted agent skill for production frontend: full UI state sets, CWV/media, Safari/video craft, SPA wiring, a11y floors, Expo-first React Native, pure native iOS/Android — 27 references, loads only what each job needs.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://frontendengskill.vercel.app/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="frontend — Production client code for web, iOS, and Android surfaces">
-<meta property="og:description" content="Production frontend implementation for web, iOS, and Android — state, forms, accessibility, performance, security, and tests, as a router that loads only what each job needs.">
+<meta property="og:description" content="Faceted router for production client code: state completeness, CWV, Safari/video, SPA wiring, Expo RN, a11y, native iOS/Android — loads only the references each job needs.">
 <meta property="og:url" content="https://frontendengskill.vercel.app/">
 <meta property="og:image" content="https://frontendengskill.vercel.app/og.png">
 <meta property="og:image:width" content="1200">
@@ -23,7 +23,7 @@
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="frontend — Production client code for web, iOS, and Android surfaces">
-<meta name="twitter:description" content="Production frontend implementation for web, iOS, and Android — state, forms, accessibility, performance, security, and tests, as a router that loads only what each job needs.">
+<meta name="twitter:description" content="Faceted router for production client code: state completeness, CWV, Safari/video, SPA wiring, Expo RN, a11y, native iOS/Android — loads only the references each job needs.">
 <meta name="twitter:image" content="https://frontendengskill.vercel.app/og.png">
 
 <script type="application/ld+json">
@@ -203,6 +203,51 @@
     .prow{flex-direction:column; align-items:flex-start}
     .prow .arr{transform:rotate(90deg); margin-left:18px}
   }
+
+  /* skill-tailored visuals (router facets, craft cards, surfaces) */
+  .poster{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:20px; margin-top:20px; display:flex; flex-direction:column; gap:14px}
+  .prow{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+  .prow .arr{color:var(--glyph); font-size:15px; flex:none}
+  .pbox{border:1px solid var(--line); border-radius:8px; padding:8px 12px; background:var(--bg); display:flex; flex-direction:column; gap:2px; line-height:1.35; min-width:0}
+  .pbox .t{display:flex; align-items:center; gap:7px; font-family:ui-monospace,Menlo,monospace; font-size:12.5px}
+  .pbox small{font-family:system-ui; font-size:10.5px; color:var(--muted)}
+  .pbox.hi{border-color:var(--accent); background:var(--panel)}
+  .pbox.hi .t{color:var(--accent)}
+  .pbox.ok{border-color:var(--good)}
+  .facet{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:20px}
+  .facet .fc{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px 16px}
+  .facet .fc h3{margin:0 0 6px; font-family:ui-monospace,Menlo,monospace; font-size:14px; color:var(--accent)}
+  .facet .fc p{margin:0; font-size:13px; color:var(--muted); line-height:1.5}
+  .facet .fc code{font-size:11.5px; background:var(--code-bg); padding:1px 5px; border-radius:4px}
+  .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; margin-top:20px}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:16px 18px 14px; display:flex; flex-direction:column; gap:8px}
+  .card:hover{border-color:var(--accent)}
+  .card h3{margin:0; font-family:ui-monospace,Menlo,monospace; font-size:15px; letter-spacing:-.01em; display:flex; align-items:center; gap:8px}
+  .card h3 .lu{width:16px; height:16px; color:var(--accent)}
+  .card .use{font-size:13.5px; color:var(--muted); line-height:1.55}
+  .card .use b{color:var(--ink); font-weight:600}
+  .card .tag{font-size:11px; color:var(--accent); border:1px solid var(--accent); border-radius:999px; padding:1px 8px; font-family:system-ui; width:fit-content}
+  .strip{display:grid; grid-template-columns:1fr 1fr; margin-top:20px; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden}
+  .strip a{display:flex; align-items:center; justify-content:space-between; gap:16px; text-decoration:none; padding:13px 16px; border-bottom:1px solid var(--line); color:inherit}
+  .strip a:nth-child(odd){border-right:1px solid var(--line)}
+  .strip a:nth-last-child(-n+2){border-bottom:none}
+  .strip a:hover{background:var(--code-bg)}
+  .strip .q{font-size:13px; color:var(--muted); line-height:1.45; flex:1}
+  .strip .a{font-family:ui-monospace,Menlo,monospace; font-size:12.5px; color:var(--accent); font-weight:600; white-space:nowrap}
+  .surf{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:20px}
+  .surf .sc{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:16px}
+  .surf .sc h3{margin:0 0 8px; font-family:ui-monospace,Menlo,monospace; font-size:15px}
+  .surf .sc ul{margin:0; padding-left:18px; font-size:13px; color:var(--muted); line-height:1.55}
+  .surf .sc li{margin:.25em 0}
+  .surf .sc b{color:var(--ink)}
+  @media (max-width:800px){
+    .facet,.surf{grid-template-columns:1fr}
+    .strip{grid-template-columns:1fr}
+    .strip a:nth-child(odd){border-right:none}
+    .strip a:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
+    .strip a:last-child{border-bottom:none}
+  }
+
 </style>
 </head>
 <body>
@@ -225,141 +270,289 @@
   <symbol id="lu-workflow" viewBox="0 0 24 24"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></symbol>
   <symbol id="lu-layers" viewBox="0 0 24 24"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="m6.08 9.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/><path d="m6.08 14.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/></symbol>
   <symbol id="lu-eye" viewBox="0 0 24 24"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></symbol>
+
+  <symbol id="lu-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol>
+  <symbol id="lu-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></symbol>
+  <symbol id="lu-video" viewBox="0 0 24 24"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></symbol>
+  <symbol id="lu-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+  <symbol id="lu-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="lu-boxes" viewBox="0 0 24 24"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3z"/><path d="m7 16.5-4.74-2.85"/><path d="m7 16.5 5-3"/><path d="M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5z"/><path d="m17 16.5-5-3"/><path d="m17 16.5 4.74-2.85"/><path d="M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0z"/><path d="M12 8 7.26 5.15"/><path d="m12 8 4.74-2.85"/><path d="M12 13.5V8"/></symbol>
 </svg>
 <div class="wrap">
+
 <header>
-  <div class="eyebrow">An agent skill · frontend implementation router</div>
+  <div class="eyebrow">An agent skill · production client implementation</div>
   <nav class="toplinks" aria-label="external links">
     <a href="https://github.com/gabros20/frontend-skill" target="_blank" rel="noopener">GitHub</a>
     <a href="https://github.com/gabros20/frontend-skill#install" target="_blank" rel="noopener">Install</a>
     <a href="/llms.txt">llms.txt</a>
   </nav>
   <h1><span class="sl">/</span>frontend</h1>
-  <p class="lede">Ask an agent to build a UI and you get a component that renders the happy path,
-  skips the empty/error/loading states, mishandles tokens, and ships with no tests. <b>frontend</b>
-  replaces that with a router: route to the primary job and the platform it targets, read the
-  reference completely, then ship production code with the full state set, accessibility floors met,
-  and the tests that guard it. Production client code for web, iOS, and Android, spanning the whole
-  register: bringing a distinctive, art-directed website design to pixel-perfect life is as much the
-  job as dense application UI.</p>
-  <div class="term" style="margin-top:22px"><span class="c"># that's the whole start</span>
-<span class="p">/frontend</span> build an accessible Next.js signup form with every state and tests</div>
+  <p class="lede">Ask an agent to “build the UI” and you often get a happy-path component:
+  missing empty/error/loading states, soft a11y, soft Safari video, no CWV budget, no tests.
+  <b>frontend</b> is a <b>faceted router</b> over 27 dense references — load only the job +
+  platform + stack you need, then ship production client code with the full state set and the
+  checks that prove it.</p>
+  <div class="term" style="margin-top:22px"><span class="c"># natural language is enough</span>
+<span class="p">/frontend</span> dual-codec transparent hero video that works on Safari and Chrome
+<span class="p">/frontend</span> fix LCP + CLS on this product page and verify the CWV thresholds
+<span class="p">/frontend</span> wire single-flight 401 refresh and multi-tab logout for our SPA</div>
   <p class="hosts"><span class="hl">runs on</span><span class="ref">Claude Code</span><span>Codex</span><span>Cursor</span><span>Antigravity</span><span>opencode</span><span>Grok Build</span><span>Hermes</span></p>
   <nav class="secnav" aria-label="page sections">
-    <a href="#arc">how it routes</a><a href="#laws">the laws</a><a href="#pick">pick by job</a>
-    <a href="#refs">reference map</a><a href="#start">start here</a>
+    <a href="#idea">the idea</a><a href="#craft">craft</a><a href="#surfaces">surfaces</a>
+    <a href="#laws">laws</a><a href="#pick">jobs</a><a href="#refs">map</a><a href="#start">start</a>
   </nav>
 </header>
 
-<section id="arc">
-  <h2><svg class="lu" aria-hidden="true"><use href="#lu-workflow"/></svg>How it routes</h2>
-  <p>Not a fixed pipeline — a faceted router. <b>Enter at whatever job you have</b>: "fix Core Web
-  Vitals on this page" jumps straight to performance; "wire this design handoff" jumps to tokens and
-  states. Every route composes the <b>smallest sufficient</b> reference set — one primary job, at
-  most one platform overlay, a web stack overlay only when it applies — and nothing unrelated is
-  loaded.</p>
-  <div class="vidwrap" id="vidwrap"></div>
-  <!-- render from remotion/, see remotion/README -->
-  <div class="poster" role="img" aria-label="Diagram: a request routes through the primary job, a platform overlay, an optional web stack overlay, into code and tests, then validation, then handoff.">
-    <p class="arcline"><b>primary job</b> <span class="ar">→</span> <b>platform overlay</b> <span class="ar">→</span> <b>stack overlay</b> <span class="ar">→</span> <b>code &amp; tests</b> <span class="ar">→</span> <b>validate</b> <span class="ar">→</span> <b>handoff</b></p>
+<section id="idea">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-workflow"/></svg>The idea</h2>
+  <p>Not a 30k-token dump of “frontend best practices.” A <b>router</b>: name the engineering job,
+  pick the surface, optionally name the stack — then read <b>only</b> those files completely before
+  writing code. Unrelated craft never enters the context.</p>
+  <div class="poster" role="img" aria-label="Diagram of faceted routing: primary job, platform overlay, optional stack overlay compose a minimal reference set into code and validation.">
+    <div class="prow">
+      <span class="pbox hi"><span class="t">① primary job</span><small>state · forms · a11y · perf · security · …</small></span>
+      <span class="arr">+</span>
+      <span class="pbox hi"><span class="t">② platform</span><small>web · iOS · Android · Expo/RN</small></span>
+      <span class="arr">+</span>
+      <span class="pbox"><span class="t">③ stack?</span><small>React · Next · Tailwind · shadcn — only if used</small></span>
+    </div>
+    <div class="prow">
+      <span class="arr">↓</span>
+      <span class="pbox ok"><span class="t">minimal reference set</span><small>read fully — never all 27</small></span>
+      <span class="arr">→</span>
+      <span class="pbox ok"><span class="t">code + tests</span><small>full state set · floors · budgets</small></span>
+      <span class="arr">→</span>
+      <span class="pbox"><span class="t">dev-loop check</span><small>serve · screenshot · interact</small></span>
+    </div>
   </div>
-  <p class="pcap"><b>The skill operates standalone</b> — invoked alone it runs the full route; given a
-  design handoff (<code>handoff.yaml</code> plus <code>DESIGN.md</code>) it implements that intent
-  faithfully rather than silently overriding it.</p>
+  <p class="pcap"><b>Native overrides web.</b> A SwiftUI screen never loads web-platform CSS rules.
+  An uncovered stack (Vue, Svelte, Astro, …) still gets the core job + platform substrate; project
+  conventions win.</p>
 
-  <div class="steps">
-    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-sliders-horizontal"/></svg>identify the primary job</b><span>Pick the one engineering job the request needs — state and data, state completeness, forms, accessibility, performance, client security, testing, i18n, or design-handoff-and-tokens. → <code>SKILL.md</code></span></div>
-    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-split"/></svg>add the platform overlay</b><span>Web is the default substrate. Native (iOS, Android, React Native) <b>overrides</b> the web defaults when the platform is native — at most one platform overlay.</span></div>
-    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-layers"/></svg>add a web stack overlay only when it applies</b><span>React, Next.js, Tailwind, shadcn/ui — added only when the platform is web and the project names or uses that stack. An uncovered stack skips the overlay; the project's own conventions win.</span></div>
-    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-file-output"/></svg>read fully, then produce</b><span>Read each selected reference completely, then ship production code with the full state set and exact values — tokens, thresholds, API names — not adjectives.</span></div>
-    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-search-check"/></svg>validate &amp; hand off</b><span>Run the dev-loop self-check — served build, screenshots at two viewports with reduced motion emulated, an interactive pass — then emit a compact handoff when downstream review or deployment is expected.</span></div>
+  <div class="facet">
+    <div class="fc">
+      <h3>1 · Primary job</h3>
+      <p>Exactly one core task: <code>state-and-data</code>, <code>forms</code>,
+      <code>performance</code>, <code>client-security</code>, <code>client-app-wiring</code>, …</p>
+    </div>
+    <div class="fc">
+      <h3>2 · Platform</h3>
+      <p>Web by default (<code>web-platform-css</code> + <code>runtime</code>). Or SwiftUI /
+      Compose / <b>Expo RN</b> — mandatory when the target is native. Expo is the default RN path.</p>
+    </div>
+    <div class="fc">
+      <h3>3 · Stack overlay</h3>
+      <p>React, Next, Tailwind, shadcn — <b>only</b> when the project actually uses them. Skip for
+      uncovered stacks.</p>
+    </div>
   </div>
-  <div class="loopback"><span class="ic"><svg class="lu" aria-hidden="true"><use href="#lu-shield-check"/></svg></span><span>A green build is not a correct screen — the skill states what the dev-loop self-check surfaced and what remains, rather than presenting unrun tests or an unscreenshotted build as verified.</span></div>
+</section>
+
+<section id="craft">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-zap"/></svg>What this skill is actually dense at</h2>
+  <p>Cookie-cutter “component library tips” are not the point. These are the hard-earned client
+  domains the pack carries at production depth:</p>
+  <div class="cards">
+    <div class="card">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-video"/></svg>Web runtime craft</h3>
+      <span class="tag">web-platform-runtime</span>
+      <div class="use"><b>Transparent / dual-codec video</b> (bowser SSR-null Pattern A, HEVC/WebM,
+      bake vs mix-blend matrix), <b>Safari / iOS chrome</b> (svh, Liquid Glass strips, fixed-modal
+      clip), scroll-scrub media traps, View Transitions silent failures, Popover/Anchor floors.</div>
+    </div>
+    <div class="card">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-gauge"/></svg>Performance</h3>
+      <span class="tag">performance</span>
+      <div class="use">CWV thresholds + fix ladders, responsive <code>imagesrcset</code> preload +
+      <code>fetchpriority</code>, Early Hints limits, compositor paint traps (blur / will-change /
+      shadow), content-visibility + retained size, idle prefetch composition.</div>
+    </div>
+    <div class="card">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-clipboard-check"/></svg>State completeness</h3>
+      <span class="tag">state-completeness · forms</span>
+      <div class="use">Eight interaction states and data-region states in code — not a happy-path
+      mock. Validation timing, optimistic update + rollback, undo-vs-confirm rules.</div>
+    </div>
+    <div class="card">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-lock"/></svg>Client security &amp; SPA wiring</h3>
+      <span class="tag">client-security · client-app-wiring</span>
+      <div class="use">HttpOnly cookies vs localStorage JWT, CSRF/credentials ladders, XSS sinks.
+      Production shell: single-flight 401 refresh, multi-tab session fanout, flags, error boundaries.</div>
+    </div>
+    <div class="card">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-layers"/></svg>CSS &amp; DOM craft</h3>
+      <span class="tag">css-craft · js-dom-craft</span>
+      <div class="use">Safari filter/blur GPU promote, backdrop-filter roots, frosted-glass
+      near-edge masks, stacking/z-index scale, observers for media + abort-on-leave, ResizeObserver
+      loop reality.</div>
+    </div>
+    <div class="card">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-boxes"/></svg>Architecture &amp; stacks</h3>
+      <span class="tag">client-architecture · next/react · expo</span>
+      <div class="use">Feature folders, import zones, content-driven section registries. React/RSC
+      boundaries, Next cache primitives, <b>Expo-first RN</b> (Router, prebuild, EAS) with optional
+      <code>expo/skills</code> + <a href="https://docs.expo.dev">docs.expo.dev</a> for deep dives.</div>
+    </div>
+  </div>
+</section>
+
+<section id="surfaces">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-monitor"/></svg>One skill · three surfaces</h2>
+  <p>Same completion laws everywhere. Platform overlays swap the substrate so web advice never
+  leaks into native — and native never pretends to be a browser.</p>
+  <div class="surf">
+    <div class="sc">
+      <h3><svg class="lu" aria-hidden="true" style="width:16px;height:16px;vertical-align:-2px;color:var(--accent)"><use href="#lu-monitor"/></svg> Web</h3>
+      <ul>
+        <li><b>CSS + runtime</b> substrate always on</li>
+        <li>Optional React / Next / Tailwind / shadcn</li>
+        <li>Safari, video, CWV, SPA session craft</li>
+      </ul>
+    </div>
+    <div class="sc">
+      <h3><svg class="lu" aria-hidden="true" style="width:16px;height:16px;vertical-align:-2px;color:var(--accent)"><use href="#lu-smartphone"/></svg> iOS / iPadOS</h3>
+      <ul>
+        <li><b>SwiftUI</b> (+ concurrency when async)</li>
+        <li>HIG conformance in code</li>
+        <li><b>Overrides</b> the web substrate entirely</li>
+      </ul>
+    </div>
+    <div class="sc">
+      <h3><svg class="lu" aria-hidden="true" style="width:16px;height:16px;vertical-align:-2px;color:var(--accent)"><use href="#lu-smartphone"/></svg> Android · Expo</h3>
+      <ul>
+        <li><b>Compose</b> + Kotlin state / Flow (pure Android)</li>
+        <li>or <b>Expo / RN</b> — greenfield default (like Next on web)</li>
+        <li>Router · EAS · lists/gestures · <a href="https://docs.expo.dev">docs.expo.dev</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="strip" aria-label="quick route strip" style="margin-top:24px">
+    <a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/web-platform-runtime.md"><span class="q">Hero video broken only in Safari?</span><span class="a">web-platform-runtime</span></a>
+    <a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/performance.md"><span class="q">LCP/CLS budget failing?</span><span class="a">performance</span></a>
+    <a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/client-app-wiring.md"><span class="q">401 thrash / multi-tab session?</span><span class="a">client-app-wiring</span></a>
+    <a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/state-completeness.md"><span class="q">Only the happy path renders?</span><span class="a">state-completeness</span></a>
+    <a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/react-native.md"><span class="q">Expo Router screen / SecureStore / EAS?</span><span class="a">react-native · Expo-first</span></a>
+    <a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/swiftui.md"><span class="q">SwiftUI settings screen?</span><span class="a">swiftui · native override</span></a>
+    <a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/client-security.md"><span class="q">Token in localStorage?</span><span class="a">client-security</span></a>
+    <a href="https://docs.expo.dev"><span class="q">Need live Expo API / CLI flags?</span><span class="a">docs.expo.dev</span></a>
+  </div>
 </section>
 
 <section id="laws">
   <h2><svg class="lu" aria-hidden="true"><use href="#lu-shield-check"/></svg>The non-negotiable laws</h2>
-  <p>These universal invariants govern every reference — the load-bearing ones, condensed.</p>
+  <p>Universal invariants — they apply even when the owning reference is not open.</p>
   <ul class="rules">
-    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-layers"/></svg>Project conventions win</b>Conform to the project's existing stack, structure, and idioms. Stack overlays sharpen core doctrine for covered stacks; for an uncovered stack, the core job ref plus the web-platform substrate carry the work.</li>
-    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-clipboard-check"/></svg>Ship the full state set in code</b>Default, hover, focus-visible, active, disabled, loading for every interactive element; empty, error, success for every data region. A build that renders only the happy path is incomplete, not done.</li>
-    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-eye"/></svg>Reduced motion is a complete alternative</b>Honor <code>prefers-reduced-motion</code> (and each platform's equivalent) by swapping to a legible no-motion state, never leaving an element mid-transition.</li>
-    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-shield-check"/></svg>Accessibility floors are constraints</b>Meet the contrast, target-size, focus, and keyboard floors from <code>accessibility.md</code> even when it is not open; cite its numbers, do not redefine them.</li>
-    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-search-check"/></svg>A green build is not a correct screen</b>Before claiming completion, run the dev-loop self-check: serve the build, screenshot every route at two viewports with reduced motion emulated, and interact with it.</li>
-    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-copy-x"/></svg>Never present untested code as verified</b>State what was run and what was not; if tests fail or a step was skipped, say so with the evidence rather than signing off.</li>
-    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-file-input"/></svg>Preserve design intent and product constraints</b>Implement a supplied design handoff faithfully; when code and a design, brand, or architecture constraint conflict, report it rather than silently override it.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-layers"/></svg>Project conventions win</b>Stack overlays sharpen doctrine; uncovered stacks follow the repo. Never invent a second design system.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-clipboard-check"/></svg>Ship the full state set</b>Interactive: default / hover / focus-visible / active / disabled / loading. Data: empty / error / success. Happy path alone is incomplete.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-eye"/></svg>Reduced motion is a complete alternative</b>Swap to a legible no-motion state — never freeze mid-transition.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-shield-check"/></svg>Accessibility floors are constraints</b>Contrast, target size, focus, keyboard — cite <code>accessibility.md</code> numbers, don’t redefine them.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-search-check"/></svg>A green build is not a correct screen</b>Serve · screenshot two viewports · reduced motion · interact. State what ran.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-copy-x"/></svg>Never present untested code as verified</b>If tests or screenshots were skipped, say so with evidence.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-file-input"/></svg>Preserve design intent</b>Implement a handoff faithfully; report conflicts instead of silently overriding brand or architecture constraints.</li>
   </ul>
 </section>
 
 <section id="pick">
   <h2><svg class="lu" aria-hidden="true"><use href="#lu-clipboard-list"/></svg>Pick by job</h2>
-  <p>The SKILL.md is a router — load only the reference your current job needs. The full primary-job table:</p>
+  <p>The router’s primary-job table — load one of these, then add platform/stack only if needed.</p>
   <div class="tblwrap"><table>
     <tr><th>I need to…</th><th>Read</th></tr>
-    <tr><td>Model client, server, URL, or form state; wire data fetching, caching, mutations, optimistic updates, retries, or client auth-flow shape</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/state-and-data.md">state-and-data.md</a></code></td></tr>
-    <tr><td>Cover every state a UI can be in — loading, empty, error, success, recovery, notifications, undo</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/state-completeness.md">state-completeness.md</a></code></td></tr>
-    <tr><td>Build or fix a form — validation timing, submission, input types, error association</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/forms.md">forms.md</a></code></td></tr>
-    <tr><td>Implement accessibility — ARIA patterns, focus management, semantic HTML, keyboard support</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/accessibility.md">accessibility.md</a></code></td></tr>
-    <tr><td>Engineer performance — Core Web Vitals, bundle/code-split, images, fonts, rendering cost</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/performance.md">performance.md</a></code></td></tr>
-    <tr><td>Handle client security and privacy — token storage, XSS sinks, CSP consumption, client-reachable-is-public</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/client-security.md">client-security.md</a></code></td></tr>
-    <tr><td>Write client tests and run the dev-loop self-check — unit/component/UI, coverage, screenshot verification</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/testing.md">testing.md</a></code></td></tr>
-    <tr><td>Internationalize — logical properties, Intl APIs, direction/language, text-expansion resilience</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/i18n.md">i18n.md</a></code></td></tr>
-    <tr><td>Consume a design handoff — read handoff.yaml and DESIGN.md, wire tokens, dark mode</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/design-handoff-and-tokens.md">design-handoff-and-tokens.md</a></code></td></tr>
-    <tr><td>Structure or restructure a client codebase — folders, feature boundaries, import discipline, token file layout</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/client-architecture.md">client-architecture.md</a></code></td></tr>
+    <tr><td>State machines, fetch/cache, optimistic updates, client auth-flow shape</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/state-and-data.md">state-and-data.md</a></code></td></tr>
+    <tr><td>Every UI/data state — loading, empty, error, recovery, undo</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/state-completeness.md">state-completeness.md</a></code></td></tr>
+    <tr><td>Forms — validation timing, submit, input types, errors</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/forms.md">forms.md</a></code></td></tr>
+    <tr><td>ARIA, focus, keyboard, contrast/target floors</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/accessibility.md">accessibility.md</a></code></td></tr>
+    <tr><td>CWV, images/fonts, preload, compositor cost, virtualization</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/performance.md">performance.md</a></code></td></tr>
+    <tr><td>Token storage, XSS, CSP, CSRF, credentialed fetch</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/client-security.md">client-security.md</a></code></td></tr>
+    <tr><td>SPA shell — API client, 401 single-flight, multi-tab session, flags</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/client-app-wiring.md">client-app-wiring.md</a></code></td></tr>
+    <tr><td>Tests + screenshot dev-loop self-check</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/testing.md">testing.md</a></code></td></tr>
+    <tr><td>i18n — logical props, Intl, RTL, expansion</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/i18n.md">i18n.md</a></code></td></tr>
+    <tr><td>Consume handoff.yaml / DESIGN.md tokens</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/design-handoff-and-tokens.md">design-handoff-and-tokens.md</a></code></td></tr>
+    <tr><td>Feature folders, import zones, section registries</td><td><code><a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/client-architecture.md">client-architecture.md</a></code></td></tr>
   </table></div>
-  <p style="margin-top:12px">Full table — plus the platform and web stack overlays: <a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/SKILL.md#route-before-acting">SKILL.md</a>.</p>
-  <div class="note"><b>Complementary, not duplicated:</b> experience intent and visual direction (<code>design-skill</code>), system decisions and API/event contracts (<code>architecture-skill</code>), server behavior and databases (<code>backend-skill</code>), independent audits and release gates (<code>quality-skill</code>), and deployment, CI/CD, and store delivery (<code>operate-skill</code>) are separate skills in the <a href="https://github.com/gabros20/digital-product-skill">digital-product-skill</a> family that this one hands off to and from.</div>
+  <p style="margin-top:12px">Platform + stack overlays and declared bundles:
+  <a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/SKILL.md#route-before-acting">SKILL.md</a>.</p>
+  <div class="note"><b>Boundary:</b> experience intent lives in <code>design</code>; system APIs in
+  <code>architecture</code>/<code>backend</code>; release audits in <code>quality</code>; deploy in
+  <code>operate</code>. This skill owns the <b>production client</b> and hands off cleanly to the
+  <a href="https://github.com/gabros20/digital-product-skill">Digital Product Skills</a> family.</div>
 </section>
 
 <section id="refs">
   <h2><svg class="lu" aria-hidden="true"><use href="#lu-files"/></svg>Reference map</h2>
-  <p>26 references, grouped by facet — primary jobs, the platform overlay, and the web stack overlay.
-  Every one is copy-pasteable rather than abstract — the whole point of the router is that you never
-  read all of them at once.</p>
+  <p><b>27 references</b>, grouped by facet. The router loads the smallest set — never all of them.</p>
   <dl class="refmap">
     <div class="refrow">
-      <dt class="reflabel"><svg class="lu" aria-hidden="true"><use href="#lu-clipboard-list"/></svg>primary job<span class="ct">10</span></dt>
-      <dd class="refchips"><span class="ref"><code>state-and-data.md</code></span><span class="ref"><code>state-completeness.md</code></span><span class="ref"><code>forms.md</code></span><span class="ref"><code>accessibility.md</code></span><span class="ref"><code>performance.md</code></span><span class="ref"><code>client-security.md</code></span><span class="ref"><code>testing.md</code></span><span class="ref"><code>i18n.md</code></span><span class="ref"><code>design-handoff-and-tokens.md</code></span><span class="ref"><code>client-architecture.md</code></span></dd>
+      <dt class="reflabel"><svg class="lu" aria-hidden="true"><use href="#lu-clipboard-list"/></svg>primary job<span class="ct">11</span></dt>
+      <dd class="refchips">
+        <span class="ref"><code>state-and-data.md</code></span>
+        <span class="ref"><code>state-completeness.md</code></span>
+        <span class="ref"><code>forms.md</code></span>
+        <span class="ref"><code>accessibility.md</code></span>
+        <span class="ref"><code>performance.md</code></span>
+        <span class="ref"><code>client-security.md</code></span>
+        <span class="ref"><code>client-app-wiring.md</code></span>
+        <span class="ref"><code>testing.md</code></span>
+        <span class="ref"><code>i18n.md</code></span>
+        <span class="ref"><code>design-handoff-and-tokens.md</code></span>
+        <span class="ref"><code>client-architecture.md</code></span>
+      </dd>
     </div>
     <div class="refrow">
-      <dt class="reflabel"><svg class="lu" aria-hidden="true"><use href="#lu-split"/></svg>platform · web substrate<span class="ct">4</span></dt>
-      <dd class="refchips"><span class="ref"><code>web-platform-css.md</code></span><span class="ref"><code>web-platform-runtime.md</code></span><span class="ref"><code>css-craft.md</code></span><span class="ref"><code>js-dom-craft.md</code></span></dd>
+      <dt class="reflabel"><svg class="lu" aria-hidden="true"><use href="#lu-split"/></svg>platform · web<span class="ct">4</span></dt>
+      <dd class="refchips">
+        <span class="ref"><code>web-platform-css.md</code></span>
+        <span class="ref"><code>web-platform-runtime.md</code></span>
+        <span class="ref"><code>css-craft.md</code></span>
+        <span class="ref"><code>js-dom-craft.md</code></span>
+      </dd>
     </div>
     <div class="refrow">
-      <dt class="reflabel"><svg class="lu" aria-hidden="true"><use href="#lu-layers"/></svg>platform · native cluster<span class="ct">5</span></dt>
-      <dd class="refchips"><span class="ref"><code>swiftui.md</code></span><span class="ref"><code>swift-concurrency-and-testing.md</code></span><span class="ref"><code>compose.md</code></span><span class="ref"><code>kotlin-and-compose-state.md</code></span><span class="ref"><code>react-native.md</code></span></dd>
+      <dt class="reflabel"><svg class="lu" aria-hidden="true"><use href="#lu-layers"/></svg>platform · native<span class="ct">5</span></dt>
+      <dd class="refchips">
+        <span class="ref"><code>swiftui.md</code></span>
+        <span class="ref"><code>swift-concurrency-and-testing.md</code></span>
+        <span class="ref"><code>compose.md</code></span>
+        <span class="ref"><code>kotlin-and-compose-state.md</code></span>
+        <span class="ref"><code>react-native.md</code><i class="d">— Expo-first</i></span>
+      </dd>
     </div>
     <div class="refrow">
-      <dt class="reflabel"><svg class="lu" aria-hidden="true"><use href="#lu-file-output"/></svg>web stack overlay<span class="ct">6</span></dt>
-      <dd class="refchips"><span class="ref"><code>react-components-and-state.md</code></span><span class="ref"><code>react-rendering-and-rsc.md</code></span><span class="ref"><code>nextjs.md</code></span><span class="ref"><code>data-fetching-libraries.md</code></span><span class="ref"><code>tailwind.md</code></span><span class="ref"><code>shadcn.md</code></span></dd>
+      <dt class="reflabel"><svg class="lu" aria-hidden="true"><use href="#lu-file-output"/></svg>web stack<span class="ct">6</span></dt>
+      <dd class="refchips">
+        <span class="ref"><code>react-components-and-state.md</code></span>
+        <span class="ref"><code>react-rendering-and-rsc.md</code></span>
+        <span class="ref"><code>nextjs.md</code></span>
+        <span class="ref"><code>data-fetching-libraries.md</code></span>
+        <span class="ref"><code>tailwind.md</code></span>
+        <span class="ref"><code>shadcn.md</code></span>
+      </dd>
     </div>
     <div class="refrow">
       <dt class="reflabel"><svg class="lu" aria-hidden="true"><use href="#lu-scroll-text"/></svg>sources<span class="ct">1</span></dt>
-      <dd class="refchips"><span class="ref"><code>SOURCES.md</code><i class="d">— traces every technique to its source</i></span></dd>
+      <dd class="refchips"><span class="ref"><code>SOURCES.md</code><i class="d">— provenance for every mined technique</i></span></dd>
     </div>
   </dl>
-  <p style="margin-top:16px">Browse the full set: <a href="https://github.com/gabros20/frontend-skill/tree/main/skills/frontend/references">skills/frontend/references/</a>.</p>
+  <p style="margin-top:16px"><a href="https://github.com/gabros20/frontend-skill/tree/main/skills/frontend/references">Browse references on GitHub →</a></p>
 </section>
 
 <section id="start">
   <h2><svg class="lu" aria-hidden="true"><use href="#lu-file-input"/></svg>Start here</h2>
-  <p>Install once. It's a plain <code>SKILL.md</code> router — no flags, no config, no scripts —
-  so it activates on natural-language phrasing ("build an accessible signup form", "implement a
-  SwiftUI settings screen", "fix Core Web Vitals on this page", "wire this design handoff into
-  React") rather than a fixed command.</p>
-  <div class="term"><span class="c"># skills.sh ecosystem</span>
+  <p>Install once. No flags or config — it activates on engineering phrasing or explicit
+  <code>/frontend</code> / <code>$frontend</code>.</p>
+  <div class="term"><span class="c"># skills.sh</span>
 npx skills add gabros20/frontend-skill
 
-<span class="c"># clone + installer (per-host targets)</span>
+<span class="c"># clone + installer</span>
 git clone https://github.com/gabros20/frontend-skill && cd frontend-skill
-./install.sh codex   <span class="c"># or: claude | agents | cursor | antigravity | opencode | grok | hermes | all</span>
+./install.sh codex   <span class="c"># claude | agents | cursor | antigravity | opencode | grok | hermes | all</span>
 
-<span class="c"># use</span>
-<span class="p">/frontend</span> build an accessible Next.js signup form with every state and tests
-<span class="p">/frontend</span> wire a design handoff into a React and Tailwind component with tokens</div>
-  <p style="margin-top:14px">The same install runs on any <a href="https://agentskills.io">Agent&nbsp;Skills</a>
-  host. Codex installs to <code>${CODEX_HOME:-$HOME/.codex}/skills</code>; <code>agents</code>
-  remains a separate cross-agent installation target.</p>
+<span class="c"># examples</span>
+<span class="p">/frontend</span> transparent dual-codec hero video for Safari + Chrome
+<span class="p">/frontend</span> iOS Safari chrome tint + svh app shell for this dark site
+<span class="p">/frontend</span> Expo Router profile screen + expo-image + SecureStore
+<span class="p">/frontend</span> accessible Next.js signup form — every state + tests
+<span class="p">/frontend</span> production SPA 401 refresh mutex and multi-tab logout</div>
   <details class="disc">
     <summary>install targets by host</summary>
     <div>
@@ -367,36 +560,36 @@ git clone https://github.com/gabros20/frontend-skill && cd frontend-skill
         <tr><th>host</th><th>install target</th><th>command</th></tr>
         <tr><td class="dim">Claude Code</td><td><code>~/.claude/skills</code></td><td><code>./install.sh claude</code></td></tr>
         <tr><td class="dim">Codex</td><td><code>${CODEX_HOME:-$HOME/.codex}/skills</code></td><td><code>./install.sh codex</code></td></tr>
-        <tr><td class="dim">Cross-agent path</td><td><code>~/.agents/skills</code></td><td><code>./install.sh agents</code></td></tr>
-        <tr><td class="dim">Cursor CLI</td><td><code>~/.cursor/skills</code></td><td><code>./install.sh cursor</code></td></tr>
-        <tr><td class="dim">Antigravity (IDE + agy)</td><td><code>~/.gemini/…/skills</code></td><td><code>./install.sh antigravity</code></td></tr>
+        <tr><td class="dim">Cross-agent</td><td><code>~/.agents/skills</code></td><td><code>./install.sh agents</code></td></tr>
+        <tr><td class="dim">Cursor</td><td><code>~/.cursor/skills</code></td><td><code>./install.sh cursor</code></td></tr>
+        <tr><td class="dim">Antigravity</td><td><code>~/.gemini/…/skills</code></td><td><code>./install.sh antigravity</code></td></tr>
         <tr><td class="dim">opencode</td><td><code>~/.config/opencode/skills</code></td><td><code>./install.sh opencode</code></td></tr>
         <tr><td class="dim">Grok Build</td><td><code>~/.grok/skills</code></td><td><code>./install.sh grok</code></td></tr>
         <tr><td class="dim">Hermes</td><td><code>~/.hermes/skills</code></td><td><code>./install.sh hermes</code></td></tr>
       </table></div>
-      <p style="margin-top:12px">Prefer <code>npx skills add gabros20/frontend-skill</code> when you have Node — it maps supported clients itself.</p>
     </div>
   </details>
   <details class="disc">
     <summary>what's in the repo</summary>
     <div>
-      <div class="files"><span class="hl">skills/frontend/</span>          <span class="d">the skill: SKILL.md (router) + references/ (26 files)</span>
+      <div class="files"><span class="hl">skills/frontend/</span>          <span class="d">SKILL.md router + references/ (27 files)</span>
 <span class="hl">docs/</span>                      <span class="d">installation · usage · recipes</span>
-<span class="hl">site/</span>                      <span class="d">this page — deploys to frontendengskill.vercel.app</span>
-install.sh                 <span class="d">installer (claude | codex | cursor | antigravity | opencode | grok | hermes | agents | all)</span>
-README.md · CHANGELOG.md · LICENSE</div>
-      <p>More docs: <a href="https://github.com/gabros20/frontend-skill/blob/main/docs/installation.md">docs/installation.md</a> ·
-      <a href="https://github.com/gabros20/frontend-skill/blob/main/docs/usage.md">docs/usage.md</a> ·
-      <a href="https://github.com/gabros20/frontend-skill/blob/main/docs/recipes.md">docs/recipes.md</a>.
-      Part of the <a href="https://github.com/gabros20/digital-product-skill">digital-product-skill</a> family.</p>
+<span class="hl">site/</span>                      <span class="d">this page — frontendengskill.vercel.app</span>
+<span class="hl">evals/</span>                     <span class="d">activation · traversal · output fixtures</span>
+install.sh · scripts/ · README.md · CHANGELOG.md · LICENSE</div>
+      <p><a href="https://github.com/gabros20/frontend-skill/blob/main/docs/installation.md">installation</a> ·
+      <a href="https://github.com/gabros20/frontend-skill/blob/main/docs/usage.md">usage</a> ·
+      <a href="https://github.com/gabros20/frontend-skill/blob/main/docs/recipes.md">recipes</a> ·
+      <a href="https://github.com/gabros20/digital-product-skill">digital-product-skill family</a></p>
     </div>
   </details>
 </section>
 
 <footer>
-  <span><span class="mono">/frontend</span> — Production client code for web, iOS, and Android surfaces</span>
+  <span><span class="mono">/frontend</span> — Production client code for web, iOS, and Android</span>
   <span><a href="https://github.com/gabros20/frontend-skill">github.com/gabros20/frontend-skill</a> · <a href="/llms.txt">llms.txt</a> · MIT</span>
 </footer>
+
 </div>
 <script>
 (function () {

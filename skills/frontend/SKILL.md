@@ -47,7 +47,10 @@ useful; do not invoke them automatically unless the user requested a composition
    (React, Next.js, Tailwind, shadcn/ui). At most one framework, one styling, one component overlay.
    For an uncovered stack (Vue, Svelte, Solid, Remix, Astro, UIKit, Flutter, and the rest), skip the
    overlay: the core job ref plus the platform substrate carry the work, and the project's own
-   conventions win.
+   conventions win. Optional deeper skills + official docs for common uncovered or library stacks
+   are listed in the matching reference when one exists (`nextjs.md`, `data-fetching-libraries.md`,
+   `react-native.md`); for **Astro** (no dedicated overlay), see the short pointer block under
+   Concern below.
 4. Add only the concern references that materially affect the output.
 5. Read every selected reference completely before writing the affected code. Do not load sibling
    platform or stack overlays you did not select.
@@ -60,12 +63,13 @@ useful; do not invoke them automatically unless the user requested a composition
 | Cover every state a UI can be in — loading, empty, error, success, recovery, notifications, undo | [State completeness](references/state-completeness.md) | The two-layer state model in code, loading-by-duration bands, error/empty/recovery taxonomy |
 | Build or fix a form — validation timing, submission, input types, error association | [Forms](references/forms.md) | Validation-timing model, submit-state rules, input-type/autocomplete tables, error wiring |
 | Implement accessibility — ARIA patterns, focus management, semantic HTML, keyboard support | [Accessibility](references/accessibility.md) | ARIA pattern code, focus/keyboard mechanics, and the canonical contrast/target/reduced-motion floors |
-| Engineer performance — Core Web Vitals, bundle/code-split, images, fonts, rendering cost | [Performance](references/performance.md) | Canonical CWV thresholds and fix ladder, image/font loading, bundle discipline, virtualization |
-| Handle client security and privacy — token storage, XSS sinks, CSP consumption, client-reachable-is-public | [Client security](references/client-security.md) | Client attack-surface rules, safe token/session handling, sanitize sinks, security-header consumption |
+| Engineer performance — Core Web Vitals, bundle/code-split, images, fonts, rendering cost | [Performance](references/performance.md) | CWV thresholds/fix ladder; responsive preload (`imagesrcset`/`fetchpriority`); image decode/sizes; compositor paint traps; idle/adaptive loading; virtualization |
+| Handle client security and privacy — token storage, XSS sinks, CSP, CSRF, credentialed fetch, OAuth cookie traps | [Client security](references/client-security.md) | Client attack-surface rules, credentials/CSRF ladders, sanitize sinks, security-header consumption |
 | Write client tests and run the dev-loop self-check — unit/component/UI, coverage, screenshot verification | [Testing](references/testing.md) | Test doctrine, RTL query ladder, TS strict baseline, and the green-build-is-not-looks-right loop |
 | Internationalize — logical properties, Intl APIs, direction/language, text-expansion resilience | [i18n](references/i18n.md) | Logical-property mapping, Intl usage, dir/lang wiring, text-expansion budget |
 | Consume a design handoff — read handoff.yaml and DESIGN.md, wire tokens, dark mode | [Design handoff and tokens](references/design-handoff-and-tokens.md) | handoff.yaml acceptance, 3-tier token model, never-edit-generated, dark-mode token strategy |
-| Structure or restructure a client codebase — folders, feature boundaries, import discipline, token file layout | [Client architecture](references/client-architecture.md) | Feature-vs-type decision rule, unidirectional import layering, colocation doctrine, barrel-vs-public-API reconciliation, token file layout |
+| Structure or restructure a client codebase — folders, feature boundaries, import discipline, token file layout, CMS/section registries | [Client architecture](references/client-architecture.md) | Feature-vs-type decision, import layering, barrels, token layout; content-driven section registry + visual acceptance |
+| Wire a production SPA shell — API client, single-flight 401 refresh, multi-tab session, feature flags, error boundaries, public runtime config | [Client app wiring](references/client-app-wiring.md) | Shared fetch client, refresh mutex, logout fanout, flag bootstrap, multi-level error reporting, build-once config |
 
 ### Platform overlay
 
@@ -73,12 +77,12 @@ Add the one substrate the request targets. At most one. Native overrides web def
 
 | When the platform is | Read | Expected contribution |
 |---|---|---|
-| The web (default substrate) | [Web platform CSS](references/web-platform-css.md) + [Web platform runtime](references/web-platform-runtime.md) | Modern CSS layout and breakpoints; SPA routing, storage, service workers, gestures, Safari/viewport hardening, real-time transport, View Transitions wiring |
-| Polish or harden CSS details — scrollbars, stacking, overflow, numeric alignment, defensive patterns | [CSS craft](references/css-craft.md) | Scrollbar/overscroll/grid single-cell-stacking patterns, sticky-in-grid failure, aspect-ratio fallback and gotcha, tabular numerals, one-line modern layouts |
-| Vanilla DOM and browser-API mechanics — events, observers, clipboard, timing, measurement, cross-tab | [JS DOM craft](references/js-dom-craft.md) | Event delegation, AbortController-as-cleanup, microtask/macrotask/rAF timing, structuredClone matrix, observer gotchas, clipboard/FormData/DOM measurement, cross-tab sync |
+| The web (default substrate) | [Web platform CSS](references/web-platform-css.md) + [Web platform runtime](references/web-platform-runtime.md) | Modern CSS layout/stacking/margin collapse/color-gamut; SPA routing, storage, Safari/iOS hardening, transparent+scrub video traps, Popover/Anchor floors, View Transitions |
+| Polish or harden CSS details — scrollbars, stacking, overflow, blur/compositor, numeric alignment, defensive patterns | [CSS craft](references/css-craft.md) | Scrollbar/overscroll/grid patterns; Safari blur/backdrop-root/will-change layer craft; paint/texture budgets; aspect-ratio and micro-patterns |
+| Vanilla DOM and browser-API mechanics — events, observers, clipboard, timing, measurement, cross-tab | [JS DOM craft](references/js-dom-craft.md) | Event delegation, AbortController-as-cleanup, microtask/macrotask/rAF timing, media IO+abort patterns, ResizeObserver loop, structuredClone, cross-tab sync |
 | Native iOS / iPadOS | [SwiftUI](references/swiftui.md) (+ [Swift concurrency and testing](references/swift-concurrency-and-testing.md) when async or tests are involved) | SwiftUI/HIG conformance in code; Swift concurrency correctness and Swift Testing |
 | Native Android | [Compose](references/compose.md) (+ [Kotlin and Compose state](references/kotlin-and-compose-state.md) when state, coroutines, or Flow are involved) | Material 3 conformance in code; Kotlin doctrine and Compose state/recomposition |
-| Cross-platform native (React Native) | [React Native](references/react-native.md) | RN as the cross-platform stack under the native mandate; SwiftUI/Compose remain the canonical native stacks |
+| Cross-platform native (React Native / **Expo default**) | [React Native](references/react-native.md) | Expo-first RN: Router, managed/prebuild, EAS, env/image/storage; core list/gesture/New Arch traps; SwiftUI/Compose remain pure-native stacks |
 
 `css-craft.md` and `js-dom-craft.md` are supplementary web-substrate reads, not alternate
 substrates — add either alongside the web row (not instead of it) when the request specifically
@@ -104,14 +108,34 @@ Add when the request involves it, on any platform.
 
 - Provenance of a technique, value, or license → [Sources](references/SOURCES.md).
 
+### Uncovered frameworks: optional skills + docs (not full overlays)
+
+These stacks do **not** have a dedicated reference in this pack. Still run the core job + platform
+substrate (and project conventions). When the task is deeply framework-specific, install a
+specialist skill and open live docs rather than inventing conventions:
+
+| Stack | Deeper skill (skills.sh) | Official docs |
+|---|---|---|
+| **Astro** | `npx skills add astrolicious/agent-skills@astro` (~11K) · Clerk: `clerk/skills@clerk-astro-patterns` | [docs.astro.build](https://docs.astro.build) — prefer [on-demand rendering](https://docs.astro.build/en/guides/on-demand-rendering/) over legacy “SSR” slugs |
+| **Remix / React Router framework mode** | `npx skills add remix-run/agent-skills@react-router-framework-mode` (~3K, official) | [reactrouter.com](https://reactrouter.com/start/framework/installation) (Remix successor); archive: [remix.run/docs/en/main](https://remix.run/docs/en/main) |
+| **TanStack Start** | Covered as a **pointer** in [Data fetching libraries](references/data-fetching-libraries.md) + `npx skills add deckardger/tanstack-agent-skills@tanstack-start-best-practices` | [tanstack.com/start/latest](https://tanstack.com/start/latest) |
+| **TanStack Query / Router** | Same reference + Query/Router companion skills listed there | [tanstack.com/query/latest](https://tanstack.com/query/latest) · [tanstack.com/router/latest](https://tanstack.com/router/latest) |
+| **Next.js** | Full overlay [Next.js](references/nextjs.md) + optional skills/docs tables in that file | [nextjs.org/docs](https://nextjs.org/docs) |
+| **Expo / RN** | Full overlay [React Native](references/react-native.md) + Expo skills/docs tables | [docs.expo.dev](https://docs.expo.dev) |
+
+Vue, Svelte, Solid, Flutter, UIKit: no high-signal single skill pinned here — use project docs +
+official framework docs; do not force Next/Expo patterns onto them.
+
 ### Declared bundles
 
 Read these together — the router encodes the pairing so no lateral hop is required:
 
 - **Next.js web app** → [Next.js](references/nextjs.md) + [React components and state](references/react-components-and-state.md) + [React rendering and RSC](references/react-rendering-and-rsc.md) + [Tailwind](references/tailwind.md) (+ [shadcn](references/shadcn.md) when the project uses it).
 - **React SPA (Vite/React Router)** → [React components and state](references/react-components-and-state.md) + [State and data](references/state-and-data.md) for the fetch/cache/optimistic doctrine + [Data fetching libraries](references/data-fetching-libraries.md) for the current library API + [Web platform runtime](references/web-platform-runtime.md) for client routing + [Tailwind](references/tailwind.md).
+- **Production SPA bootstrap** → [Client app wiring](references/client-app-wiring.md) + [Client security](references/client-security.md) + [State and data](references/state-and-data.md) (+ [Client architecture](references/client-architecture.md) when folder/import structure is in scope).
 - **Native iOS screen** → [SwiftUI](references/swiftui.md) (+ [Swift concurrency and testing](references/swift-concurrency-and-testing.md) when async or tests are involved). This overrides the web-platform substrate.
 - **Native Android screen** → [Compose](references/compose.md) + [Kotlin and Compose state](references/kotlin-and-compose-state.md). This overrides the web-platform substrate.
+- **Expo / React Native app** → [React Native](references/react-native.md) (+ [React components and state](references/react-components-and-state.md) for shared React discipline). Overrides the web-platform substrate. Prefer Expo-managed unless the repo is already bare.
 - **Consume a design handoff** → [Design handoff and tokens](references/design-handoff-and-tokens.md) + the relevant primary job ref + the target platform/stack overlay.
 - **Any surface where accessibility or performance is explicit** → the primary job ref + [Accessibility](references/accessibility.md) and/or [Performance](references/performance.md).
 

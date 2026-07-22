@@ -67,7 +67,7 @@
   },
   {
     "id": "janky-list-compose",
-    "prompt": "Our Jetpack Compose LazyColumn is janky when scrolling through a long list — fix it.",
+    "prompt": "Our Jetpack Compose LazyColumn is janky when scrolling through a long list \u2014 fix it.",
     "expected_references": [
       "references/compose.md",
       "references/kotlin-and-compose-state.md"
@@ -104,7 +104,7 @@
   },
   {
     "id": "project-restructure-feature-folders",
-    "prompt": "This React codebase's components/hooks/services folders are a mess and imports go every which way — restructure it into feature folders with a real import boundary.",
+    "prompt": "This React codebase's components/hooks/services folders are a mess and imports go every which way \u2014 restructure it into feature folders with a real import boundary.",
     "expected_references": [
       "references/client-architecture.md"
     ],
@@ -112,6 +112,95 @@
       "references/swiftui.md",
       "references/compose.md",
       "references/react-native.md"
+    ]
+  },
+  {
+    "id": "spa-api-client-401-refresh",
+    "prompt": "Wire a shared API client with credentials, single-flight silent token refresh on 401, and multi-tab logout for this SPA.",
+    "expected_references": [
+      "references/client-app-wiring.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md",
+      "references/react-native.md"
+    ]
+  },
+  {
+    "id": "client-csrf-cookie-cors",
+    "prompt": "Our SPA cookie session is empty on the API subdomain \u2014 fix credentialed CORS and CSRF for the client half.",
+    "expected_references": [
+      "references/client-security.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md"
+    ]
+  },
+  {
+    "id": "tanstack-stale-initialdata-trap",
+    "prompt": "TanStack Query never refetches after we seed with initialData \u2014 what's wrong with our staleTime and how should we fix it?",
+    "expected_references": [
+      "references/data-fetching-libraries.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md"
+    ]
+  },
+  {
+    "id": "transparent-video-gradient-pattern",
+    "prompt": "Serve a transparent hero video over a gradient marketing background that works in Safari and Chrome.",
+    "expected_references": [
+      "references/web-platform-runtime.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md"
+    ]
+  },
+  {
+    "id": "safari-blur-and-backdrop-root",
+    "prompt": "Frosted glass navbar with backdrop-filter shows no blur when parent opacity is 0.99, and large filter:blur cards jank Safari.",
+    "expected_references": [
+      "references/css-craft.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md"
+    ]
+  },
+  {
+    "id": "responsive-lcp-preload-imagesrcset",
+    "prompt": "Preload the responsive LCP hero image so mobile does not download the 2000w candidate.",
+    "expected_references": [
+      "references/performance.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md"
+    ]
+  },
+  {
+    "id": "scroll-scrub-safari-video-freeze",
+    "prompt": "Scroll-scrubbed section freezes the video on Safari when body scroll is locked with position fixed.",
+    "expected_references": [
+      "references/web-platform-runtime.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md"
+    ]
+  },
+  {
+    "id": "color-gamut-p3-pipeline",
+    "prompt": "Site colors and photos look different on Safari vs Chrome wide-gamut displays \u2014 implement a correct CSS color pipeline.",
+    "expected_references": [
+      "references/web-platform-css.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md"
     ]
   }
 ]

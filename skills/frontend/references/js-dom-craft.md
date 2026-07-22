@@ -92,10 +92,35 @@ destructure `[entry]`. Two gotchas recur in every framework wrapper, not only Re
 fresh options object literal on every render/call recreates the observer whenever it sits in a
 dependency check — hoist it to a stable reference; (2) cleanup reading the observed node from a
 ref that may have changed since `observe()` was called unobserves the wrong node — capture it in
-a local const at observe-time instead. `ResizeObserver` also throws a benign, non-fatal "loop
-completed with undelivered notifications" console warning under rapid resize. Restrain
-`MutationObserver` to the narrowest `subtree`/`childList`/`attributes` combination needed;
-over-broad becomes its own perf problem.
+a local const at observe-time instead. Restrain `MutationObserver` to the narrowest
+`subtree`/`childList`/`attributes` combination needed; over-broad becomes its own perf problem.
+
+**IntersectionObserver for media.** `threshold: 1` rarely fires for tall videos that never reach
+100% visibility — use ~0.25–0.5 for play. Separate load vs play policies: positive `rootMargin`
+(~200–400px, e.g. `200px 0px` for images) starts the fetch before the element enters the
+viewport; pause when `intersectionRatio === 0`. One options bag for both "prefetch early" and
+"must be fully visible to play" causes half-visible autoplay confusion — split observers or gate
+on ratio explicitly. The initial callback batch reports current state (often
+`isIntersecting: false`), not only later changes — handle already-visible targets on mount, and
+gate work on `entry.isIntersecting` / ratio so observe-time fire does not start loads as if
+"entered." Multiple thresholds fire multiple times per element; unobserve after a successful
+one-shot load; keep a small state machine (`idle → loading → loaded`). Rapid scroll can
+double-fire enter/exit; debounce teardown (~100–120ms), re-check still out of view, then
+pause/reset, and clear the pending timer if the target re-intersects.
+
+**Abort in-flight asset loads on leave.** IO can trigger a fetch that continues after the user
+scrolls away; the response still arrives, decodes, and may assign `src` → bandwidth/memory burn
+and late layout work. Native `loading=lazy` cancels less aggressively than a custom path you
+control. Pair IO with `AbortController`: on exit before settle, `abort()` and do not assign
+`src`; re-observe (or re-arm a fresh controller) when the element returns.
+
+**ResizeObserver loop.** `ResizeObserver loop completed with undelivered notifications` means the
+callback caused another size change in the same frame. Often benign (extensions such as LastPass
+also trigger it; Chrome grew stricter around 132+), but real loops thrash layout and must be
+fixed. Do not write width/height/styles that re-trigger the observed element's size in the same
+callback turn; batch DOM writes via `requestAnimationFrame`. When measuring layout that must not
+self-mutate (tables, self-sizing hosts), observing a 0-height sentinel child is sometimes safer
+than observing the element whose size you rewrite.
 
 ## `WeakMap` and `EventTarget` patterns
 
@@ -208,4 +233,7 @@ Resize/IntersectionObserver lifecycle; lydiahallie/javascript-questions (MIT) - 
 macrotask ordering; scout-js-x.md (X posts + re-expressed articles, no verbatim reuse) -
 AbortSignal.timeout/any, WeakMap pattern, BroadcastChannel vs storage, visibilitychange/pagehide/
 sendBeacon reliability (nicj.net), 0.1+0.2/Intl.NumberFormat; MDN - scrollIntoView, input/change/
-beforeinput, key vs code. -->
+beforeinput, key vs code, IntersectionObserver options; web-media-perf C-web-26–29 - media IO
+rootMargin/threshold split, AbortController on leave, initial callback / double-fire, ResizeObserver
+loop (rAF batch, sentinel); TrackJS/Sentry RO loop reports; local-specialists C-16 debounce exit
+~120ms (re-expressed). -->

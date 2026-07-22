@@ -2,9 +2,9 @@
 
 Read [AGENTS.md](AGENTS.md) before changing runtime behavior and
 [CONTRIBUTING.md](CONTRIBUTING.md) before preparing a release. Keep `frontend` focused on the
-production client — components, state, data, forms, accessibility, performance, client security,
-and tests — and hand experience design, system architecture, marketing, quality audits, and
-deployment/release to their owning capabilities.
+production client — components, state, SPA wiring, data, forms, accessibility, performance, client
+security, and tests — and hand experience design, system architecture, marketing, quality audits,
+and deployment/release to their owning capabilities.
 
 Preserve the canonical homes: the two-layer state model in `state-completeness.md`, accessibility
 floors in `accessibility.md`, design-handoff token acceptance in `design-handoff-and-tokens.md`. Run

@@ -29,19 +29,23 @@ composes the smallest sufficient reference set from three facets, then reads onl
 before writing the affected code:
 
 1. **Primary job** — exactly one. The core engineering task: state and data, state completeness,
-   forms, accessibility, performance, client security, testing, i18n, or design-handoff consumption.
-2. **Platform overlay** — the web substrate by default, or the native cluster (iOS, Android, React
-   Native) when the request names or implies it. **Native is mandatory for native work and
-   overrides the web-platform defaults** — never apply web-flavored substrate guidance to a SwiftUI
-   or Compose screen.
+   forms, accessibility, performance, client security, client-app wiring, testing, i18n,
+   design-handoff consumption, or client architecture.
+2. **Platform overlay** — the web substrate by default, or the native cluster (iOS, Android, Expo /
+   React Native) when the request names or implies it. **Native is mandatory for native work and
+   overrides the web-platform defaults** — never apply web-flavored substrate guidance to a
+   SwiftUI, Compose, or RN screen. Cross-platform RN defaults to **Expo-managed** unless the repo
+   is already bare.
 3. **Web stack overlay** — only when the platform is web and a covered stack is named or detected
    (React, Next.js, Tailwind, shadcn/ui). At most one framework, one styling, one component overlay.
    For an uncovered stack (Vue, Svelte, Solid, Remix, Astro, UIKit, Flutter, and the rest), skip the
    overlay: the core job ref plus the platform substrate carry the work, and the project's own
-   conventions win.
+   conventions win. Optional deeper skills + official docs for Next, TanStack, Expo, and Astro are
+   listed in `nextjs.md`, `data-fetching-libraries.md`, `react-native.md`, and SKILL.md's uncovered-
+   frameworks block.
 
 That "read only what you need" discipline is the whole point. A one-file accessibility fix loads
-`accessibility.md`, not all 25 references.
+`accessibility.md`, not all 27 references.
 
 ### Declared bundles
 
@@ -49,12 +53,18 @@ Some jobs pair predictably, so the router encodes the pairing — no lateral dis
 
 - **Next.js web app** → `nextjs.md` + `react-components-and-state.md` + `react-rendering-and-rsc.md`
   + `tailwind.md` (+ `shadcn.md` when the project uses it).
-- **React SPA (Vite/React Router)** → `react-components-and-state.md` +
+- **React SPA (Vite/React Router)** → `react-components-and-state.md` + `state-and-data.md` +
   `data-fetching-libraries.md` + `web-platform-runtime.md` for client routing + `tailwind.md`.
+- **Production SPA bootstrap** → `client-app-wiring.md` + `client-security.md` +
+  `state-and-data.md` (+ `client-architecture.md` when folder/import structure is in scope).
 - **Native iOS screen** → `swiftui.md` (+ `swift-concurrency-and-testing.md` when async or tests
   are involved). This overrides the web-platform substrate.
 - **Native Android screen** → `compose.md` + `kotlin-and-compose-state.md`. This overrides the
   web-platform substrate.
+- **Expo / React Native app** → `react-native.md` (+ `react-components-and-state.md` for shared
+  React discipline). Overrides the web substrate. Prefer Expo-managed; for EAS, Expo UI kits, or
+  full SDK upgrades, install optional deeper skills listed in that file and open
+  [docs.expo.dev](https://docs.expo.dev).
 - **Consume a design handoff** → `design-handoff-and-tokens.md` + the relevant primary job ref + the
   target platform/stack overlay.
 - **Any surface where accessibility or performance is explicit** → the primary job ref +
@@ -74,22 +84,23 @@ reference file(s)".
 | Build or fix a form — validation timing, submission, input types, error association | `forms.md` |
 | Implement accessibility — ARIA patterns, focus management, semantic HTML, keyboard support | `accessibility.md` |
 | Engineer performance — Core Web Vitals, bundle/code-split, images, fonts, rendering cost | `performance.md` |
-| Handle client security and privacy — token storage, XSS sinks, CSP consumption | `client-security.md` |
+| Handle client security and privacy — token storage, XSS, CSP, CSRF, credentialed fetch | `client-security.md` |
 | Write client tests and run the dev-loop self-check — unit/component/UI, coverage, screenshot verification | `testing.md` |
 | Internationalize — logical properties, Intl APIs, direction/language, text-expansion resilience | `i18n.md` |
 | Consume a design handoff — read handoff.yaml and DESIGN.md, wire tokens, dark mode | `design-handoff-and-tokens.md` |
 | Structure or restructure a client codebase — folders, feature boundaries, import discipline, token file layout | `client-architecture.md` |
+| Wire a production SPA shell — API client, 401 refresh, multi-tab session, flags, error boundaries | `client-app-wiring.md` |
 
 ### Platform overlay
 
 | When the platform is | Read |
 |---|---|
-| The web (default substrate) | `web-platform-css.md` + `web-platform-runtime.md` |
-| The web, polishing or hardening CSS details — scrollbars, stacking, overflow, numeric alignment | `css-craft.md` (supplementary web read) |
-| The web, vanilla DOM/browser-API mechanics — events, observers, clipboard, timing, measurement | `js-dom-craft.md` (supplementary web read) |
+| The web (default substrate) | `web-platform-css.md` + `web-platform-runtime.md` (includes Safari/video dual-codec craft) |
+| The web, polishing or hardening CSS details — scrollbars, blur/compositor, stacking, overflow | `css-craft.md` (supplementary web read) |
+| The web, vanilla DOM/browser-API mechanics — events, media observers, clipboard, timing | `js-dom-craft.md` (supplementary web read) |
 | Native iOS / iPadOS | `swiftui.md` (+ `swift-concurrency-and-testing.md` when async or tests are involved) |
 | Native Android | `compose.md` (+ `kotlin-and-compose-state.md` when state, coroutines, or Flow are involved) |
-| Cross-platform native (React Native) | `react-native.md` |
+| Cross-platform native (React Native / **Expo default**) | `react-native.md` — Expo-managed first; bare when required; optional `expo/skills` + [docs.expo.dev](https://docs.expo.dev) for deep dives |
 
 ### Web stack overlay
 
@@ -97,8 +108,10 @@ reference file(s)".
 |---|---|
 | React components, hooks, effects, state placement | `react-components-and-state.md` |
 | React rendering, RSC/client boundary, hydration, memoization | `react-rendering-and-rsc.md` |
-| Next.js App Router, server actions, caching, next/* primitives | `nextjs.md` |
-| Data-fetching libraries — TanStack Query, React Router data APIs | `data-fetching-libraries.md` |
+| Next.js App Router, server actions, caching, next/* primitives | `nextjs.md` (+ optional skills/docs tables; [nextjs.org/docs](https://nextjs.org/docs)) |
+| Data-fetching — TanStack Query/Router/Start, SWR, React Router | `data-fetching-libraries.md` (+ companion skills; official docs in that file) |
+| Astro (no dedicated overlay) | Core job + web substrate; optional `astrolicious/agent-skills@astro` · [docs.astro.build](https://docs.astro.build) |
+| Remix / RR framework mode (no dedicated overlay) | Core job + web substrate; `remix-run/agent-skills@react-router-framework-mode` · [reactrouter.com framework](https://reactrouter.com/start/framework/installation) |
 | Tailwind CSS — theme, utilities, responsive variants | `tailwind.md` |
 | shadcn/ui and component-library selection | `shadcn.md` |
 

@@ -31,7 +31,10 @@ cited floors.
 - Semantic HTML
 - ARIA patterns
 - Focus management
+- Default anchor offset (sticky chrome)
 - Label-in-Name
+- CSS generated content — accessible name
+- Container-query art direction and `alt`
 - Contrast (implementation reference)
 - Touch targets
 - Reduced motion
@@ -103,7 +106,8 @@ rules above as the cross-cutting constraints; do not invent a bespoke attribute 
 - Focus order follows visual/reading order. No positive `tabindex`, ever.
 - **Focus not obscured** (WCAG 2.4.11/2.4.12): a focused element must not sit fully behind a sticky
   header or footer. Size `scroll-margin-top`/`scroll-margin-bottom` to the sticky element's height
-  so `:focus`/`:target` scrolls clear of it.
+  so `:focus`/`:target` scrolls clear of it. Prefer the default anchor-offset recipe below over
+  per-id one-offs.
 - Overlays: trap focus inside, set initial focus inside on open, restore focus to the trigger on
   close, and let Escape close it.
 
@@ -111,12 +115,64 @@ SPA route-change focus (updating `document.title`, moving focus to the new `<h1>
 restoration) is runtime/routing mechanics, not accessibility implementation per se; see
 `web-platform-runtime.md`.
 
+## Default anchor offset (sticky chrome)
+
+One set-and-forget rule covers in-page targets and keyboard focus so content is not hidden under a
+sticky header:
+
+```css
+:where([id], :focus) {
+  scroll-margin-block-start: var(--header-block-size, 80px);
+}
+```
+
+Set `--header-block-size` to the real sticky header block size (update when the header resizes). The
+`:where()` keeps specificity zero so local overrides win. Apply the equivalent
+`scroll-margin-block-end` when a sticky footer can obscure focus. Order of operations: define the
+margin before relying on hash navigation or `scrollIntoView` — without it, the browser scrolls the
+target flush to the viewport edge under the chrome.
+
 ## Label-in-Name (WCAG SC 2.5.3)
 
 When visible text exists, the accessible name must contain it verbatim. Voice-control users (Dragon,
 macOS Voice Control) speak the visible label, and an `aria-label` that diverges from it breaks the
 command. `aria-label` is for icon-only controls with no visible text; never add it alongside
 existing visible text.
+
+## CSS generated content — accessible name
+
+CSS `content:` / `::before` / `::after` can produce text that some assistive tech exposes and some
+ignore, depending on browser and whether the content is treated as decorative. Order of operations
+when using generated content:
+
+1. **Prefer real DOM text** for anything meaningful (labels, status words, icons that carry meaning
+   via a visible character). Generated content is a last resort for meaningful names.
+2. **Decorative only:** keep `content: ""` (empty) or purely ornamental glyphs, and ensure the
+   accessible name comes from the element or an associated label — not from `content`.
+3. **If generated text must convey meaning:** provide an accessible name strategy on the host
+   element (`aria-label` / visually-hidden text / `alt` on replaced content) that matches what
+   sighted users see. Do not assume `content: "…"` alone is announced everywhere.
+4. **Speech/`/` alt for CSS content** (Sara Soueidan / emerging support): where the platform
+   supports alternative text for generated content, supply it; still ship a DOM-level name so older
+   AT is covered.
+
+Agents commonly emit decorative `::before` icons with no name plan — treat that as a review fail
+when the control would otherwise be unlabeled.
+
+## Container-query art direction and `alt`
+
+Container queries and `<picture>` can swap crops, aspect ratios, or entirely different art per
+container size. **`alt` cannot change with the active source** — there is one accessible name for
+the image, not one per candidate. Risk: art direction that changes *meaning* (product A → product
+B, face → logo, warning → decoration) creates a content mismatch for AT users. Order of operations:
+
+1. Keep art-direction variants the **same subject**; only crop/scale/lighting changes.
+2. If meaning must change by breakpoint, use separate images in the DOM (with their own `alt`) or
+   change the surrounding copy — do not rely on one `<img alt>` spanning contradictory sources.
+3. Decorative swaps use `alt=""` only when every candidate is decorative.
+
+Responsive-image performance mechanics live in `performance.md`; this section owns the a11y
+constraint on art direction.
 
 ## Contrast (implementation reference)
 
@@ -187,4 +243,4 @@ in `web-platform-css.md`).
 - SPA focus-on-route-change, scroll restoration, History API: `web-platform-runtime.md`.
 - Dataviz charting-library selection and its a11y-fallback pairing: `shadcn.md`.
 
-<!-- sources: ehmo_platform-design-skills (MIT) - semantic HTML table, ARIA quick-reference, forms/touch/dark-mode sections; cuellarfr_design-skills (MIT) - modal focus-trap, roving-tabindex, ARIA live-region roles; dembrandt_dembrandt-skills (no license, facts re-expressed; MDN/WCAG/web.dev cited) - modal/overlay hierarchy, tabs ARIA spec, focus-ring CSS; pbakaus_impeccable (Apache-2.0, NOTICE credits ehmo) - :focus-visible rule, inert attribute, Popover API, native <dialog> vs manual trap; millionco/react-doctor (Modified MIT, recommendation strings re-expressed) - aria-hidden-and-focusability family, disabled-but-explained pattern, data-table a11y; accessibility skill (MIT, web-quality-skills) - WCAG 2.2 new criteria (focus-not-obscured), visually-hidden CSS, live-region re-trigger recipe; saadeghi/daisyui (MIT) - native <dialog> vs Popover-API modal decision; swiftui-pro/twostraws (MIT) - reduced-motion opacity-crossfade pattern; WCAG 2.2 (W3C), MDN cited for numeric floors and API references, no verbatim prose copied. -->
+<!-- sources: ehmo_platform-design-skills (MIT) - semantic HTML table, ARIA quick-reference, forms/touch/dark-mode sections; cuellarfr_design-skills (MIT) - modal focus-trap, roving-tabindex, ARIA live-region roles; dembrandt_dembrandt-skills (no license, facts re-expressed; MDN/WCAG/web.dev cited) - modal/overlay hierarchy, tabs ARIA spec, focus-ring CSS; pbakaus_impeccable (Apache-2.0, NOTICE credits ehmo) - :focus-visible rule, inert attribute, Popover API, native <dialog> vs manual trap; millionco/react-doctor (Modified MIT, recommendation strings re-expressed) - aria-hidden-and-focusability family, disabled-but-explained pattern, data-table a11y; accessibility skill (MIT, web-quality-skills) - WCAG 2.2 new criteria (focus-not-obscured), visually-hidden CSS, live-region re-trigger recipe; saadeghi/daisyui (MIT) - native <dialog> vs Popover-API modal decision; swiftui-pro/twostraws (MIT) - reduced-motion opacity-crossfade pattern; WCAG 2.2 (W3C), MDN cited for numeric floors and API references, no verbatim prose copied; x-bookmarks.md #10 (@tak_dcxi) - :where([id], :focus) scroll-margin-block-start default recipe; Sara Soueidan (X + blog) - CSS generated-content accessible name strategy; Sara Soueidan / authors-architecture - container-query art direction, alt cannot change with active source. -->
