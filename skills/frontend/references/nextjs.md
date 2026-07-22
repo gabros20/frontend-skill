@@ -256,7 +256,11 @@ Turbopack config moved top-level in Next 16 (`turbopack: {...}`, out of
 `resolve.alias`. Webpack-loader equivalents: `css-loader`/`style-loader`/`sass-loader`/
 `postcss-loader` are built in; `svgr` becomes a `turbopack.rules` entry; `raw-loader` becomes a
 `?raw` import query; `worker-loader` becomes a native `new Worker(new URL(...))`. When no
-Turbopack equivalent exists yet, `bundler: 'webpack'` is the escape hatch.
+Turbopack equivalent exists yet, `bundler: 'webpack'` is the escape hatch. **SVGR/SVGO:** keep
+`removeViewBox: false` (preset-default otherwise drops viewBox when width/height attrs exist and
+breaks coordinate scaling). Wire that into **Turbopack and webpack** svgr rules — Next 16
+`next build` is Turbopack-first. Prefer no width/height presentation attrs; size logos with CSS
+`aspect-ratio` (`css-craft.md` Inline SVG Safari paint traps).
 
 `import 'server-only'` at the top of a module enforces the server/client import boundary at build
 time — the build fails if that module is imported from a client component.

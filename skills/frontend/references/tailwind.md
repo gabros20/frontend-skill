@@ -94,6 +94,13 @@ And a literal `*` inside a CSS comment near a `@theme` block can make some minif
 entire token block while only printing a soft warning; treat any such parser warning as a hard
 failure and verify computed styles directly rather than trusting a green build.
 
+**SVG presentation attributes vs `@layer utilities` (Safari):** Tailwind v4 ships utilities inside
+`@layer utilities`. WebKit treats SVG presentation attributes (`width`, `height`, `fill`, …) as
+**unlayered** author declarations, which beat layered utilities — so `h-24 w-auto` can lose to
+`width="1024"` and the SVG blows to intrinsic size (Chrome/Firefox still honor utilities). Never put
+sizing/fill presentation attributes on an SVG you style with Tailwind; drive size with CSS
+`aspect-ratio` + height/width utilities. Full SVG/WebKit stack: `css-craft.md`.
+
 ## Sharing a theme across projects
 
 Tailwind v4 does support splitting `@theme` declarations across multiple imported CSS files, and

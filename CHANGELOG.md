@@ -7,6 +7,14 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 
 ## [Unreleased]
 
+## [0.2.1] — 2026-07-22
+
+### Added
+- **Safari inline SVG paint traps** (Safari 26 / macOS 26 production postmortem):
+  `content-visibility` + SVG paint invalidation; Tailwind v4 `@layer` vs presentation attributes;
+  flat paths (no `<g transform>`); unique clip IDs; SVGO `removeViewBox: false` — `css-craft.md`
+  primary, cross-refs in `performance.md`, `tailwind.md`, `nextjs.md`, `testing.md`.
+
 ### Changed
 - Site framing matches docs: creative websites and web apps, not “UI only”
   (`site/index.html`, `llms.txt`, `og-source.html`).
@@ -74,5 +82,6 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 - Evaluation fixtures across four dimensions — activation, traversal, output, and
   compression-ablation — replacing the placeholder sets.
 
+[0.2.1]: https://github.com/gabros20/frontend-skill/releases/tag/v0.2.1
 [0.2.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.2.0
 [0.1.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.1.0
