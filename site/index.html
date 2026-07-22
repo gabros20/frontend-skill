@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f7fa">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#12151d">
-<title>frontend — Production client code for web, iOS, and Android surfaces</title>
-<meta name="description" content="Faceted agent skill for production frontend: full UI state sets, CWV/media, Safari/video craft, SPA wiring, a11y floors, Expo-first React Native, pure native iOS/Android — 27 references, loads only what each job needs.">
+<title>frontend — Websites, web apps, iOS &amp; Android client code</title>
+<meta name="description" content="Faceted agent skill for production frontend: creative websites and marketing pages, web apps and dense product UI, iOS and Android — full state sets, CWV/media, Safari/video craft, SPA wiring, Expo-first RN — 27 references, loads only what each job needs.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://frontendengskill.vercel.app/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="frontend — Production client code for web, iOS, and Android surfaces">
-<meta property="og:description" content="Faceted router for production client code: state completeness, CWV, Safari/video, SPA wiring, Expo RN, a11y, native iOS/Android — loads only the references each job needs.">
+<meta property="og:title" content="frontend — Websites, web apps, iOS &amp; Android client code">
+<meta property="og:description" content="Production client code from art-directed websites to dense product UI — and native iOS/Android. Faceted router: CWV, Safari/video, SPA wiring, Expo RN, a11y — loads only the references each job needs.">
 <meta property="og:url" content="https://frontendengskill.vercel.app/">
 <meta property="og:image" content="https://frontendengskill.vercel.app/og.png">
 <meta property="og:image:width" content="1200">
@@ -22,8 +22,8 @@
 <meta property="og:site_name" content="frontend">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="frontend — Production client code for web, iOS, and Android surfaces">
-<meta name="twitter:description" content="Faceted router for production client code: state completeness, CWV, Safari/video, SPA wiring, Expo RN, a11y, native iOS/Android — loads only the references each job needs.">
+<meta name="twitter:title" content="frontend — Websites, web apps, iOS &amp; Android client code">
+<meta name="twitter:description" content="Production client code from art-directed websites to dense product UI — and native iOS/Android. Faceted router: CWV, Safari/video, SPA wiring, Expo RN, a11y — loads only the references each job needs.">
 <meta name="twitter:image" content="https://frontendengskill.vercel.app/og.png">
 
 <script type="application/ld+json">
@@ -33,7 +33,7 @@
   "name": "frontend",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Claude Code / agent CLIs",
-  "description": "Implement and review production frontend code for websites, web apps, iOS, and Android: components, state, data fetching, forms, auth flows, routing, responsive and accessible UI, performance, client security, and unit/component/UI tests. Covers React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and React Native, and consumes a design handoff (handoff.yaml plus DESIGN.md).",
+  "description": "Implement and review production frontend code for websites, web apps, iOS, and Android — from creative, art-directed website builds to dense product UI: components, state, data fetching, forms, auth flows, routing, responsive and accessible interfaces, performance, client security, and tests. Covers React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and React Native, and consumes a design handoff (handoff.yaml plus DESIGN.md).",
   "url": "https://frontendengskill.vercel.app/",
   "offers": {
     "@type": "Offer",
@@ -281,19 +281,21 @@
 <div class="wrap">
 
 <header>
-  <div class="eyebrow">An agent skill · production client implementation</div>
+  <div class="eyebrow">An agent skill · websites · web apps · iOS · Android</div>
   <nav class="toplinks" aria-label="external links">
     <a href="https://github.com/gabros20/frontend-skill" target="_blank" rel="noopener">GitHub</a>
     <a href="https://github.com/gabros20/frontend-skill#install" target="_blank" rel="noopener">Install</a>
     <a href="/llms.txt">llms.txt</a>
   </nav>
   <h1><span class="sl">/</span>frontend</h1>
-  <p class="lede">Ask an agent to “build the UI” and you often get a happy-path component:
+  <p class="lede">Not “just UI.” <b>frontend</b> owns the production client across
+  <b>creative websites</b>, <b>web apps</b>, and dense product UI — plus native iOS and Android.
+  Ask an agent to ship a marketing page or a product surface and you often get a happy-path mock:
   missing empty/error/loading states, soft a11y, soft Safari video, no CWV budget, no tests.
-  <b>frontend</b> is a <b>faceted router</b> over 27 dense references — load only the job +
-  platform + stack you need, then ship production client code with the full state set and the
-  checks that prove it.</p>
+  This pack is a <b>faceted router</b> over 27 dense references — load only the job + platform +
+  stack you need, then ship with the full state set and the checks that prove it.</p>
   <div class="term" style="margin-top:22px"><span class="c"># natural language is enough</span>
+<span class="p">/frontend</span> pixel-perfect art-directed marketing site from this design handoff
 <span class="p">/frontend</span> dual-codec transparent hero video that works on Safari and Chrome
 <span class="p">/frontend</span> fix LCP + CLS on this product page and verify the CWV thresholds
 <span class="p">/frontend</span> wire single-flight 401 refresh and multi-tab logout for our SPA</div>
@@ -306,9 +308,10 @@
 
 <section id="idea">
   <h2><svg class="lu" aria-hidden="true"><use href="#lu-workflow"/></svg>The idea</h2>
-  <p>Not a 30k-token dump of “frontend best practices.” A <b>router</b>: name the engineering job,
-  pick the surface, optionally name the stack — then read <b>only</b> those files completely before
-  writing code. Unrelated craft never enters the context.</p>
+  <p>Not a 30k-token dump of “frontend best practices.” A <b>router</b> for the whole client
+  register — marketing and creative websites as much as dense application UI. Name the engineering
+  job, pick the surface, optionally name the stack — then read <b>only</b> those files completely
+  before writing code. Unrelated craft never enters the context.</p>
   <div class="poster" role="img" aria-label="Diagram of faceted routing: primary job, platform overlay, optional stack overlay compose a minimal reference set into code and validation.">
     <div class="prow">
       <span class="pbox hi"><span class="t">① primary job</span><small>state · forms · a11y · perf · security · …</small></span>
@@ -352,7 +355,7 @@
 <section id="craft">
   <h2><svg class="lu" aria-hidden="true"><use href="#lu-zap"/></svg>What this skill is actually dense at</h2>
   <p>Cookie-cutter “component library tips” are not the point. These are the hard-earned client
-  domains the pack carries at production depth:</p>
+  domains the pack carries at production depth — for <b>sites and apps</b>, not UI kits alone:</p>
   <div class="cards">
     <div class="card">
       <h3><svg class="lu" aria-hidden="true"><use href="#lu-video"/></svg>Web runtime craft</h3>
@@ -398,13 +401,15 @@
 </section>
 
 <section id="surfaces">
-  <h2><svg class="lu" aria-hidden="true"><use href="#lu-monitor"/></svg>One skill · three surfaces</h2>
-  <p>Same completion laws everywhere. Platform overlays swap the substrate so web advice never
-  leaks into native — and native never pretends to be a browser.</p>
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-monitor"/></svg>One skill · whole client register</h2>
+  <p>Creative websites, product web apps, dense UI, and pure native — same completion laws.
+  Platform overlays swap the substrate so web advice never leaks into native — and native never
+  pretends to be a browser.</p>
   <div class="surf">
     <div class="sc">
-      <h3><svg class="lu" aria-hidden="true" style="width:16px;height:16px;vertical-align:-2px;color:var(--accent)"><use href="#lu-monitor"/></svg> Web</h3>
+      <h3><svg class="lu" aria-hidden="true" style="width:16px;height:16px;vertical-align:-2px;color:var(--accent)"><use href="#lu-monitor"/></svg> Websites &amp; web apps</h3>
       <ul>
+        <li>Marketing / art-directed sites <b>and</b> product apps</li>
         <li><b>CSS + runtime</b> substrate always on</li>
         <li>Optional React / Next / Tailwind / shadcn</li>
         <li>Safari, video, CWV, SPA session craft</li>
@@ -472,9 +477,11 @@
   </table></div>
   <p style="margin-top:12px">Platform + stack overlays and declared bundles:
   <a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/SKILL.md#route-before-acting">SKILL.md</a>.</p>
-  <div class="note"><b>Boundary:</b> experience intent lives in <code>design</code>; system APIs in
-  <code>architecture</code>/<code>backend</code>; release audits in <code>quality</code>; deploy in
-  <code>operate</code>. This skill owns the <b>production client</b> and hands off cleanly to the
+  <div class="note"><b>Boundary:</b> experience intent and visual direction live in <code>design</code>;
+  system APIs in <code>architecture</code>/<code>backend</code>; release audits in
+  <code>quality</code>; deploy in <code>operate</code>. This skill owns the <b>production client</b>
+  — implementing websites, web apps, and native surfaces from an approved design or engineering
+  request — and hands off cleanly to the
   <a href="https://github.com/gabros20/digital-product-skill">Digital Product Skills</a> family.</div>
 </section>
 
@@ -547,7 +554,8 @@ npx skills add gabros20/frontend-skill
 git clone https://github.com/gabros20/frontend-skill && cd frontend-skill
 ./install.sh codex   <span class="c"># claude | agents | cursor | antigravity | opencode | grok | hermes | all</span>
 
-<span class="c"># examples</span>
+<span class="c"># examples — websites, web apps, product UI, native</span>
+<span class="p">/frontend</span> pixel-perfect art-directed marketing site from this design handoff
 <span class="p">/frontend</span> transparent dual-codec hero video for Safari + Chrome
 <span class="p">/frontend</span> iOS Safari chrome tint + svh app shell for this dark site
 <span class="p">/frontend</span> Expo Router profile screen + expo-image + SecureStore
@@ -586,7 +594,7 @@ install.sh · scripts/ · README.md · CHANGELOG.md · LICENSE</div>
 </section>
 
 <footer>
-  <span><span class="mono">/frontend</span> — Production client code for web, iOS, and Android</span>
+  <span><span class="mono">/frontend</span> — Websites, web apps, iOS &amp; Android production client</span>
   <span><a href="https://github.com/gabros20/frontend-skill">github.com/gabros20/frontend-skill</a> · <a href="/llms.txt">llms.txt</a> · MIT</span>
 </footer>
 

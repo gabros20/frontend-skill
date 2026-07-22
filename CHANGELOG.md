@@ -7,6 +7,10 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 
 ## [Unreleased]
 
+### Changed
+- Site framing matches docs: creative websites and web apps, not “UI only”
+  (`site/index.html`, `llms.txt`, `og-source.html`).
+
 ## [0.2.0] — 2026-07-22
 
 ### Added

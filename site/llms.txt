@@ -1,8 +1,8 @@
 # frontend
 
-> Production client code for web, iOS, and Android. Faceted agent skill — loads only the references each job needs.
+> Production client code for websites, web apps, iOS, and Android — from creative, art-directed website builds to dense product UI. Faceted agent skill — loads only the references each job needs.
 
-frontend turns “build this UI” into controlled implementation instead of a happy-path mock. It covers component and state architecture, full state completeness, forms, accessibility floors, Core Web Vitals and media loading, client security, production SPA session wiring, testing + screenshot self-check, i18n, design-handoff consumption, and hard web-platform craft (Safari/iOS chrome, dual-codec transparent video, CSS/DOM traps) across React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and Expo/React Native (Expo default greenfield; bare when required).
+frontend is not “just UI.” It owns the production client across marketing and creative websites, web apps, and dense application UI (plus native iOS/Android). It turns “ship this site / screen / flow” into controlled implementation instead of a happy-path mock. Coverage: component and state architecture, full state completeness, forms, accessibility floors, Core Web Vitals and media loading, client security, production SPA session wiring, testing + screenshot self-check, i18n, design-handoff consumption, and hard web-platform craft (Safari/iOS chrome, dual-codec transparent video, CSS/DOM traps) across React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and Expo/React Native (Expo default greenfield; bare when required).
 
 SKILL.md is a faceted router: one primary job, at most one platform overlay (native overrides web), a web stack overlay only when the project uses that stack — read those files fully, then ship. Installs as plain Agent Skills format (agentskills.io) on Claude Code, Codex, Cursor, Antigravity, opencode, Grok Build, Hermes, and more.
 
