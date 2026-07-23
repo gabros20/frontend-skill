@@ -248,6 +248,52 @@
     .strip a:last-child{border-bottom:none}
   }
 
+  /* worked example — one concrete request → the exact refs it loads (mirrors the hero route scene) */
+  .worked{margin-top:20px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 18px}
+  .worked .wq{font-family:ui-monospace,Menlo,monospace; font-size:13.5px; color:var(--ink); display:flex; align-items:baseline; gap:8px; flex-wrap:wrap}
+  .worked .wq .p{color:var(--accent); font-weight:600}
+  .worked .wlanes{display:flex; flex-wrap:wrap; gap:6px 8px; margin:12px 0 4px}
+  .worked .wlane{display:flex; align-items:baseline; gap:6px; font-size:12px; color:var(--muted)}
+  .worked .wlane em{font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif; text-transform:uppercase; letter-spacing:.08em; font-style:normal; font-weight:600; font-size:11px}
+  .worked .wlane code{background:var(--accent); color:var(--accent-ink); border-radius:5px; padding:1px 7px; font-size:11.5px}
+  .worked .wset{display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; padding-top:12px; border-top:1px solid var(--line)}
+  .worked .wset code{background:var(--code-bg); border:1px solid var(--accent); color:var(--accent); border-radius:6px; padding:3px 9px; font-size:11.5px; white-space:nowrap}
+  .worked .wcount{font-size:12.5px; color:var(--muted); margin-top:10px}
+  .worked .wcount b{color:var(--ink)}
+
+  /* family — where frontend sits in the Digital Product Skills family */
+  .famarc{display:flex; align-items:stretch; gap:0; margin-top:20px; flex-wrap:wrap}
+  .fstage{flex:1; min-width:148px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:13px 15px; display:flex; flex-direction:column; gap:3px}
+  .fstage .fk{font-family:ui-monospace,Menlo,monospace; font-size:15px; color:var(--ink)}
+  .fstage .fk .sl{color:var(--glyph)}
+  .fstage small{font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif; text-transform:uppercase; letter-spacing:.07em; font-weight:600; font-size:11px; color:var(--muted)}
+  .fstage.cur{border-color:var(--accent); border-width:2px; box-shadow:0 20px 50px -34px var(--accent)}
+  .fstage.cur .fk{color:var(--accent)} .fstage.cur .fk .sl{color:var(--accent)}
+  .famarr{align-self:center; color:var(--glyph); font-family:ui-monospace,Menlo,monospace; font-size:19px; padding:0 7px; flex:none}
+  .famarc .fstage.up{border-left:3px solid var(--tok-dim)}
+
+  /* the consume seam — design's artifacts flow INTO frontend */
+  .seam{display:grid; grid-template-columns:1fr auto 1fr; gap:16px; align-items:center; margin-top:22px}
+  .yamlcard{background:var(--code-bg); border:1px solid var(--line); border-radius:9px; padding:16px 20px; font-family:ui-monospace,Menlo,monospace; font-size:12.5px; line-height:1.85; overflow-x:auto; white-space:pre}
+  .yamlcard .k{color:var(--tok-dim)} .yamlcard .c{color:var(--muted)} .yamlcard .s{color:var(--good)}
+  .yamlcard .fn{color:var(--tok-dim); font-weight:600}
+  .seamarr{display:flex; flex-direction:column; align-items:center; gap:6px}
+  .seamarr .a{font-family:ui-monospace,Menlo,monospace; font-size:26px; color:var(--accent)}
+  .seamarr .at{font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif; text-transform:uppercase; letter-spacing:.1em; font-size:11px; font-weight:600; color:var(--muted); text-align:center; line-height:1.3}
+  .consumes{background:var(--panel); border:1px solid var(--accent); border-radius:9px; padding:16px 20px}
+  .consumes b{font-family:ui-monospace,Menlo,monospace; font-size:15px; color:var(--ink)} .consumes b .sl{color:var(--accent)}
+  .consumes p{font-size:13px; color:var(--muted); margin:6px 0 0; max-width:none}
+  .consumes code{background:var(--code-bg); padding:1px 6px; border-radius:4px; font-size:12px; white-space:nowrap}
+  @media (max-width:640px){ .seam{grid-template-columns:1fr} .seamarr .a{transform:rotate(90deg)} }
+
+  /* sharp boundaries with neighbors — what's out, and the two nuances that stay in */
+  .bounds{display:grid; grid-template-columns:repeat(auto-fill,minmax(232px,1fr)); gap:10px; margin-top:20px}
+  .bnd{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px 15px; font-size:13px; line-height:1.5; color:var(--muted)}
+  .bnd b{font-family:ui-monospace,Menlo,monospace; font-size:13px; color:var(--ink); display:block; margin-bottom:2px}
+  .bnd .keep{color:var(--good); font-weight:600}
+  .bnd.nuance{border-left:3px solid var(--good)}
+  @media (max-width:720px){ .famarc{flex-direction:column} .famarr{transform:rotate(90deg); align-self:flex-start; margin:2px 0 2px 18px} }
+
 </style>
 </head>
 <body>
@@ -302,7 +348,7 @@
   <p class="hosts"><span class="hl">runs on</span><span class="ref">Claude Code</span><span>Codex</span><span>Cursor</span><span>Antigravity</span><span>opencode</span><span>Grok Build</span><span>Hermes</span></p>
   <nav class="secnav" aria-label="page sections">
     <a href="#idea">the idea</a><a href="#craft">craft</a><a href="#surfaces">surfaces</a>
-    <a href="#laws">laws</a><a href="#pick">jobs</a><a href="#refs">map</a><a href="#start">start</a>
+    <a href="#family">family</a><a href="#laws">laws</a><a href="#pick">jobs</a><a href="#refs">map</a><a href="#start">start</a>
   </nav>
 </header>
 
@@ -312,6 +358,7 @@
   the surface (web, iOS, Android, Expo/RN), optionally name the stack — then read <b>only</b> those
   files completely before writing code. The same skill covers creative websites and product UI;
   unrelated craft never enters the context.</p>
+  <div class="vidwrap" id="vidwrap"></div>
   <div class="poster" role="img" aria-label="Diagram of faceted routing: primary job, platform overlay, optional stack overlay compose a minimal reference set into code and validation.">
     <div class="prow">
       <span class="pbox hi"><span class="t">① primary job</span><small>state · forms · a11y · perf · security · …</small></span>
@@ -349,6 +396,20 @@
       <p>React, Next, Tailwind, shadcn — <b>only</b> when the project actually uses them. Skip for
       uncovered stacks.</p>
     </div>
+  </div>
+
+  <div class="worked" role="img" aria-label="Worked routing example: the request 'accessible Next.js signup form, every state and tests' selects primary job forms, platform web, web stack Next.js — composing six of the twenty-seven references: forms, accessibility, web-platform-runtime, nextjs, react-components-and-state, and testing.">
+    <div class="wq"><span class="p">/frontend</span> accessible Next.js signup form — every state + tests</div>
+    <div class="wlanes">
+      <span class="wlane"><em>job</em> <code>forms</code></span>
+      <span class="wlane"><em>platform</em> <code>web</code></span>
+      <span class="wlane"><em>stack</em> <code>Next.js</code></span>
+      <span class="wlane"><em>concerns</em> <code>a11y</code> <code>testing</code></span>
+    </div>
+    <div class="wset">
+      <code>forms.md</code><code>accessibility.md</code><code>web-platform-runtime.md</code><code>nextjs.md</code><code>react-components-and-state.md</code><code>testing.md</code>
+    </div>
+    <p class="wcount"><b>6 of 27</b> references loaded — the forms job, the web runtime substrate, the Next.js React overlay, and the accessibility + testing concerns. The other 21, including every native and sibling-stack file, stay closed.</p>
   </div>
 </section>
 
@@ -441,6 +502,58 @@
     <a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/swiftui.md"><span class="q">SwiftUI settings screen?</span><span class="a">swiftui · native override</span></a>
     <a href="https://github.com/gabros20/frontend-skill/blob/main/skills/frontend/references/client-security.md"><span class="q">Token in localStorage?</span><span class="a">client-security</span></a>
     <a href="https://docs.expo.dev"><span class="q">Need live Expo API / CLI flags?</span><span class="a">docs.expo.dev</span></a>
+  </div>
+</section>
+
+<section id="family">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-file-input"/></svg>Where it sits in the family</h2>
+  <p><b>frontend</b> is the <b>Build</b> stage of the
+  <a href="https://github.com/gabros20/digital-product-skill">Digital Product Skills</a> family — the
+  capability that turns an approved design or engineering request into shipped client code. It
+  <b>consumes</b> a <code>design</code> handoff as the source of truth and hands off to
+  <code>quality</code> and <code>operate</code> downstream. It also runs standalone with no upstream
+  handoff, and never invokes another skill silently.</p>
+
+  <div class="famarc" role="img" aria-label="The Digital Product Skills pipeline: design (intent) flows to frontend (build the client, the current stage), which flows to quality (audit) and then operate (deploy).">
+    <div class="fstage up"><span class="fk"><span class="sl">/</span>design</span><small>intent · direction · tokens</small></div>
+    <span class="famarr">→</span>
+    <div class="fstage cur"><span class="fk"><span class="sl">/</span>frontend</span><small>build the client · you are here</small></div>
+    <span class="famarr">→</span>
+    <div class="fstage"><span class="fk"><span class="sl">/</span>quality</span><small>audit · WCAG · gates</small></div>
+    <span class="famarr">→</span>
+    <div class="fstage"><span class="fk"><span class="sl">/</span>operate</span><small>deploy · monitor · store</small></div>
+  </div>
+  <p class="pcap"><code>architecture</code> (system decisions, API/event contracts) and <code>backend</code>
+  (server behavior, databases, server APIs) sit alongside Build and feed it — but <b>SSR/RSC runtime</b>
+  inside the client framework and the <b>client build config</b> stay inside frontend.</p>
+
+  <div class="seam">
+    <div class="yamlcard"><span class="c"># design emits → frontend consumes</span>
+<span class="fn">handoff.yaml</span>
+  <span class="k">skill:</span> design   <span class="k">status:</span> <span class="s">complete</span>
+<span class="fn">DESIGN.md</span>
+  <span class="k">tokens:</span> primitive → semantic → component
+  <span class="k">states:</span> loading · empty · error · success
+  <span class="k">per-screen:</span> intent + a11y floors</div>
+    <div class="seamarr"><span class="a">→</span><span class="at">source of truth<br>consumed</span></div>
+    <div class="consumes">
+      <b><span class="sl">/</span>frontend implements it</b>
+      <p>Wires the tokens into a two-mode system, builds every state and meets the accessibility floors
+      as specified, and holds design intent as a <b>constraint</b> — implementing faithfully and
+      reporting conflicts rather than silently re-deciding. The
+      <code>design-handoff-and-tokens.md</code> reference owns accepting this contract.</p>
+    </div>
+  </div>
+
+  <p style="margin-top:24px">Sharp boundaries with the neighbors — what each owns, plus the two things
+  people expect to live elsewhere but stay in frontend:</p>
+  <div class="bounds">
+    <div class="bnd"><b>design</b>Experience intent, visual direction, and look-and-feel critique. frontend implements it, never re-decides it.</div>
+    <div class="bnd"><b>architecture</b>System decisions, stack-selection rationale, and API/event contracts.</div>
+    <div class="bnd nuance"><b>backend</b>Server behavior, databases, server APIs — <span class="keep">but SSR/RSC runtime is IN frontend.</span></div>
+    <div class="bnd"><b>quality</b>Independent verification, WCAG audits, and release-gate sign-off.</div>
+    <div class="bnd nuance"><b>operate</b>Deploy, CI/CD, monitoring, store delivery — <span class="keep">but client build config is IN frontend.</span></div>
+    <div class="bnd"><b>animation · seo</b>Motion beyond reduced-motion, and search beyond semantic markup — future family skills.</div>
   </div>
 </section>
 
@@ -615,7 +728,7 @@ install.sh · scripts/ · README.md · CHANGELOG.md · LICENSE</div>
   v.autoplay = true;
   v.playsInline = true;
   v.setAttribute("playsinline", "");
-  v.setAttribute("aria-label", "Animated: a frontend request routes through the primary job, a platform overlay, and an optional web stack overlay, into production code and tests, validation, and handoff.");
+  v.setAttribute("aria-label", "Animated: a frontend request arrives, a design handoff feeds in, the primary job, platform overlay, and optional web stack overlay compose the smallest sufficient reference set, native overrides web, the full state set is built in code, the dev-loop self-check runs, and the code and tests hand off to quality and operate.");
   v.addEventListener("loadeddata", function () { document.body.classList.add("has-vid"); });
   v.addEventListener("error", function () { wrap.remove(); });
   function apply() {
