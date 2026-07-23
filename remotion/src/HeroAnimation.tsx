@@ -13,16 +13,21 @@ import { themes, MONO, SANS, type ThemeName, type Theme } from "./theme";
 // request arrives, a design handoff feeds in from the family upstream, the three facets (primary
 // job · platform · web stack) light up and compose the SMALLEST sufficient reference set, native
 // overrides web, the full state set is built in code, the dev-loop self-check runs, and the code +
-// tests hand off to quality/operate. 31s, loops (opens/closes on an empty stage).
+// tests hand off to quality/operate. ~56s, loops (opens/closes on an empty stage).
+//
+// Pacing model (reader-first): every scene animates its content IN, then HOLDS fully still for a
+// reading beat (~2.5–4s, scaled to how much there is to read) before the container fades OUT. The
+// fade-out begins at dur − <envelope hold>, so each scene's dur = content-in-end + reading-hold +
+// fade. Never let the next scene start before this one has been readable at rest.
 //
 // Scene map (30fps):
-//   S1 ask       0–120    two /frontend asks type in — the whole client register
-//   S2 handoff   120–250  design's DESIGN.md + handoff.yaml feed IN (family upstream; intent, not re-decided)
-//   S3 route     250–430  THE centerpiece: 3 facet lanes light up → smallest sufficient read-set (poster beat)
-//   S4 native    430–540  platform axis: native (SwiftUI/Compose/Expo) OVERRIDES the web substrate
-//   S5 build     540–700  production code: the full state set in code, not a happy-path mock
-//   S6 verify    700–810  dev-loop self-check: serve · screenshot 2 viewports · reduced-motion · interact
-//   S7 ship      810–930  code + tests hand off → quality (audit) / operate (deploy); the family arc closes
+//   S1 ask       0–201      two /frontend asks type in — the whole client register
+//   S2 handoff   201–435    design's DESIGN.md + handoff.yaml feed IN (family upstream; intent, not re-decided)
+//   S3 route     435–729    THE centerpiece: 3 facet lanes light up → smallest sufficient read-set (poster beat)
+//   S4 native    729–961    platform axis: native (SwiftUI/Compose/Expo) OVERRIDES the web substrate
+//   S5 build     961–1227   production code: the full state set in code, not a happy-path mock
+//   S6 verify    1227–1443  dev-loop self-check: serve · screenshot 2 viewports · reduced-motion · interact
+//   S7 ship      1443–1675  code + tests hand off → quality (audit) / operate (deploy); the family arc closes
 
 const EASE = Easing.bezier(0.16, 1, 0.3, 1);
 
@@ -385,7 +390,7 @@ const SceneShip: React.FC<{ t: Theme; dur: number }> = ({ t, dur }) => {
 };
 
 // ── persistent chrome + master timeline ──────────────────────────────────────
-const BOUNDS = [120, 250, 430, 540, 700, 810, 930];
+const BOUNDS = [201, 435, 729, 961, 1227, 1443, 1675];
 const LABELS = ["ask", "handoff", "route", "native", "build", "verify", "ship"];
 
 const PhaseBar: React.FC<{ t: Theme; frame: number }> = ({ t, frame }) => {
@@ -416,13 +421,13 @@ export const HeroAnimation: React.FC<{ theme: ThemeName }> = ({ theme }) => {
     <AbsoluteFill style={{ backgroundColor: t.bg, fontFamily: SANS }}>
       <AbsoluteFill style={{ background: `radial-gradient(circle at 82% 16%, color-mix(in srgb, ${t.accent} 13%, transparent), transparent 44%), radial-gradient(circle at 8% 92%, color-mix(in srgb, ${t.accent} 9%, transparent), transparent 48%)`, opacity: glow }} />
       <AbsoluteFill style={{ opacity: master }}>
-        <Sequence from={0} durationInFrames={120}><SceneAsk t={t} dur={120} /></Sequence>
-        <Sequence from={120} durationInFrames={130}><SceneHandoffIn t={t} dur={130} /></Sequence>
-        <Sequence from={250} durationInFrames={180}><SceneRoute t={t} dur={180} /></Sequence>
-        <Sequence from={430} durationInFrames={110}><SceneNative t={t} dur={110} /></Sequence>
-        <Sequence from={540} durationInFrames={160}><SceneBuild t={t} dur={160} /></Sequence>
-        <Sequence from={700} durationInFrames={110}><SceneVerify t={t} dur={110} /></Sequence>
-        <Sequence from={810} durationInFrames={120}><SceneShip t={t} dur={120} /></Sequence>
+        <Sequence from={0} durationInFrames={201}><SceneAsk t={t} dur={201} /></Sequence>
+        <Sequence from={201} durationInFrames={234}><SceneHandoffIn t={t} dur={234} /></Sequence>
+        <Sequence from={435} durationInFrames={294}><SceneRoute t={t} dur={294} /></Sequence>
+        <Sequence from={729} durationInFrames={232}><SceneNative t={t} dur={232} /></Sequence>
+        <Sequence from={961} durationInFrames={266}><SceneBuild t={t} dur={266} /></Sequence>
+        <Sequence from={1227} durationInFrames={216}><SceneVerify t={t} dur={216} /></Sequence>
+        <Sequence from={1443} durationInFrames={232}><SceneShip t={t} dur={232} /></Sequence>
         <PhaseBar t={t} frame={frame} />
       </AbsoluteFill>
     </AbsoluteFill>
