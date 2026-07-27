@@ -13,7 +13,7 @@ Read when:
 Skip when:
 - The task is Tailwind theme/class mechanics with no shadcn involved (`tailwind.md`).
 - The question is the component's visual direction or aesthetic pick, not its implementation
-  (design).
+  (`design`).
 
 Inputs: whether shadcn is already installed, the project's existing icon-library dependency (if
 any), and the brief/brand signal (enterprise, government, Shopify, indie SaaS, no signal at all).

@@ -13,7 +13,7 @@ Read when:
 Skip when:
 - The question is Tailwind's specific `@theme` mechanics (`tailwind.md`) or shadcn's specific
   CSS-variable shape (`shadcn.md`); this file is the stack-agnostic layer underneath both.
-- The design is still being explored or isn't approved yet (design owns that stage).
+- The design is still being explored or isn't approved yet (`design` owns that stage).
 
 Inputs: the `handoff.yaml` companion, DESIGN.md, its exported token format(s), and the target
 codebase's existing stack and conventions.

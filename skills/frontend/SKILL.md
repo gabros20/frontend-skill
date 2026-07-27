@@ -23,12 +23,14 @@ and the tests that guard it. Own the implementation and its craft; consume desig
 than re-deciding it.
 
 Adjacent work this pack does not own: experience intent, visual direction, tokens-as-decisions, and
-look-and-feel critique (design); motion and animation beyond wiring reduced-motion and consuming
+look-and-feel critique (`design`); motion and animation beyond wiring reduced-motion and consuming
 motion tokens (animation, future); anything done for search beyond semantic markup (seo, future);
-system decisions, stack-selection rationale, and API/event contracts (architecture); server
-behavior, databases, and server APIs (backend) — but SSR and RSC runtime inside the client framework
-is IN; independent verification, WCAG audits, and release gates (quality); deployment, CI/CD,
-monitoring, and store delivery (operate) — but the client *build* config is IN.
+system decisions, stack-selection rationale, and API/event contracts (`architecture`); server
+behavior, databases, and server APIs (`backend`) — but SSR and RSC runtime inside the client framework
+is IN; independent verification, WCAG audits, and release gates (`quality`); deployment, CI/CD,
+monitoring, and store delivery (`operate`) — but the client *build* config is IN; business processes
+spanning systems you do not own — a client triggering a cross-vendor workflow is `automation`'s, not
+this pack's.
 
 When design supplies a `handoff.yaml` and `DESIGN.md`, consume them as the source of truth for
 tokens, states, and per-screen intent; implement that intent faithfully and report conflicts rather

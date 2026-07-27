@@ -7,6 +7,15 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 
 ## [Unreleased]
 
+## [0.2.3] — 2026-07-27
+
+### Fixed
+- Sibling-skill references in boundary/routing prose now use the family-standard backticked
+  runtime id (`design`, `architecture`, `backend`, `quality`, `operate`) instead of bare
+  parenthetical names, matching convention used elsewhere in this pack and across the family.
+- "Adjacent work this pack does not own" now names `automation` (business processes spanning
+  systems this pack does not own), closing a gap against the released 10-pack family.
+
 ## [0.2.2] — 2026-07-22
 
 ### Changed
