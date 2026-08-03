@@ -297,6 +297,16 @@ for required in ("README.md", "AGENTS.md", "CLAUDE.md", "CHANGELOG.md", "CONTRIB
     if not (ROOT / required).is_file():
         fail(f"missing repository contract file: {required}")
 
+# Portability guard (family convention, 2026-08-03): runtime skill content must never
+# carry absolute local paths — they break on every machine but the author's.
+for tracked in sorted(skill_dir.rglob("*")):
+    if tracked.is_file() and tracked.suffix.lower() in {".md", ".yaml", ".yml", ".json", ".py", ".sh"}:
+        try:
+            if "/Users/" in tracked.read_text(encoding="utf-8"):
+                fail(f"absolute local path (/Users/...) in runtime file: {tracked.relative_to(ROOT)}")
+        except UnicodeDecodeError:
+            continue
+
 for message in warnings:
     print(f"lint-skill: WARN: {message}")
 if errors:
