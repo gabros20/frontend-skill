@@ -45,7 +45,7 @@ before writing the affected code:
    frameworks block.
 
 That "read only what you need" discipline is the whole point. A one-file accessibility fix loads
-`accessibility.md`, not all 27 references.
+`accessibility.md`, not all 28 references.
 
 ### Declared bundles
 

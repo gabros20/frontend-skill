@@ -202,5 +202,18 @@
       "references/swiftui.md",
       "references/compose.md"
     ]
+  },
+  {
+    "id": "faithful-site-rebuild-nextjs",
+    "prompt": "Migrate this Squarespace site the client owns onto Next.js + Tailwind, pixel-faithful, including the hero slider and logo.",
+    "expected_references": [
+      "references/site-rebuild.md",
+      "references/design-handoff-and-tokens.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md",
+      "references/react-native.md"
+    ]
   }
 ]

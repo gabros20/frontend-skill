@@ -197,6 +197,14 @@ copied.
   work → [reactrouter.com framework mode](https://reactrouter.com/start/framework/installation).
   Tables: `nextjs.md`, `data-fetching-libraries.md`, SKILL.md uncovered-frameworks. Research:
   `.orchestrate/research-sweep-2/reports/framework-skills-ranked.md` + `framework-docs-skills.md`.
+- **Production site-rebuild runs (anonymous studio pipeline, 2026)** — first-hand failure lessons
+  from rebuilding owner-authorized sites onto Next.js: re-authoring drift vs measured porting,
+  raw-vs-cleaned HTML media loss, thin-page anomaly, lazy/computed-background harvest, slider
+  placeholder frames, map-tile exclusion, Referer-gated originals, the asset identity map, logo /
+  stock / slider substitution failures, partial-preview placeholder routes, screenshot-capture
+  pitfalls, shared-layout fetch blast radius, starter templates with baked fixes. Re-expressed;
+  no client or site named. Drawn into `site-rebuild.md`, `testing.md`, `css-craft.md`,
+  `nextjs.md`, `client-architecture.md`.
 - **defensivecss.dev (Ahmad Shadeed)** — no license visible; the scrollbar native-overlay default
   and the `position: sticky`-in-grid `align-self: stretch` failure, re-expressed and credited to
   Ahmad Shadeed. Drawn into `css-craft.md`.
@@ -269,7 +277,12 @@ github-relay digests). Load-bearing facts re-expressed.
 MDN Web Docs · WCAG 2.2 (W3C) · web.dev / Core Web Vitals · React documentation · Apple Human
 Interface Guidelines · Material 3 (m3.material.io) · ECMA-402 Intl / Unicode CLDR · W3C Design Tokens
 Community Group (DTCG) format · Can I Use (for current browser-support verification) · OWASP
-CheatSheetSeries (client half, re-expressed).
+CheatSheetSeries (client half, re-expressed). · Rebuild and visual-diff tooling, facts verified at the
+primary repo/docs 2026-10-17 and cited only: Playwright snapshot docs (pixelmatch), odiff (MIT),
+SingleFile CLI (AGPL-3.0), monolith (CC0-1.0), Project Wallace css-analyzer (MIT),
+JCodesMore/ai-website-cloner-template README (MIT), lucide-static `tags.json` (ISC), `@tabler/icons`
+`icons.json` (MIT), Iconify search API docs, Phosphor React README (MIT), simple-icons
+DISCLAIMER.md.
 
 ## Fold-wave-2b web-search pass (2026-07-22)
 

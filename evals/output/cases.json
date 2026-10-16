@@ -3,7 +3,7 @@
     "id": "optimistic-update-contract",
     "prompt": "Add optimistic updates to a TanStack Query mutation for liking a post.",
     "assertions": [
-      "The mutation implements the three-step onMutate/onError/onSettled shape, in that order, matching the cancel-snapshot-write → rollback → invalidate discipline.",
+      "The mutation implements the three-step onMutate/onError/onSettled shape, in that order, matching the cancel-snapshot-write \u2192 rollback \u2192 invalidate discipline.",
       "onMutate cancels in-flight queries for the affected key (e.g. via queryClient.cancelQueries) before snapshotting and applying the optimistic value.",
       "onError rolls back to the snapshot taken in onMutate.",
       "onSettled invalidates the query regardless of outcome."
@@ -41,6 +41,16 @@
       "Tokens are consumed from the generated token layer; the generated output file itself is not hand-edited.",
       "Dark mode is implemented via a single, stated token strategy rather than ad hoc per-component overrides.",
       "The dark-mode variant is called out as needing its own verification rather than assumed correct because light mode passed."
+    ]
+  },
+  {
+    "id": "faithful-rebuild-no-substitution-contract",
+    "prompt": "Rebuild the client's existing marketing site on Next.js; some hero photos failed to download and the logo is a PNG.",
+    "assertions": [
+      "The captured logo is rendered as the image file, not replaced by a text wordmark.",
+      "Missing hero photos are recovered (lazy-load data attributes, srcset, computed backgrounds, owner originals) or shown as an explicit labeled placeholder reported as a gap \u2014 never swapped for unrelated stock imagery.",
+      "Acceptance is a pixel-diff parity check against reference screenshots of the source at fixed viewports, with the threshold stated before comparison, not an eyeballed review.",
+      "An interactive source widget (e.g. the hero slider) is built as working behavior, not a static image."
     ]
   }
 ]

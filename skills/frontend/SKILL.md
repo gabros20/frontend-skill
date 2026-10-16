@@ -2,12 +2,12 @@
 name: frontend
 description: >-
   Implement production frontend code for websites, web apps, iOS, and Android, from creative
-  website builds to dense product UI: components, state, data fetching, forms, auth flows, routing,
-  responsive accessible interfaces, performance, client security, and tests. Covers React, Next.js,
-  Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and React Native, and consumes a design handoff
-  (handoff.yaml, DESIGN.md). Do not use for design direction, motion or animation implementation,
-  SEO strategy, backend or system architecture, or QA audits unless the request also requires
-  frontend implementation.
+  website builds and faithful site rebuilds to dense product UI: components, state, data
+  fetching, forms, auth flows, routing, responsive accessible interfaces, performance, client
+  security, and tests. Covers React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and
+  React Native, and consumes a design handoff (handoff.yaml, DESIGN.md). Do not use for design
+  direction, motion or animation implementation, SEO strategy, backend or system architecture, or
+  QA audits unless the request also requires frontend implementation.
 ---
 
 # Frontend Engineering
@@ -70,6 +70,7 @@ useful; do not invoke them automatically unless the user requested a composition
 | Write client tests and run the dev-loop self-check — unit/component/UI, coverage, screenshot verification | [Testing](references/testing.md) | Test doctrine, RTL query ladder, TS strict baseline, and the green-build-is-not-looks-right loop |
 | Internationalize — logical properties, Intl APIs, direction/language, text-expansion resilience | [i18n](references/i18n.md) | Logical-property mapping, Intl usage, dir/lang wiring, text-expansion budget |
 | Consume a design handoff — read handoff.yaml and DESIGN.md, wire tokens, dark mode | [Design handoff and tokens](references/design-handoff-and-tokens.md) | handoff.yaml acceptance, 3-tier token model, never-edit-generated, dark-mode token strategy |
+| Rebuild or migrate an existing site the client owns, faithfully, onto a new stack | [Site rebuild](references/site-rebuild.md) | Render capture + full asset harvest, identity map, no-substitution rules, measured tokens, pixel-diff fidelity gate |
 | Structure or restructure a client codebase — folders, feature boundaries, import discipline, token file layout, CMS/section registries | [Client architecture](references/client-architecture.md) | Feature-vs-type decision, import layering, barrels, token layout; content-driven section registry + visual acceptance |
 | Wire a production SPA shell — API client, single-flight 401 refresh, multi-tab session, feature flags, error boundaries, public runtime config | [Client app wiring](references/client-app-wiring.md) | Shared fetch client, refresh mutex, logout fanout, flag bootstrap, multi-level error reporting, build-once config |
 
@@ -139,6 +140,7 @@ Read these together — the router encodes the pairing so no lateral hop is requ
 - **Native Android screen** → [Compose](references/compose.md) + [Kotlin and Compose state](references/kotlin-and-compose-state.md). This overrides the web-platform substrate.
 - **Expo / React Native app** → [React Native](references/react-native.md) (+ [React components and state](references/react-components-and-state.md) for shared React discipline). Overrides the web-platform substrate. Prefer Expo-managed unless the repo is already bare.
 - **Consume a design handoff** → [Design handoff and tokens](references/design-handoff-and-tokens.md) + the relevant primary job ref + the target platform/stack overlay.
+- **Faithful site rebuild** → [Site rebuild](references/site-rebuild.md) + [Design handoff and tokens](references/design-handoff-and-tokens.md) for the token pipeline + the target platform/stack overlay.
 - **Any surface where accessibility or performance is explicit** → the primary job ref + [Accessibility](references/accessibility.md) and/or [Performance](references/performance.md).
 
 ## Universal invariants

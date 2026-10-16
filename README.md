@@ -74,7 +74,7 @@ reference set from three facets and reads only those files before writing code:
 Declared bundles encode the common pairings (a Next.js web app, a React SPA, production SPA
 bootstrap, Expo/RN app, a native iOS or Android screen, consuming a design handoff) so no lateral
 discovery is needed. The runtime router is [skills/frontend/SKILL.md](skills/frontend/SKILL.md); it
-links directly to **27** focused references and loads only what the job needs.
+links directly to **28** focused references and loads only what the job needs.
 
 ## Install
 
@@ -126,10 +126,10 @@ Documentation may use `/frontend` as shorthand. Other clients may expose a slash
 experience/visual design, system architecture, marketing/SEO, or independent release verification
 unless the request also requires frontend implementation.
 
-## The 27 references
+## The 28 references
 
 The router selects from a primary-job set, a platform overlay, and a web stack overlay. It loads
-the smallest sufficient set — never all 27.
+the smallest sufficient set — never all 28.
 
 **Primary job**
 
@@ -146,6 +146,7 @@ the smallest sufficient set — never all 27.
 | [design-handoff-and-tokens.md](skills/frontend/references/design-handoff-and-tokens.md) | handoff.yaml acceptance, 3-tier token model, never-edit-generated, dark-mode token strategy |
 | [client-architecture.md](skills/frontend/references/client-architecture.md) | Feature-vs-type decision rule, unidirectional import layering, colocation doctrine, barrel-vs-public-API reconciliation, token file layout |
 | [client-app-wiring.md](skills/frontend/references/client-app-wiring.md) | API client, single-flight 401 refresh, multi-tab session, feature flags, error boundaries → reporting, public runtime config |
+| [site-rebuild.md](skills/frontend/references/site-rebuild.md) | Faithful rebuild/migration of an owned site: render capture, full asset harvest + identity map, no-substitution rules, measured tokens, pixel-diff fidelity gate |
 
 **Platform overlay** (the web substrate by default, native when named or implied — native overrides web)
 
@@ -219,7 +220,7 @@ prose. Full attribution and licenses:
 ```text
 .codex-plugin/plugin.json  Codex plugin and release metadata
 AGENTS.md / CLAUDE.md      repository and client-specific maintainer guidance
-skills/frontend/           portable runtime skill and client metadata (27 references)
+skills/frontend/           portable runtime skill and client metadata (28 references)
 evals/                     activation, traversal, output, and compression fixtures
 docs/                      installation, usage, and recipes
 site/                      visual guide (deployed to frontendengskill.vercel.app)
