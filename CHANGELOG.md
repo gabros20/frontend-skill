@@ -7,6 +7,26 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 
 ## [Unreleased]
 
+### Added
+- **`site-rebuild.md`** (28th reference): faithful rebuild/migration of an owner-authorized site —
+  port and measure rather than re-author, render capture + raw-HTML read, thin-page anomaly flag,
+  full asset harvest (lazy `data-*`, `srcset`, computed backgrounds, slider placeholder frames,
+  map-tile exclusion, Referer-gated originals), the asset identity map, no-substitution rules,
+  measured tokens, partial-preview placeholder routes, and a pixel-diff fidelity gate. Wired as a
+  primary-job row and a declared bundle; description names faithful rebuilds.
+
+### Changed
+- `testing.md`: visual-regression baselines (pixelmatch/odiff, per-platform environment, fixed
+  tolerance); scripted capture mechanics; fast-scroll reveal miss, mobile full-page mis-stitch,
+  section element crops; computed section-key coverage.
+- `shadcn.md`: icon name resolution via tag manifests, Iconify build-time bundling, Phosphor SSR
+  entry, logo trademark rule, vendored build-time assets.
+- `css-craft.md`: `ch` caps on the text element; fixed-header offset on hero-less routes.
+- `nextjs.md`: per-environment `remotePatterns`; shared-layout fetch blast radius.
+- `client-architecture.md`: typed fixture/CMS loader swap, delivery-API done-check, starter
+  templates with baked fixes and a smoke build.
+- Evals: activation, traversal, and output cases for faithful rebuilds.
+
 ## [0.2.3] — 2026-07-27
 
 ### Fixed
