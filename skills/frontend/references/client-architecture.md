@@ -271,6 +271,20 @@ and `tailwind.md`; do not "clean up" those tokens out of the global sheet.
 **Stack posture.** Prefer these patterns over stack loyalty — the registry, defensive lists,
 primitives, and visual gate transfer across Next/Astro/SvelteKit; only the file names change.
 
+**One typed content interface, two loaders.** Render sections from a typed content interface that
+a local fixture loader and the CMS client both satisfy, so the site builds, previews, and
+prerenders (static params from the fixtures) without CMS credentials, and the CMS swaps in without
+touching a section. **Done means delivered:** a headless CMS's delivery API typically serves only
+published content, while authoring tools read the management API — verify every route resolves
+through the delivery side, never by a management read, and keep the management credential out of
+the client entirely (`client-security.md`).
+
+**Bake solved traps into the starter.** For repeated site builds, commit a starter that already
+encodes the fixes (container tokens, image-host allow-list, registry wiring) with pinned
+dependencies, a lockfile, and a standalone build smoke test against fixture content; per-site
+sections stay authored. A solved bug then cannot recur, and dependency drift fails the smoke build
+instead of a live project.
+
 ## Structure anti-patterns
 
 - **Cyclic feature imports** — a sibling feature reaching into another's internals; prevented by the
@@ -304,4 +318,6 @@ official docs) — apps/+packages/ convention; Vercel react-best-practices resid
 — via authors-architecture.md, github-relay.md, skills-finder.md; webdesign frontend-build-patterns
 (local specialist, re-expressed) — section-key registry fail-loud, data-order render, defensive
 list fields, image/link primitives, visual acceptance screenshots + step-scroll, container-token
-collision cite to web-platform-css/tailwind, map embed black-in-headless. -->
+collision cite to web-platform-css/tailwind, map embed black-in-headless; anonymous production
+site-rebuild runs (2026, re-expressed) — typed fixture/CMS loader swap, delivery-API done-check,
+starter template with baked fixes + smoke build. -->

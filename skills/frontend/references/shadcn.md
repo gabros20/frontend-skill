@@ -114,6 +114,19 @@ one and never mix libraries within the same UI. Whichever is chosen: one consist
 throughout, `aria-hidden` on every decorative icon, and never hand-roll an SVG for a concept the
 chosen library already ships a named icon for.
 
+Resolve a concept to a verified export name before importing it — never guess one. Lucide ships a
+name→tags map (`lucide-static`'s `tags.json`) and Tabler a richer manifest (`@tabler/icons`'
+`icons.json`: tags plus category); search it, then import the matched name. Tabler is the larger
+fallback set when Lucide lacks a symbol. For the long tail, Iconify's search API
+(`/search?query=…&prefixes=…`) returns set-prefixed names (`mdi:home`); resolve at build time and
+bundle from `@iconify-json/<set>` so a static build makes no runtime icon request, honoring each
+set's own license. Phosphor inside a React Server Component imports from its SSR entry
+(`@phosphor-icons/react/ssr`), which cannot inherit an ancestor `IconContext`. Brand logos: a file
+license (MIT, CC0) is not trademark permission — render marks unaltered, imply no endorsement, and
+skip no-derivatives sets when a mark must be recolored. Anything fetched from an asset API at build
+time is vendored into the repo with its name, path, and license in a manifest, never left as a
+runtime dependency.
+
 ## Choosing a component-library stack for non-shadcn projects
 
 When a brief signals an established design-system expectation rather than a from-scratch build,
@@ -155,4 +168,7 @@ into shadcn's CSS-variable shape lives in `design-handoff-and-tokens.md`.
 + shadcn-accessibility.md (MIT) — miner-ext-a.md; Vercel shadcn/bootstrap skills (claude-plugins-official/
 vercel, Apache-2.0, attribution required) — miner-vercel.md; Leonxlnx taste-skill SKILL.md design-system
 selection table + dark-mode protocol (MIT) — miner-ext-c.md; Nutlope/hallmark export-formats.md shadcn
-CSS-variable shape (MIT) — miner-ext-c.md -->
+CSS-variable shape (MIT) — miner-ext-c.md; icon/asset integration verified 2026-10-17 against
+unpkg.com/lucide-static/tags.json (ISC), unpkg.com/@tabler/icons/icons.json (MIT),
+iconify.design/docs/api/search.html + @iconify-json packages, github.com/phosphor-icons/react
+README + package exports (MIT), simple-icons DISCLAIMER.md (CC0 files, brand guidelines apply) -->

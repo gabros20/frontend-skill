@@ -80,6 +80,13 @@ suites: each side runs independently while a broker verifies the consumer's publ
 against the live provider. This replaces slow, brittle full-stack end-to-end tests specifically for
 API-boundary correctness — it is not a substitute for E2E's job of covering real user journeys.
 
+Visual regression is a pixel diff against an approved baseline: Playwright's `toHaveScreenshot()`
+(pixelmatch; `threshold` per pixel, `maxDiffPixels` overall) or a faster engine such as odiff behind
+a reporting service. Baselines are per browser and platform — rendering varies with host OS, browser
+version, and installed fonts — so generate and compare them in one pinned environment, or the diff
+measures the machine instead of the change. Fix the tolerance before the first comparison. A
+faithful-rebuild parity gate is the same mechanic against a captured source (`site-rebuild.md`).
+
 Enforce two distinct performance budgets in CI, both able to fail a build: a bundle-size budget
 (catches an accidentally-heavy new dependency) and a runtime budget (Lighthouse CI assertions
 against the Core Web Vitals thresholds defined in `performance.md`) — pair both with production RUM
@@ -90,13 +97,21 @@ monitoring, since CI budgets alone miss regressions that only appear in the fiel
 **A green build proves the code compiles; it does not prove the feature works or looks right.**
 Treat this as the acceptance gate for any UI-affecting change, before reporting it done:
 
-1. Serve the build and get the full route list.
+1. Serve the build and get the full route list. Script the mechanics once and reuse them — a free
+   port, a ready-wait, route enumeration, absolute output paths (some capture tools silently skip a
+   relative one), teardown by port — rather than re-improvising them each session.
 2. Screenshot every route at two viewports — a standard desktop width (e.g. 1440×900) and a
    representative mobile size — with `prefers-reduced-motion` emulated so in-flight animations
    settle before capture. A blank crop from motion mid-transition is a capture miss, not a defect;
    note it and move on rather than flagging a false positive.
 3. For scroll-reveal or lazy-loaded content, step-scroll with a short wait between steps instead of
-   taking one full-page shot — a single full-page screenshot can capture content still blank.
+   taking one full-page shot — a single full-page screenshot can capture content still blank. Step
+   in increments under a viewport height: a fast scroll-to-bottom-and-back does not reliably fire
+   `IntersectionObserver` reveals. A mobile full-page capture under device emulation can mis-stitch
+   (output height a multiple of `document.body.scrollHeight`); set the viewport height to the
+   measured document height and take a plain screenshot instead. Full-page shots also downscale
+   detail — for a section-by-section read, wrap each section in a layout-neutral attribute
+   (`data-section-key`) and capture element crops at full resolution.
 4. Actually look at each screenshot for: text overflow or clipping, element overlap, a fixed header
    obscuring content, broken or placeholder images, an unreachable or overlapping mobile nav,
    cramped or collapsed spacing, low-contrast text over imagery, and horizontal scroll on mobile.
@@ -109,7 +124,8 @@ Treat this as the acceptance gate for any UI-affecting change, before reporting 
 
 **Coverage-as-a-blocker**: confirm every component or section a spec calls for is actually wired up
 and rendering — a defined-but-never-rendered piece is a load-bearing gap, not a cosmetic one, and
-blocks completion the same way a failing test would.
+blocks completion the same way a failing test would. Compute it — diff the content's section keys
+against the component registry — rather than tracing the mapping by eye.
 
 **Build-health as a gate**: the build/typecheck/lint pipeline must pass clean, and if a design-token
 spec (e.g. `DESIGN.md`) backs the project, it must still lint clean with no broken token references
@@ -140,4 +156,8 @@ project-scaffolder (MIT) — scout-github.md; antfu/skills vitest (MIT) — scou
 thedaviddias Front-End-Checklist testing category (no LICENSE, re-expressed) — scout-github.md;
 anthropics/skills webapp-testing (Apache-2.0) — miner-ext-b.md; webdesign frontend-build-patterns.md
 + art-review.md + design-critique.md (MIT, same author) — miner-webdesign.md; millionco/react-doctor
-regression-gate pattern (Modified MIT) — miner-react-doctor.md -->
+regression-gate pattern (Modified MIT) — miner-react-doctor.md; playwright.dev/docs/test-snapshots
+(pixelmatch, threshold/maxDiffPixels, per-platform baselines; verified 2026-10-17); odiff README
+(MIT); anonymous production site-rebuild runs (2026, re-expressed) — capture-script mechanics,
+scroll-reveal fast-reset miss, mobile full-page mis-stitch, section element crops, computed
+coverage -->

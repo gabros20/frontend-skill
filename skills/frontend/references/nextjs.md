@@ -93,6 +93,11 @@ runs in a Server-Component-like environment with no React hooks, no `ReactDOM`, 
 Plain client fetch: only when the data is genuinely client-interactive (polling, client-only
 auth state) and can't be modeled as one of the above.
 
+A fetch in a shared layout runs for every route beneath it, so one slow or hanging dependency there
+takes down every page at once. Fetch in a layout only what every child route needs (navigation,
+global settings), bound it with a timeout and a fallback, and fetch everything else in the route
+that uses it.
+
 ## RSC boundary invalid-pattern catalog
 
 Enforceable constraints, not style preferences:
@@ -224,7 +229,8 @@ rewrite the already-sent response).
 
 **Images**: always `next/image` over `<img>`. Local images auto-infer width/height; remote images
 need explicit `width`/`height` or `fill` + `sizes`, and their domain must be allow-listed via
-`images.remotePatterns`. Reserve `priority` for the LCP/above-fold image only. `placeholder="blur"`
+`images.remotePatterns` — for every environment: a CMS or CDN often serves staging media from a
+different host than production, and an allow-list that names only one rejects the other's images. Reserve `priority` for the LCP/above-fold image only. `placeholder="blur"`
 (auto-generated for local images, manual `blurDataURL` for remote) prevents layout shift while the
 real image loads. Static export (`output: 'export'`) requires either `unoptimized` or a custom
 loader (a CDN image service, for example). The broader responsive-image/CLS doctrine lives in
@@ -336,4 +342,6 @@ day-one tags.ts registry, revalidate.ts helpers, use cache on data functions not
 entity+collection invalidation pairing, cacheTag 128 tags/call + 256 char silent drop limits;
 vercel-labs/agent-skills @vercel-react-best-practices residual — after() for non-blocking
 logging/analytics; View Transition Next flag cross-ref — skills-finder / CANDIDATES #10;
-optional deeper skills + nextjs.org/docs table (canonical getting-started/guides paths; install counts as of fold; re-check skills.sh) -->
+optional deeper skills + nextjs.org/docs table (canonical getting-started/guides paths; install counts as of fold; re-check skills.sh);
+anonymous production site-rebuild runs (2026, re-expressed) — per-environment media host in
+remotePatterns, shared-layout fetch blast radius -->

@@ -342,6 +342,13 @@ Verify a 16×16 sprite scaled to 128px across Chrome/Safari/Firefox (4×–8× u
 - **Inline-flex button mid-phrase wrap:** `display: inline-flex` buttons wrap multi-word labels
   mid-phrase (“View / Projects”) under tight widths. Set `white-space: nowrap` on the button or its
   label text in the base component unless the design intentionally multi-lines.
+- **`ch`/`em` measure caps belong on the text element:** `ch` resolves against the font of the
+  element it is set on, so `max-width: 20ch` on a wrapper measures the wrapper's small body font,
+  not the display heading inside it — the heading wraps a word per line and can overflow a
+  fixed-height frame. Put the cap on the heading or paragraph itself.
+- **Fixed header, no hero:** a `position: fixed` header overlaps the first content of every route
+  that lacks a full-bleed hero underneath it; give those routes a top offset equal to the header's
+  block size (`--header-block-size`, the variable `accessibility.md` uses for `scroll-margin`).
 
 <!-- sources: AllThingsSmitty/css-protips (CC0-1.0, verbatim-safe) - aspect-ratio + padding-top
 legacy fallback, pointer-events:disabled, currentColor reuse, :empty whitespace, broken-image UX,
@@ -361,6 +368,8 @@ Safari filter + translate3d Vite minify trap); authors-architecture Comeau moder
 (form/media) + backdrop-filter backdrop root; emil-design-eng / skills-finder - never
 transition:all; research-sweep-2 web-media-perf C-web-1–6,14 (Safari blur CPU, radius cost,
 backdrop root, blur bleed/clip, will-change explosion/persistence, image-rendering dual keywords);
+MDN CSS length (`ch` = advance of "0" in the element's font); anonymous production site-rebuild runs
+(2026, re-expressed) - wrapper `ch` cap, fixed-header offset on hero-less routes;
 research-sweep-2 local-specialists C-25–C-26, C-28–C-30, C-33 (grid max-w + w-full, button nowrap,
 glass budget thresholds, grain opacity band, clip-path vs mask-image, layered shadow animation
 tax); Graffino/WebDong Safari filter:blur force-GPU; SiteLint blur stay-within-container;
