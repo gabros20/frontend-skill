@@ -85,7 +85,9 @@ Visual regression is a pixel diff against an approved baseline: Playwright's `to
 a reporting service. Baselines are per browser and platform — rendering varies with host OS, browser
 version, and installed fonts — so generate and compare them in one pinned environment, or the diff
 measures the machine instead of the change. Fix the tolerance before the first comparison. A
-faithful-rebuild parity gate is the same mechanic against a captured source (`site-rebuild.md`).
+faithful-rebuild parity gate is the same mechanic against a captured source (`site-rebuild.md`). A
+dev-only gallery route (or Storybook) that renders every primitive and section variant gives the
+visual check one surface to baseline; keep it out of the production build.
 
 Enforce two distinct performance budgets in CI, both able to fail a build: a bundle-size budget
 (catches an accidentally-heavy new dependency) and a runtime budget (Lighthouse CI assertions
@@ -160,4 +162,4 @@ regression-gate pattern (Modified MIT) — miner-react-doctor.md; playwright.dev
 (pixelmatch, threshold/maxDiffPixels, per-platform baselines; verified 2026-10-17); odiff README
 (MIT); anonymous production site-rebuild runs (2026, re-expressed) — capture-script mechanics,
 scroll-reveal fast-reset miss, mobile full-page mis-stitch, section element crops, computed
-coverage -->
+coverage, dev-only gallery route -->
