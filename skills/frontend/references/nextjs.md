@@ -230,7 +230,8 @@ rewrite the already-sent response).
 **Images**: always `next/image` over `<img>`. Local images auto-infer width/height; remote images
 need explicit `width`/`height` or `fill` + `sizes`, and their domain must be allow-listed via
 `images.remotePatterns` — for every environment: a CMS or CDN often serves staging media from a
-different host than production, and an allow-list that names only one rejects the other's images. Reserve `priority` for the LCP/above-fold image only. `placeholder="blur"`
+different host than production, and an allow-list that names only one rejects the other's images.
+Reserve `priority` for the LCP/above-fold image only. `placeholder="blur"`
 (auto-generated for local images, manual `blurDataURL` for remote) prevents layout shift while the
 real image loads. Static export (`output: 'export'`) requires either `unoptimized` or a custom
 loader (a CDN image service, for example). The broader responsive-image/CLS doctrine lives in

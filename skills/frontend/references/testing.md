@@ -121,7 +121,10 @@ Treat this as the acceptance gate for any UI-affecting change, before reporting 
    indefinitely.
 6. Do an interactive pass (hover states, nav, forms) via a real or CDP-based browser tool, not
    screenshots alone. **Inline SVG:** Chromium-only checks miss WebKit paint-no-draw; spot-check
-   Safari/WebKit after SVG or SVGO/svgr changes (`css-craft.md`).
+   Safari/WebKit after SVG or SVGO/svgr changes (`css-craft.md`). Confirm every route returns 200,
+   internal links resolve, and the console and network panel show no errors or failed asset
+   requests. Pin the emulated color scheme for captures so a theme-aware page does not shift with
+   the host's OS setting.
 7. Tear down the server when done.
 
 **Coverage-as-a-blocker**: confirm every component or section a spec calls for is actually wired up

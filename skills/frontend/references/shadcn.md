@@ -123,7 +123,8 @@ bundle from `@iconify-json/<set>` so a static build makes no runtime icon reques
 set's own license. Phosphor inside a React Server Component imports from its SSR entry
 (`@phosphor-icons/react/ssr`), which cannot inherit an ancestor `IconContext`. Brand logos: a file
 license (MIT, CC0) is not trademark permission — render marks unaltered, imply no endorsement, and
-skip no-derivatives sets when a mark must be recolored. Anything fetched from an asset API at build
+skip no-derivatives sets when a mark must be recolored. Key country flags by ISO 3166 alpha-2 code
+from a tree-shakeable package, never a component that bundles every flag. Anything fetched from an asset API at build
 time is vendored into the repo with its name, path, and license in a manifest, never left as a
 runtime dependency.
 
@@ -171,4 +172,5 @@ selection table + dark-mode protocol (MIT) — miner-ext-c.md; Nutlope/hallmark 
 CSS-variable shape (MIT) — miner-ext-c.md; icon/asset integration verified 2026-10-17 against
 unpkg.com/lucide-static/tags.json (ISC), unpkg.com/@tabler/icons/icons.json (MIT),
 iconify.design/docs/api/search.html + @iconify-json packages, github.com/phosphor-icons/react
-README + package exports (MIT), simple-icons DISCLAIMER.md (CC0 files, brand guidelines apply) -->
+README + package exports (MIT), simple-icons DISCLAIMER.md (project CC0, per-icon licences vary;
+follow each brand's guidelines) -->

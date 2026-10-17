@@ -16,9 +16,12 @@ Skip when:
 - The source is a third party's site: that is reference material for `design`, never a source to
   copy.
 - The question is the general screenshot self-check on your own build → `testing.md`.
+- An independent fidelity or release verdict on the rebuild → `quality`; this gate is the build's
+  own acceptance check.
 
 Inputs: the source URLs and the owner's authorization; any owner export (CMS content export, media
-library, brand files); the target stack; the agreed fidelity threshold per viewport.
+library, brand files); the target stack; the fidelity threshold per viewport, agreed with the
+owner before the first run.
 
 Produces: a reference capture (snapshot + per-viewport screenshots), an asset identity map, a port
 on the target stack, and a parity report (score + diff heatmap per page and viewport) with every
@@ -35,10 +38,14 @@ unresolved gap listed.
 
 ## Scope and licensing
 
-Rebuild only what the client owns or holds rights to. Code, copy, and imagery come over under the
-owner's rights; fonts, stock photos, icon sets, and embedded third-party code carry their own
-licenses, which may not follow the site to a new host or domain — check each before shipping it.
-Logos stay trademarks regardless of file license (see `shadcn.md`, Icon libraries).
+Rebuild only what the client owns or holds rights to, within the host platform's terms — some
+sites and platforms prohibit scraping or reproduction outright, so check first. Copy and the
+owner's own imagery come over under the owner's rights. Theme, template, and plugin code (a hosted
+builder's template, a premium theme, a slider plugin) is licensed, not owned: re-implement it from
+measurements rather than copying its source. Fonts, stock photos, icon sets, and embedded
+third-party code carry their own licenses, which may not follow the site to a new host or domain —
+check each before shipping it. Logos stay trademarks regardless of file license (see `shadcn.md`,
+Icon libraries).
 
 ## Port and measure, don't re-author
 
@@ -54,7 +61,7 @@ opinion instead of a visible diff. Measure instead: tokens come from computed st
 the rendered DOM, acceptance from a pixel diff against the reference.
 
 Capture the **rendered output, not the CMS**. Every platform paints a DOM a real browser can read;
-locked hosted builders have no clean export at all. Where the owner can export content (a CMS
+locked hosted builders offer little or no clean export. Where the owner can export content (a CMS
 export, a media library), prefer it for copy and originals, and still capture the render for
 presentation. Content scrapers that return markdown or JSON carry no CSS or layout — they suit
 route discovery, not fidelity capture.
@@ -67,7 +74,7 @@ that exists from the first page turns every later fix into a measurable delta.
 Render each page in a real browser at every target viewport. Scroll the full page in steps so
 lazy-loading fires, wait for webfonts to finish loading, then save the snapshot and the reference
 screenshots. Read the **raw server HTML** as well as the rendered DOM: a cleaned or markdown-derived
-variant routinely drops slider and video markup that was server-rendered the whole time.
+variant can drop slider and video markup that was server-rendered the whole time.
 
 Flag anomalies before accepting a capture: a page whose captured HTML is a small fraction of its
 siblings', or whose body is one empty slider, is a degraded capture — retry with a realistic
@@ -87,14 +94,16 @@ captured page set explicitly.
 (`data-src`, `data-lazy-src`, `data-lazy`, `data-lazyload`, `data-bg`, `data-background`); inline
 **and computed** `background-image: url(...)` — read computed backgrounds in the page, since
 external-stylesheet backgrounds never appear in the HTML; `<video>`, `<source>`, and `poster`; CSS
-background video; webfonts; inline SVG. Slider plugins commonly render one shared placeholder frame
+background video; webfonts; inline SVG. Some slider plugins render one shared placeholder frame
 in every slide's `src` and keep the real per-slide photo in a `data-*` attribute — take the
 attribute, drop the placeholder. Exclude map tiles (every pan or zoom is a distinct, unresolvable
 URL) and rebuild the map as an embed with a static fallback (`client-architecture.md`).
 
 When an original refuses a plain HTTP fetch (hotlink protection keyed on `Referer`), ask the owner
 for the original first; otherwise fetch it inside a browser context on the owner's site. Log every
-failure — a dropped fetch is a silent missing asset later.
+failure — a dropped fetch is a silent missing asset later. If the site actively blocks automated
+access (a bot wall, a CAPTCHA, a login gate), stop: get the originals, an export, or an
+allow-listed capture from the owner, and never work around the block.
 
 Keep one **identity map** from every rendered variant (resize-suffixed `srcset` files, CDN query
 params) and the original URL to the on-disk file, and resolve every media reference through it:
@@ -135,11 +144,12 @@ placeholder is inert.
 
 ## The fidelity gate
 
-Render the port and the reference in the same browser, at the same viewports, in the same
-environment — rendering varies with host OS, browser version, and installed fonts, so baselines are
+Render the port and the reference in the same browser, at the same viewports, with the same
+emulated media (color scheme, reduced motion) on both sides, in the same environment — rendering varies with host OS, browser version, and installed fonts, so baselines are
 per browser and platform. Diff the screenshots (Playwright's `toHaveScreenshot()` uses pixelmatch;
 odiff is a SIMD diff engine that Argos and Lost Pixel use), score parity per page and viewport, and
-emit the diff heatmap as the report.
+emit the diff heatmap as the report. A page passes only with no failed asset requests or console
+errors on the port.
 
 - Fix the threshold per viewport **before** the first run; a number agreed afterwards gets
   negotiated down.
@@ -148,14 +158,14 @@ emit the diff heatmap as the report.
 - On a failure, fix the offending region, rebuild, re-diff, for a bounded number of rounds.
 - A literal 100% on a clean stack is rare (webfont hinting, sub-pixel rounding, script-driven
   widgets). A section that cannot reach the threshold is flagged in the report; embedding the
-  snapshot fragment is allowed only as a labeled stopgap.
+  snapshot fragment is allowed only as a labeled stopgap, and only when that fragment's code is the
+  owner's or its license permits it.
 - The gate is a number. A wrong hero or a flipped color shows up as diff pixels, so it cannot be
   waved through as an acceptable stand-in. Taste critique is a separate lens and is not this gate.
 
-Agent cloning templates converge on the same shape — map routes, observe the source and its
-states, build editable components with working interactions, compare at matched sizes and repair —
-and position it for rebuilding a site you own. Generative URL- or screenshot-to-code tools give
-approximate scaffolds; they never replace the gate.
+Agent cloning templates converge on this shape (map routes, observe source states, build working
+components, compare at matched sizes and repair) for rebuilding a site you own; generative URL- or
+screenshot-to-code tools give approximate scaffolds and never replace the gate.
 
 <!-- sources: anonymous production site-rebuild runs (2026, re-expressed) — re-authoring drift,
 raw-vs-cleaned HTML media loss, thin-page anomaly, lazy/computed-background harvest, slider
@@ -166,4 +176,5 @@ baselines; verified 2026-10-17); github.com/dmtrKovalenko/odiff (MIT; SIMD; used
 Pixel; verified 2026-10-17); gildas-lormeau/single-file-cli (AGPL-3.0) and Y2Z/monolith (CC0-1.0)
 single-file archivers (verified 2026-10-17); projectwallace/css-analyzer (MIT);
 JCodesMore/ai-website-cloner-template README (MIT; map → observe → build → compare; "rebuild a site
-you own"; verified 2026-10-17). -->
+you own"; "some sites explicitly prohibit scraping or reproduction. Check first."; verified
+2026-10-17). -->

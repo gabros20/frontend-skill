@@ -198,7 +198,7 @@ copied.
   Tables: `nextjs.md`, `data-fetching-libraries.md`, SKILL.md uncovered-frameworks. Research:
   `.orchestrate/research-sweep-2/reports/framework-skills-ranked.md` + `framework-docs-skills.md`.
 - **Production site-rebuild runs (anonymous studio pipeline, 2026)** — first-hand failure lessons
-  from rebuilding owner-authorized sites onto Next.js: re-authoring drift vs measured porting,
+  from production site-rebuild runs onto Next.js: re-authoring drift vs measured porting,
   raw-vs-cleaned HTML media loss, thin-page anomaly, lazy/computed-background harvest, slider
   placeholder frames, map-tile exclusion, Referer-gated originals, the asset identity map, logo /
   stock / slider substitution failures, partial-preview placeholder routes, screenshot-capture

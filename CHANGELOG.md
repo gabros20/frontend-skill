@@ -18,13 +18,14 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ### Changed
 - `testing.md`: visual-regression baselines (pixelmatch/odiff, per-platform environment, fixed
   tolerance); scripted capture mechanics; fast-scroll reveal miss, mobile full-page mis-stitch,
-  section element crops; computed section-key coverage; dev-only gallery route as the baseline surface.
+  section element crops; computed section-key coverage; dev-only gallery route as the baseline surface;
+  route/link/console/failed-request check and a pinned color scheme in the dev loop.
 - `shadcn.md`: icon name resolution via tag manifests, Iconify build-time bundling, Phosphor SSR
-  entry, logo trademark rule, vendored build-time assets.
+  entry, logo trademark rule, ISO-keyed tree-shakeable flags, vendored build-time assets.
 - `css-craft.md`: `ch` caps on the text element; fixed-header offset on hero-less routes.
 - `nextjs.md`: per-environment `remotePatterns`; shared-layout fetch blast radius.
 - `client-architecture.md`: typed fixture/CMS loader swap, delivery-API done-check, starter
-  templates with baked fixes and a smoke build.
+  templates with baked fixes and a smoke build, one render path for CMS-modeled chrome.
 - Evals: activation, traversal, and output cases for faithful rebuilds.
 
 ## [0.2.3] — 2026-07-27

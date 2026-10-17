@@ -277,7 +277,9 @@ prerenders (static params from the fixtures) without CMS credentials, and the CM
 touching a section. **Done means delivered:** a headless CMS's delivery API typically serves only
 published content, while authoring tools read the management API — verify every route resolves
 through the delivery side, never by a management read, and keep the management credential out of
-the client entirely (`client-security.md`).
+the client entirely (`client-security.md`). When the content model carries the header and footer
+as sections, render chrome through exactly one path — the registry or the layout, never both — or
+it renders twice.
 
 **Bake solved traps into the starter.** For repeated site builds, commit a starter that already
 encodes the fixes (container tokens, image-host allow-list, registry wiring) with pinned
