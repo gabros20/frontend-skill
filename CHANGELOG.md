@@ -18,7 +18,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ### Changed
 - `testing.md`: visual-regression baselines (pixelmatch/odiff, per-platform environment, fixed
   tolerance); scripted capture mechanics; fast-scroll reveal miss, mobile full-page mis-stitch,
-  section element crops; computed section-key coverage.
+  section element crops; computed section-key coverage; dev-only gallery route as the baseline surface.
 - `shadcn.md`: icon name resolution via tag manifests, Iconify build-time bundling, Phosphor SSR
   entry, logo trademark rule, vendored build-time assets.
 - `css-craft.md`: `ch` caps on the text element; fixed-header offset on hero-less routes.
