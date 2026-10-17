@@ -1,8 +1,8 @@
 # Site rebuild and migration
 
-Purpose: Rebuild an existing, owner-authorized website faithfully on a new stack — capture its
-rendered output, harvest every real asset, port structure and measured tokens, and accept the port
-on an objective visual-diff gate rather than on taste.
+Purpose: Rebuild an existing, owner-authorized website faithfully on a new stack (`design`'s
+"reproduce" mode, `quality`'s "fidelity"): capture its render, harvest every real asset, port
+structure and measured tokens, and accept the port on an objective visual-diff gate, not taste.
 
 Read when:
 - Migrating a site the client owns (WordPress, Wix, Squarespace, Webflow, a legacy custom build)
@@ -116,7 +116,9 @@ then web-encoded (`web-platform-runtime.md`, Background and transparent video).
 
 - A captured logo renders as the image, never as a text wordmark.
 - A missing asset gets an explicit, labeled placeholder and a reported gap — never a stock or
-  generated stand-in passed off as the real thing. "Fix a broken image" means repairing a corrupt
+  generated stand-in passed off as the real thing. The one exception: a generated fill in a
+  non-brand, non-hero decorative slot, disclosed as `generated` in provenance and approved by the
+  owner. "Fix a broken image" means repairing a corrupt
   file, never swapping in a different one.
 - Colors come from computed values, button and CTA states included.
 - An inventoried interactive widget ships as working behavior; a static shell of a slider is a
@@ -129,17 +131,19 @@ Section boundaries follow the source's rendered layout tree, mapped onto a keyed
 (`client-architecture.md`). Extract tokens from computed-style frequency — palette, type scale,
 spacing, radii, shadows — and feed them through the normal token pipeline
 (`design-handoff-and-tokens.md`); where snapping a measured value to a clean scale shifts it,
-record the delta. A CSS analyzer run over the old stylesheets (Project Wallace's
-`@projectwallace/css-analyzer`) gives the raw distribution. Preserve each page's head and meta.
+record the delta. `@projectwallace/css-analyzer` over the old stylesheets gives the raw
+distribution. Preserve each page's head and meta.
 
 Keep routes 1:1. If routes must change, ship a permanent redirect for every old route, generated
 from the captured route list rather than recalled.
 
 **Partial rebuilds and previews.** When only some pages are built, never prune kept nav or footer
 links (the chrome then reads broken) and never let them 404: route every linked-but-unbuilt internal
-path to a placeholder page inside the real chrome, served 200 and labeled with the link's text.
-Derive the gap from **every** nav level, dropdown groups included, and use a catch-all route so
-multi-segment paths reach it. A genuinely unknown route still 404s; once every page is built the
+path to a placeholder page inside the real chrome, labeled with the link's text. Placeholder
+routes carry `noindex`, stay out of the sitemap, and are listed in the gap report; served 200 in a
+preview, they may return 404 inside the real chrome once the site is live. Derive the gap from
+**every** nav level, dropdown groups included, and use a catch-all route so multi-segment paths
+reach it. A genuinely unknown route still 404s; once every page is built the
 placeholder is inert.
 
 ## The fidelity gate
@@ -161,12 +165,11 @@ errors on the port.
   widgets). A section that cannot reach the threshold is flagged in the report; embedding the
   snapshot fragment is allowed only as a labeled stopgap, and only when that fragment's code is the
   owner's or its license permits it.
-- The gate is a number. A wrong hero or a flipped color shows up as diff pixels, so it cannot be
-  waved through as an acceptable stand-in. Taste critique is a separate lens and is not this gate.
+- The gate is a number: a wrong hero or flipped color is diff pixels, never an acceptable
+  stand-in. Taste critique is a separate lens.
 
-Agent cloning templates converge on this shape (map routes, observe source states, build working
-components, compare at matched sizes and repair) for rebuilding a site you own; generative URL- or
-screenshot-to-code tools give approximate scaffolds and never replace the gate.
+Generative URL- or screenshot-to-code tools give approximate scaffolds and never replace the
+gate.
 
 <!-- sources: anonymous production site-rebuild runs (2026, re-expressed) — re-authoring drift,
 raw-vs-cleaned HTML media loss, thin-page anomaly, lazy/computed-background harvest, slider
@@ -176,6 +179,5 @@ catch-all); MDN getComputedStyle; playwright.dev/docs/test-snapshots (pixelmatch
 baselines; verified 2026-10-17); github.com/dmtrKovalenko/odiff (MIT; SIMD; used by Argos and Lost
 Pixel; verified 2026-10-17); gildas-lormeau/single-file-cli (AGPL-3.0) and Y2Z/monolith (CC0-1.0)
 single-file archivers (verified 2026-10-17); projectwallace/css-analyzer (MIT);
-JCodesMore/ai-website-cloner-template README (MIT; map → observe → build → compare; "rebuild a site
-you own"; "some sites explicitly prohibit scraping or reproduction. Check first."; verified
-2026-10-17). -->
+JCodesMore/ai-website-cloner-template README (MIT; "rebuild a site you own"; terms-of-service
+check; verified 2026-10-17). -->

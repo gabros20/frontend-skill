@@ -116,14 +116,17 @@ chosen library already ships a named icon for.
 
 Resolve a concept to a verified export name before importing it — never guess one. Lucide ships a
 name→tags map (`lucide-static`'s `tags.json`) and Tabler a richer manifest (`@tabler/icons`'
-`icons.json`: tags plus category); search it, then import the matched name. Tabler is the larger
-fallback set when Lucide lacks a symbol. For the long tail, Iconify's search API
-(`/search?query=…&prefixes=…`) returns set-prefixed names (`mdi:home`); resolve at build time and
-bundle from `@iconify-json/<set>` so a static build makes no runtime icon request, honoring each
-set's own license. Phosphor inside a React Server Component imports from its SSR entry
-(`@phosphor-icons/react/ssr`), which cannot inherit an ancestor `IconContext`. Brand logos: a file
-license (MIT, CC0) is not trademark permission — render marks unaltered, imply no endorsement, and
-skip no-derivatives sets when a mark must be recolored. Key country flags by ISO 3166 alpha-2 code
+`icons.json`: tags plus category); search it, then import the matched name. Tabler's manifest and
+Iconify's search API (`/search?query=…&prefixes=…`, set-prefixed names such as `mdi:home`) are
+inputs to *choosing* the project's one library by coverage; Iconify adopts a whole set (bundled
+from `@iconify-json/<set>` at build time, so a static build makes no runtime icon request, under
+that set's license), never single icons from other sets. When the chosen library lacks a symbol,
+use its nearest glyph or a custom glyph drawn on its grid, and record that in the handoff.
+Phosphor inside a React Server Component imports from its SSR entry (`@phosphor-icons/react/ssr`),
+which cannot inherit an ancestor `IconContext`. Brand logos: a file
+license (MIT, CC0) is not trademark permission — render marks unaltered, imply no endorsement,
+and recolor a mark only where the brand's guidelines permit it (often a single-color variant); a
+no-derivatives set cannot be recolored at all. Key country flags by ISO 3166 alpha-2 code
 from a tree-shakeable package, never a component that bundles every flag. Anything fetched from
 an asset API at build time is vendored into the repo with its name, path, and license in a
 manifest, never left as a runtime dependency.
