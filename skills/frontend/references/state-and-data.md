@@ -54,7 +54,7 @@ Treat any non-trivial feature as an explicit state machine: enumerate states, th
 - **Fetch**: idle → loading → success/error, error → retrying.
 - **Auth**: logged-out → authenticating → logged-in → logging-out.
 - **Wizard**: step N → review → submitting → complete.
-- **Agent run**: queued → running ⇄ awaiting-approval → succeeded / failed / cancelled, each terminal state able to carry a partial result.
+- **Agent run**: queued → running ⇄ awaiting-approval → succeeded / failed; running or awaiting-approval → cancelling → cancelled. Each terminal state can carry a partial result.
 
 Model one machine per concern. Combining independent concerns into a single machine multiplies their states into an unmanageable cross-product; compose or nest separate machines instead.
 

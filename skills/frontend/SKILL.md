@@ -4,10 +4,10 @@ description: >-
   Implement production frontend code for websites, web apps, iOS, and Android, from creative
   website builds and faithful site rebuilds to dense product UI: components, state, data
   fetching, forms, auth flows, chat and agent-run UIs, routing, responsive accessible interfaces,
-  performance, client security, and tests. Covers React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and
-  React Native, and consumes a design handoff (handoff.yaml, DESIGN.md). Do not use for design
-  direction, motion or animation implementation, SEO strategy, backend or system architecture, or
-  QA audits unless the request also requires frontend implementation.
+  performance, client security, and tests. Covers React, Next.js, Tailwind, shadcn/ui, SwiftUI,
+  Jetpack Compose, and React Native, and consumes a design handoff (handoff.yaml, DESIGN.md). Do
+  not use for design direction, motion or animation implementation, SEO strategy, backend or system
+  architecture, or QA audits unless the request also requires frontend implementation.
 ---
 
 # Frontend Engineering
