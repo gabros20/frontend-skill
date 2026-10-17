@@ -27,6 +27,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 - `client-architecture.md`: typed fixture/CMS loader swap, delivery-API done-check, starter
   templates with baked fixes and a smoke build, one render path for CMS-modeled chrome.
 - Evals: activation, traversal, and output cases for faithful rebuilds.
+- Cross-pack seam alignment with `design` and `quality` (D-8): a disclosed, owner-approved generated
+  fill only in non-brand, non-hero decorative slots; placeholder routes `noindex`, kept out of the
+  sitemap, listed in the gap report, 404-in-chrome once live; one icon library (manifests choose it,
+  gaps use its nearest or a custom on-grid glyph); recolor marks only where brand guidelines
+  permit; `site-rebuild.md` names design's "reproduce" and quality's "fidelity".
 
 ## [0.2.3] — 2026-07-27
 
