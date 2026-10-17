@@ -8,6 +8,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
+- Queue unreleased changes here.
+
+## [0.4.0] — 2026-10-17
+
+### Added
 - `state-and-data.md` **Agent-run streaming client**: render the product's versioned run-event
   contract (never a vendor UI protocol as the contract), resume after the last committed event and
   re-sync from a snapshot when the cursor expired, provisional partial text replaced when a retried
@@ -136,6 +141,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 - Evaluation fixtures across four dimensions — activation, traversal, output, and
   compression-ablation — replacing the placeholder sets.
 
+[0.4.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.4.0
 [0.3.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.3.0
 [0.2.2]: https://github.com/gabros20/frontend-skill/releases/tag/v0.2.2
 [0.2.1]: https://github.com/gabros20/frontend-skill/releases/tag/v0.2.1
