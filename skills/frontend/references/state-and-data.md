@@ -109,9 +109,9 @@ A chat UI or agent-run view renders a server-owned run the client does not contr
 running when the tab closes, retries steps the user already watched, and pauses for approval. The
 client renders committed truth and sends intent; prompts, provider credentials, orchestration,
 policy, and durable run state stay on the server. The event contract itself is `architecture`'s
-(`contracts.md` "Versioning + deprecation"), the replayable event log behind it is `backend`'s
-(`surface-realtime.md` "Replayable run events"), and what a turn must carry arrives in `ai`'s handoff
-(`handoff.md` "What `ai` hands downstream").
+(`contracts.md` "Contract-first design", versioned per "Versioning + deprecation"), the replayable
+event log behind it is `backend`'s (`surface-realtime.md` "Replayable run events"), and what a turn
+must carry arrives in `ai`'s handoff (`handoff.md` "What `ai` hands downstream").
 
 - **Render the product's versioned event contract, never a vendor UI protocol.** Components bind to
   the product's own event types (text delta, status, source, tool call, approval request, artifact,
