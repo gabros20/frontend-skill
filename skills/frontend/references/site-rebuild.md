@@ -145,8 +145,9 @@ placeholder is inert.
 ## The fidelity gate
 
 Render the port and the reference in the same browser, at the same viewports, with the same
-emulated media (color scheme, reduced motion) on both sides, in the same environment — rendering varies with host OS, browser version, and installed fonts, so baselines are
-per browser and platform. Diff the screenshots (Playwright's `toHaveScreenshot()` uses pixelmatch;
+emulated media (color scheme, reduced motion) on both sides, in the same environment —
+rendering varies with host OS, browser version, and installed fonts, so baselines are per browser
+and platform. Diff the screenshots (Playwright's `toHaveScreenshot()` uses pixelmatch;
 odiff is a SIMD diff engine that Argos and Lost Pixel use), score parity per page and viewport, and
 emit the diff heatmap as the report. A page passes only with no failed asset requests or console
 errors on the port.
