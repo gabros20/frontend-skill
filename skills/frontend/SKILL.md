@@ -3,8 +3,8 @@ name: frontend
 description: >-
   Implement production frontend code for websites, web apps, iOS, and Android, from creative
   website builds and faithful site rebuilds to dense product UI: components, state, data
-  fetching, forms, auth flows, routing, responsive accessible interfaces, performance, client
-  security, and tests. Covers React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and
+  fetching, forms, auth flows, chat and agent-run UIs, routing, responsive accessible interfaces,
+  performance, client security, and tests. Covers React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and
   React Native, and consumes a design handoff (handoff.yaml, DESIGN.md). Do not use for design
   direction, motion or animation implementation, SEO strategy, backend or system architecture, or
   QA audits unless the request also requires frontend implementation.
@@ -61,7 +61,7 @@ useful; do not invoke them automatically unless the user requested a composition
 
 | When the request is | Read | Expected contribution |
 |---|---|---|
-| Model client, server, URL, or form state; wire data fetching, caching, mutations, optimistic updates, retries, or client auth-flow shape | [State and data](references/state-and-data.md) | State categories and machines, no-waterfall fetch discipline, optimistic+rollback, auth-flow shape |
+| Model client, server, URL, or form state; wire data fetching, caching, mutations, optimistic updates, retries, or client auth-flow shape; build a chat UI or streaming agent-run UI | [State and data](references/state-and-data.md) | State categories and machines, no-waterfall fetch discipline, optimistic+rollback, auth-flow shape, agent-run client (resume, provisional text, approve/cancel) |
 | Cover every state a UI can be in — loading, empty, error, success, recovery, notifications, undo | [State completeness](references/state-completeness.md) | The two-layer state model in code, loading-by-duration bands, error/empty/recovery taxonomy |
 | Build or fix a form — validation timing, submission, input types, error association | [Forms](references/forms.md) | Validation-timing model, submit-state rules, input-type/autocomplete tables, error wiring |
 | Implement accessibility — ARIA patterns, focus management, semantic HTML, keyboard support | [Accessibility](references/accessibility.md) | ARIA pattern code, focus/keyboard mechanics, and the canonical contrast/target/reduced-motion floors |

@@ -92,6 +92,8 @@ connection needs an app-level heartbeat (a ping the server echoes) to detect dea
 not surfaced, plus reconnect with exponential backoff and jitter so a server restart does not
 trigger a synchronized reconnect stampede. Behind a load balancer, WebSocket and long-polling need
 sticky sessions (or a shared pub/sub backend) so a connection's messages reach the node holding it.
+Rendering an agent run over this transport (resume cursor, provisional text, approve/cancel) is
+`state-and-data.md`'s Agent-run streaming client.
 
 ## Gesture and pointer handling
 

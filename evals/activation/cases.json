@@ -143,5 +143,10 @@
     "id": "positive-owned-site-rebuild",
     "prompt": "Our client wants their existing WordPress site rebuilt on Next.js so it looks exactly the same \u2014 port it faithfully.",
     "should_trigger": true
+  },
+  {
+    "id": "positive-agent-run-chat-ui",
+    "prompt": "Build the chat UI for our research agent: stream its progress, show tool calls, and let the user approve a send-email action.",
+    "should_trigger": true
   }
 ]

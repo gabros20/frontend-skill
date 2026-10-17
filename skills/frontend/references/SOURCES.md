@@ -282,7 +282,10 @@ primary repo/docs 2026-10-17 and cited only: Playwright snapshot docs (pixelmatc
 SingleFile CLI (AGPL-3.0), monolith (CC0-1.0), Project Wallace css-analyzer (MIT),
 JCodesMore/ai-website-cloner-template README (MIT), lucide-static `tags.json` (ISC), `@tabler/icons`
 `icons.json` (MIT), Iconify search API docs, Phosphor React README (MIT), simple-icons
-DISCLAIMER.md.
+DISCLAIMER.md. · Agent-run streaming client in `state-and-data.md`, verified at the primary page 2026-10-17
+and cited only: HTML Living Standard server-sent events (`Last-Event-ID`), AI SDK UI "Chatbot
+Resume Streams" docs (one adapter's example), OWASP AI Agent Security Cheat Sheet (action
+previews), Cursor "What we've learned building cloud agents" (Josh Ma, 2 Jun 2026).
 
 ## Fold-wave-2b web-search pass (2026-07-22)
 

@@ -215,5 +215,17 @@
       "references/compose.md",
       "references/react-native.md"
     ]
+  },
+  {
+    "id": "agent-run-streaming-client",
+    "prompt": "Our agent chat UI duplicates messages after a reconnect and the stop button doesn't actually stop the run \u2014 fix the React client.",
+    "expected_references": [
+      "references/state-and-data.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md",
+      "references/site-rebuild.md"
+    ]
   }
 ]

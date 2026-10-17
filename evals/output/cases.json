@@ -3,7 +3,7 @@
     "id": "optimistic-update-contract",
     "prompt": "Add optimistic updates to a TanStack Query mutation for liking a post.",
     "assertions": [
-      "The mutation implements the three-step onMutate/onError/onSettled shape, in that order, matching the cancel-snapshot-write → rollback → invalidate discipline.",
+      "The mutation implements the three-step onMutate/onError/onSettled shape, in that order, matching the cancel-snapshot-write \u2192 rollback \u2192 invalidate discipline.",
       "onMutate cancels in-flight queries for the affected key (e.g. via queryClient.cancelQueries) before snapshotting and applying the optimistic value.",
       "onError rolls back to the snapshot taken in onMutate.",
       "onSettled invalidates the query regardless of outcome."
@@ -51,6 +51,17 @@
       "Missing hero photos are recovered (lazy-load data attributes, srcset, computed backgrounds, owner originals) or shown as an explicit labeled placeholder reported as a gap \u2014 never swapped for unrelated stock imagery.",
       "Acceptance is a pixel-diff parity check against reference screenshots of the source at fixed viewports, with the threshold stated before comparison, not an eyeballed review.",
       "An interactive source widget (e.g. the hero slider) is built as working behavior, not a static image."
+    ]
+  },
+  {
+    "id": "agent-run-client-contract",
+    "prompt": "Wire a streaming agent-run view in our Next.js app over the product's run event stream, with an approval card for actions.",
+    "assertions": [
+      "The UI renders the product's versioned run events, not a vendor UI-library message format as the contract.",
+      "Reconnect subscribes after the last committed event ID and applies replays idempotently; an expired cursor is replaced by a server snapshot.",
+      "Partial streamed text is shown as provisional and replaced, not appended, when a retried step commits.",
+      "Closing the tab or unmounting closes the stream only; cancel and approve are authenticated API calls with an idempotency key.",
+      "The approval card shows the exact operation, target, normalized parameters, and expiry from the approval event."
     ]
   }
 ]

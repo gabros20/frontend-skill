@@ -6,6 +6,7 @@ Read when:
 - Designing a feature's state shape, wiring data fetching, or deciding how a client should react to a request outcome.
 - Checking whether a set of `await`s forms an accidental waterfall.
 - Deciding how to model or handle a session, an auth flow, or a component's teardown.
+- Building a chat UI or agent-run view over a streaming server run: resume, provisional text, approve, cancel.
 
 Skip when:
 - The question is which visual state to show for a given condition (`state-completeness.md`).
@@ -26,6 +27,7 @@ Produces: a state machine with no impossible states, a fetch plan with no accide
 - Optimistic UI and rollback
 - Retry, backoff, and conflict recovery
 - Offline behavior
+- Agent-run streaming client
 - Client auth-flow shape
 - Component teardown discipline
 - Analytics: emit, don't define
@@ -52,6 +54,7 @@ Treat any non-trivial feature as an explicit state machine: enumerate states, th
 - **Fetch**: idle → loading → success/error, error → retrying.
 - **Auth**: logged-out → authenticating → logged-in → logging-out.
 - **Wizard**: step N → review → submitting → complete.
+- **Agent run**: queued → running ⇄ awaiting-approval → succeeded / failed / cancelled, each terminal state able to carry a partial result.
 
 Model one machine per concern. Combining independent concerns into a single machine multiplies their states into an unmanageable cross-product; compose or nest separate machines instead.
 
@@ -100,6 +103,55 @@ Map an API's status code to the right client behavior rather than treating every
 
 `navigator.onLine` and the `online`/`offline` events report the network interface, not real reachability; verify with a lightweight request before trusting either. Queue mutations made while offline and replay them on reconnect, keyed by an idempotency key per mutation, so a double-replay can't double-apply. Surface the queued-not-synced state to the user, a pending/syncing badge, never a silent success; reuse `state-completeness.md`'s autosave "stored locally, will retry" pattern rather than inventing a new one. TanStack Query: `networkMode` plus paused mutations resume automatically on reconnect (see `data-fetching-libraries.md` for the concrete API). Offline shell and asset caching live in `web-platform-runtime.md`.
 
+## Agent-run streaming client
+
+A chat UI or agent-run view renders a server-owned run the client does not control: it keeps
+running when the tab closes, retries steps the user already watched, and pauses for approval. The
+client renders committed truth and sends intent; prompts, provider credentials, orchestration,
+policy, and durable run state stay on the server. The event contract itself is `architecture`'s
+(`contracts.md` "Versioning + deprecation"), the replayable event log behind it is `backend`'s
+(`surface-realtime.md`), and what a turn must carry arrives in `ai`'s handoff (`handoff.md` "What
+`ai` hands downstream").
+
+- **Render the product's versioned event contract, never a vendor UI protocol.** Components bind to
+  the product's own event types (text delta, status, source, tool call, approval request, artifact,
+  error, completion) and check the schema version. A UI-adapter library may translate events
+  internally, as one swappable adapter; its message format never becomes what a native client or a
+  second web app depends on. An unknown event type or newer schema degrades (log, generic "update
+  the app"), never crashes the thread.
+- **Resume after the last committed event; re-sync from a snapshot when the cursor has expired.**
+  Keep the ID/sequence of the last committed event applied, subscribe after it on every reconnect
+  (drop, tab wake, reload, second device), and apply replayed events idempotently by event ID — a
+  replay is a no-op, never a duplicate message. The browser's own SSE reconnect replays the last
+  `id` as `Last-Event-ID` (Real-time transport in `web-platform-runtime.md`), but a reload or a new
+  device starts with no cursor: persist it per run or fetch it with the run. When the server reports
+  the cursor expired, replace local run state with its snapshot rather than splicing, then stream on.
+- **Partial text is provisional.** Show streaming deltas as in progress, keyed by step and attempt,
+  not by append order. When a retried step commits, its output replaces the superseded partial text;
+  never concatenate the retry onto the old attempt, and never let provisional text be copied, cited,
+  or shown as the final answer.
+- **Closing the tab never cancels.** Disconnect, unmount, navigation, and the teardown abort above
+  close the connection only. Cancel is an explicit user action; on return, render the run's current
+  state (running, awaiting approval, finished) from replay or snapshot.
+- **Start, cancel, and approve are authenticated API calls, not stream messages.** Send them
+  through the shared API client (`client-app-wiring.md`) with an idempotency key, so a double-click
+  is one run or one decision. A run starts only from an explicit user action — never as a side
+  effect of rendering, an effect, or a prefetch. Show each pending until the run's own event
+  confirms: cancel requested is not cancelled, and a step already executing may still complete —
+  show what completed.
+- **The approval card shows the exact action preview.** Render what the server will execute — the
+  operation, its target resource, the normalized parameters, and the expiry — from the approval
+  event's payload, not a model-written summary. An expired or already-decided approval renders as
+  such with its controls disabled; the server re-checks authorization on resume, the client never
+  decides it.
+- **Native clients use the same contract.** iOS, Android, and desktop consume the same run API and
+  event schema over their own networking stack — ideally a typed client generated from the same
+  contract — with no dependence on React hooks, a web framework's server actions, or browser
+  cookies for auth.
+
+Test it: drop the connection mid-run, reload, and open the same run on a second device; both
+replays render with no duplicate or superseded output, and the run kept running.
+
 ## Client auth-flow shape
 
 Model authentication as its own state machine (see above): logged-out, authenticating, logged-in, logging-out, with session expiry handled as the silent-refresh recovery case above, not as a hard redirect that discards the user's place. Whichever auth provider's SDK is in use, its client-side hook and provider-component API are framework-specific (see `nextjs.md`); never persist the session token itself in `localStorage` or `sessionStorage` regardless of provider (`client-security.md` is the canonical home for why: anything reachable from client storage is public). Pick a provider based on what the product actually needs, a fast prebuilt UI, passwordless/flow-builder flexibility, or enterprise SSO, rather than defaulting to whichever is best known.
@@ -118,4 +170,4 @@ The client's job is to emit well-named events at the point of genuine user inten
 
 API client shape (`baseURL`, `credentials`), single-flight 401 interceptors, feature-flag bootstrap, error boundaries + reporters, and public runtime config are production *wiring*, not pure state modeling — home is `client-app-wiring.md`. This file owns the state-machine, recovery-class, and multi-tab *requirements* those seams implement.
 
-<!-- sources: triage-owl-listener.md (owl-listener state-machine/SKILL.md skeletons); triage-cuellarfr-dembrandt-ehmo.md (cuellarfr interaction-design/state-and-transitions.md, ehmo web/SKILL.md URL/history/scroll-restoration, dembrandt loading-states-and-perceived-performance optimistic UI); triage-pbakaus-ehmo-web.md (pbakaus harden.md API-status-to-UI-state mapping, memory-leak teardown checklist); miner-vercel.md (react-best-practices async-*/server-* rules: Promise.all/waterfalls, RSC parallel fetching, client-auth-flows Clerk/Descope decision matrix, client-passive-event-listeners); miner-react-doctor.md (state-and-effects: no-derived-state family, no-fetch-in-effect, cleanup-completeness family; tanstack-start/react-router four-way Promise.all convergence); fold-wave research-extend: TkDodo/KCD server-state≠client-state; authors-architecture single-flight 401 mutex + multi-tab logout fanout + client idempotency-key headers; js-dom-craft BroadcastChannel mechanism cite; GAP_MAP P0 #1 wiring, P1 state/idempotency -->
+<!-- sources: triage-owl-listener.md (owl-listener state-machine/SKILL.md skeletons); triage-cuellarfr-dembrandt-ehmo.md (cuellarfr interaction-design/state-and-transitions.md, ehmo web/SKILL.md URL/history/scroll-restoration, dembrandt loading-states-and-perceived-performance optimistic UI); triage-pbakaus-ehmo-web.md (pbakaus harden.md API-status-to-UI-state mapping, memory-leak teardown checklist); miner-vercel.md (react-best-practices async-*/server-* rules: Promise.all/waterfalls, RSC parallel fetching, client-auth-flows Clerk/Descope decision matrix, client-passive-event-listeners); miner-react-doctor.md (state-and-effects: no-derived-state family, no-fetch-in-effect, cleanup-completeness family; tanstack-start/react-router four-way Promise.all convergence); fold-wave research-extend: TkDodo/KCD server-state≠client-state; authors-architecture single-flight 401 mutex + multi-tab logout fanout + client idempotency-key headers; js-dom-craft BroadcastChannel mechanism cite; GAP_MAP P0 #1 wiring, P1 state/idempotency; papa-fold 2026-10-17 agent-run streaming client: HTML Living Standard server-sent events (Last-Event-ID reports the last event ID string on reconnect); AI SDK UI "Chatbot Resume Streams" docs, observed 2026-10-17 (a client stop only closes the HTTP connection and should not cancel the underlying generation; explicit stop goes to a dedicated endpoint), as one adapter's example; OWASP AI Agent Security Cheat Sheet ("Implement action previews before execution"; approval bound to the exact action); Cursor, Josh Ma, "What we've learned building cloud agents" (2 Jun 2026: storage and streaming separated from the agent workflow; the client rewinds its stream and shows the new data after a retry) -->
