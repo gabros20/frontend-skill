@@ -8,7 +8,15 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
-- Queue unreleased changes here.
+- `state-and-data.md` **Agent-run streaming client**: render the product's versioned run-event
+  contract (never a vendor UI protocol as the contract), resume after the last committed event and
+  re-sync from a snapshot when the cursor expired, provisional partial text replaced when a retried
+  step commits, closing the tab never cancels, cancel/approve as authenticated idempotent API calls,
+  an approval card that previews the exact action, and native clients on the same contract; an
+  agent-run state-machine skeleton and a reconnect/second-device test. Points to `architecture`
+  (event contract), `backend` (replayable event log) and `ai` (handoff). Router: the State and data
+  row and the description reach "chat UI / streaming agent-run UI"; `web-platform-runtime.md`
+  Real-time transport points to it. Evals: one activation, one traversal, one output case.
 
 ## [0.3.0] — 2026-10-17
 
