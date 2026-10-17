@@ -110,8 +110,8 @@ running when the tab closes, retries steps the user already watched, and pauses 
 client renders committed truth and sends intent; prompts, provider credentials, orchestration,
 policy, and durable run state stay on the server. The event contract itself is `architecture`'s
 (`contracts.md` "Versioning + deprecation"), the replayable event log behind it is `backend`'s
-(`surface-realtime.md`), and what a turn must carry arrives in `ai`'s handoff (`handoff.md` "What
-`ai` hands downstream").
+(`surface-realtime.md` "Replayable run events"), and what a turn must carry arrives in `ai`'s handoff
+(`handoff.md` "What `ai` hands downstream").
 
 - **Render the product's versioned event contract, never a vendor UI protocol.** Components bind to
   the product's own event types (text delta, status, source, tool call, approval request, artifact,
