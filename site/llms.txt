@@ -20,7 +20,7 @@ SKILL.md is a faceted router: one primary job, at most one platform overlay (nat
 - [docs/usage.md](https://raw.githubusercontent.com/gabros20/frontend-skill/main/docs/usage.md)
 - [docs/recipes.md](https://raw.githubusercontent.com/gabros20/frontend-skill/main/docs/recipes.md)
 
-## Reference inventory (`skills/frontend/references/`) — 27 files
+## Reference inventory (`skills/frontend/references/`) — 28 files
 
 ### Primary job
 - `state-and-data.md` — state machines, fetch/cache, optimistic+rollback, client auth-flow shape
@@ -34,6 +34,7 @@ SKILL.md is a faceted router: one primary job, at most one platform overlay (nat
 - `i18n.md` — logical props, Intl, dir/lang, text expansion
 - `design-handoff-and-tokens.md` — handoff.yaml / DESIGN.md consumption
 - `client-architecture.md` — feature folders, import zones, section registries
+- `site-rebuild.md` — faithful rebuild/migration of a site the client owns: render capture, asset harvest, no substitution, pixel-diff fidelity gate
 
 ### Platform · web
 - `web-platform-css.md` — layout, stacking, color-gamut / color-management

@@ -8,6 +8,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
+- Queue unreleased changes here.
+
+## [0.3.0] — 2026-10-17
+
+### Added
 - **`site-rebuild.md`** (28th reference): faithful rebuild/migration of an owner-authorized site —
   port and measure rather than re-author, render capture + raw-HTML read, thin-page anomaly flag,
   full asset harvest (lazy `data-*`, `srcset`, computed backgrounds, slider placeholder frames,
@@ -123,6 +128,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 - Evaluation fixtures across four dimensions — activation, traversal, output, and
   compression-ablation — replacing the placeholder sets.
 
+[0.3.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.3.0
 [0.2.2]: https://github.com/gabros20/frontend-skill/releases/tag/v0.2.2
 [0.2.1]: https://github.com/gabros20/frontend-skill/releases/tag/v0.2.1
 [0.2.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.2.0
