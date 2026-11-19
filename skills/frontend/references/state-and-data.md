@@ -155,7 +155,7 @@ must carry arrives in `ai`'s handoff (`handoff.md` "What `ai` hands downstream")
   cookies for auth.
 - **Prebuilt agent components render states, not the contract.** Solid Glass's `turn-status`,
   `tool-steps`, `ask-card` and kin map onto these events; the mapping and the live-region and
-  approval gaps to fix on import are in `shadcn.md` "Solid Glass theme".
+  approval gaps to fix on import are in `solid-glass.md` "Agent-run mapping".
 
 Test it: drop the connection mid-run, reload, and open the same run on a second device; both
 replays render with no duplicate or superseded output, and the run kept running.

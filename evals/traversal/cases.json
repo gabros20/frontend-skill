@@ -274,7 +274,7 @@
     "id": "solid-glass-agent-ui-install",
     "prompt": "Install the Solid Glass theme in our shadcn agent chat app and wire its turn-status and tool-steps components to our run events.",
     "expected_references": [
-      "references/shadcn.md",
+      "references/solid-glass.md",
       "references/state-and-data.md"
     ],
     "forbidden_references": [

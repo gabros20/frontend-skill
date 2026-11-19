@@ -8,13 +8,14 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
-- `shadcn.md` **Solid Glass theme** (deeplethe/solid-glass, MIT): the Base UI vs Radix/AI Elements
-  conflict, registry install and pinning, how the unlayered material hangs on `bg-card`/
-  `bg-popover`/`bg-sidebar` and what that costs overrides and focus rings, deltas from stock
-  shadcn, an agent-run component map, import fixes (live-region chatter, colour-only outcomes),
-  the per-card backdrop-blur cost, and MDN-checked gaps: `prefers-reduced-transparency` is
-  Chromium-only and forced colours strip its shadow-drawn edges and focus ring. Pointers from
-  `state-and-data.md` "Agent-run streaming client" and `css-craft.md` glass budget; router row.
+- `solid-glass.md` (31st reference, deeplethe/solid-glass, MIT): adopting the Solid Glass theme on
+  shadcn/ui: the Base UI vs Radix/AI Elements conflict, registry install and pinning, how the
+  unlayered material hangs on `bg-card`/`bg-popover`/`bg-sidebar` and what that costs overrides and
+  focus rings, deltas from stock shadcn, an agent-run component map, import fixes (live-region
+  chatter, colour-only outcomes), the per-card backdrop-blur cost, and MDN-checked gaps:
+  `prefers-reduced-transparency` is Chromium-only and forced colours strip its shadow-drawn edges and
+  focus ring. Router row and description; pointers from `shadcn.md`, `state-and-data.md` "Agent-run
+  streaming client" and the `css-craft.md` glass budget.
 - **UI and component motion is now this pack's** (family decision D1): new `ui-motion.md`
   (29th reference) — cheapest-driver ladder (CSS → `@starting-style` → keyframes → WAAPI →
   library), library-free enter/exit with `allow-discrete` and `overlay` for top-layer exits,

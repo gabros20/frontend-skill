@@ -29,7 +29,7 @@
   "interface": {
     "displayName": "Frontend Engineering",
     "shortDescription": "Production frontend code for websites, web apps, iOS, and Android",
-    "longDescription": "Implement and review production client code across websites, web apps, iOS, and Android: component and state architecture, routing, data fetching, forms and auth flows, responsive and accessible UI, the full state set, client security, performance, and unit/component/UI tests. Covers React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and React Native, and consumes a design handoff (handoff.yaml and DESIGN.md).",
+    "longDescription": "Implement and review production client code across websites, web apps, iOS, and Android: component and state architecture, routing, data fetching, forms and auth flows, responsive and accessible UI, the full state set, client security, performance, and unit/component/UI tests. Covers React, Next.js, Tailwind, shadcn/ui (and its Solid Glass theme), SwiftUI, Jetpack Compose, and React Native, and consumes a design handoff (handoff.yaml and DESIGN.md).",
     "developerName": "gabros20",
     "category": "Productivity",
     "capabilities": [],

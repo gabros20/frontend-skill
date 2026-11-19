@@ -4,9 +4,9 @@ description: >-
   Implement production frontend code for websites, web apps, iOS, and Android, from creative
   builds and site rebuilds to dense product UI: components, state, data fetching, forms, auth
   flows, chat and agent-run UIs, UI motion and micro-interactions, responsive accessible
-  interfaces, performance, client security, and tests. Covers React, Next.js, Tailwind, shadcn/ui,
-  SwiftUI, Jetpack Compose, and React Native, and builds from a design handoff, Figma file, or
-  approved comp. Do not use for design direction or motion specs, scroll-linked animation, SEO
+  interfaces, performance, client security, and tests. Covers React, Next.js, Tailwind, shadcn/ui
+  (and its Solid Glass theme), SwiftUI, Jetpack Compose, and React Native, and builds from a design
+  handoff, Figma file, or approved comp. Do not use for design direction or motion specs, scroll-linked animation, SEO
   strategy, backend or system architecture, or QA audits unless the request also requires frontend
   implementation.
 ---
@@ -107,7 +107,8 @@ Add only when the platform is web and the project names or uses the stack. Skip 
 | Next.js App Router, server actions, caching, next/* primitives | [Next.js](references/nextjs.md) | File conventions, RSC/server-actions, caching model, image/font/link primitives |
 | Data-fetching libraries — TanStack Query, SWR, React Router data APIs, TanStack Start | [Data fetching libraries](references/data-fetching-libraries.md) | Current-API pointers per library; the cache/optimistic/no-waterfall principles themselves are homed in `state-and-data.md` |
 | Tailwind CSS — theme, utilities, responsive variants | [Tailwind](references/tailwind.md) | v4 `@theme` canonical (v3 compat), `cn`/twMerge/CVA, the postcss trap |
-| shadcn/ui and component-library selection, or the Solid Glass theme | [shadcn](references/shadcn.md) | Registry/CLI/ownership model, composition recipes, official-library selection table, icon discipline, Solid Glass adoption |
+| shadcn/ui and component-library selection | [shadcn](references/shadcn.md) | Registry/CLI/ownership model, composition recipes, official-library selection table, icon discipline |
+| The Solid Glass theme, or a thick-glass material on a shadcn/ui app (replaces shadcn as the component overlay) | [Solid Glass](references/solid-glass.md) | Base UI requirement, pinned registry install, material and deltas from stock, agent components bound to run states, forced-colours and reduced-transparency fixes |
 
 ### Concern
 

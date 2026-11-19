@@ -20,7 +20,7 @@ SKILL.md is a faceted router: one primary job, at most one platform overlay (nat
 - [docs/usage.md](https://raw.githubusercontent.com/gabros20/frontend-skill/main/docs/usage.md)
 - [docs/recipes.md](https://raw.githubusercontent.com/gabros20/frontend-skill/main/docs/recipes.md)
 
-## Reference inventory (`skills/frontend/references/`) — 28 files
+## Reference inventory (`skills/frontend/references/`) — 31 files
 
 ### Primary job
 - `state-and-data.md` — state machines, fetch/cache, optimistic+rollback, client auth-flow shape
@@ -51,7 +51,7 @@ SKILL.md is a faceted router: one primary job, at most one platform overlay (nat
 - `react-components-and-state.md`, `react-rendering-and-rsc.md`
 - `nextjs.md` — App Router/cache/assets traps; optional skills; docs https://nextjs.org/docs
 - `data-fetching-libraries.md` — durable cache traps; TanStack Query/Router/Start + SWR; companion skills + official docs
-- `tailwind.md`, `shadcn.md`
+- `tailwind.md`, `shadcn.md`, `solid-glass.md` (the Solid Glass theme)
 
 ### Uncovered frameworks (no full overlay)
 - Astro: core job + web substrate; optional `astrolicious/agent-skills@astro` · https://docs.astro.build

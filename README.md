@@ -129,10 +129,10 @@ Documentation may use `/frontend` as shorthand. Other clients may expose a slash
 experience/visual design, system architecture, marketing/SEO, or independent release verification
 unless the request also requires frontend implementation.
 
-## The 30 references
+## The 31 references
 
 The router selects from a primary-job set, a platform overlay, and a web stack overlay. It loads
-the smallest sufficient set — never all 30.
+the smallest sufficient set — never all 31.
 
 **Primary job**
 
@@ -177,6 +177,7 @@ the smallest sufficient set — never all 30.
 | [data-fetching-libraries.md](skills/frontend/references/data-fetching-libraries.md) | Durable cache traps; TanStack Query/Router/Start + SWR pointers; companion skills + official docs |
 | [tailwind.md](skills/frontend/references/tailwind.md) | v4 `@theme` canonical (v3 compat), `cn`/twMerge/CVA, the postcss trap |
 | [shadcn.md](skills/frontend/references/shadcn.md) | Registry/CLI/ownership model, composition recipes, official-library selection table, icon discipline |
+| [solid-glass.md](skills/frontend/references/solid-glass.md) | The Solid Glass theme: Base UI requirement, pinned install, material and deltas from stock, agent components bound to run states, forced-colours and reduced-transparency fixes |
 
 **Concern and provenance**
 
@@ -225,7 +226,7 @@ prose. Full attribution and licenses:
 ```text
 .codex-plugin/plugin.json  Codex plugin and release metadata
 AGENTS.md / CLAUDE.md      repository and client-specific maintainer guidance
-skills/frontend/           portable runtime skill and client metadata (30 references)
+skills/frontend/           portable runtime skill and client metadata (31 references)
 evals/                     activation, traversal, output, and compression fixtures
 docs/                      installation, usage, and recipes
 site/                      visual guide (deployed to frontendengskill.vercel.app)

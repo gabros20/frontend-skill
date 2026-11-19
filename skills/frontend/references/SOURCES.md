@@ -135,7 +135,7 @@ provenance in more detail.
   shadcn/ui theme: install path, theming mechanism, component deltas, agent-component states, and
   the import fixes found by reading its sources (live-region chatter, colour-only outcome, forced
   colours, Safari reduced transparency). Adapted, no code copied beyond its documented commands.
-  Its shadcn/ui-derived files (NOTICE.md) were not used. Drawn into `shadcn.md`.
+  Its shadcn/ui-derived files (NOTICE.md) were not used. Drawn into `solid-glass.md`.
 
 ## CC0-1.0 (public domain; verbatim reuse permitted)
 

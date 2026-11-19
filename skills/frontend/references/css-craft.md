@@ -269,7 +269,7 @@ Include `saturate()` plus a 1px low-opacity edge and optional inset top highligh
 material, not grey smear. Needs a busy/colorful backdrop or the effect goes dull-flat. Always ship
 the `@supports not (backdrop-filter: …)` fallback, with a denser fill than the glass (roughly
 0.45 → 0.6 alpha) so text keeps contrast without the blur behind it. A theme that glasses every card
-exceeds this budget by design: `shadcn.md` "Solid Glass theme".
+exceeds this budget by design: `solid-glass.md` "Performance".
 
 **Progressive edge blur:** stack a few `backdrop-filter` layers with stepped radii, each masked to an
 overlapping band, `pointer-events: none`. Every layer is a backdrop pass and counts against the
