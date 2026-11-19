@@ -75,7 +75,7 @@ Toast rules (durations and persistence: design's ladder above): one position pro
 
 ## Autosave and draft recovery
 
-The save model is design's (`design` `forms.md`). Autosave: debounce ~1–2s after the last change and flush on blur, `visibilitychange` to hidden, and navigation; keep a periodic save only as a backstop. Show status in a polite live region ("Saving…" → "Saved"), announced at most once per burst. Never mount an immediate-apply control inside a form that has a Save button. If an autosave attempt fails, say so without alarming the user ("changes stored locally, will retry") instead of failing silently. On return after a crash or unexpected close, offer an explicit Restore or Discard of the last unsaved snapshot instead of either silently restoring or silently discarding it.
+The save model is design's (`design` `forms.md` "Save model"). Autosave: debounce ~1–2s after the last change and flush on blur, `visibilitychange` to hidden, and navigation; keep a periodic save only as a backstop. Show status in a polite live region ("Saving…" → "Saved"), announced at most once per burst. Never mount an immediate-apply control inside a form that has a Save button. If an autosave attempt fails, say so without alarming the user ("changes stored locally, will retry") instead of failing silently. On return after a crash or unexpected close, offer an explicit Restore or Discard of the last unsaved snapshot instead of either silently restoring or silently discarding it.
 
 ## Notification-center preferences
 

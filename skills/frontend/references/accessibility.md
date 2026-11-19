@@ -102,6 +102,8 @@ with JS off, then CSS, then JS. Each layer degrades to the one below it, not to 
   `aria-current` for the current page, step, or date; `aria-pressed` only on toggle buttons. Keep
   widget state in that one attribute and style from it (`[aria-selected="true"]`), never a parallel
   `.is-active` class that can drift.
+Which of the next three a product must meet is decided in `design` `accessibility.md` "WCAG 2.2 AA
+decisions design owns"; this is the wiring.
 - **Hover and focus content (1.4.13):** a tooltip opens on hover *and* focus, closes on Escape
   without moving focus, stays open while the pointer is over the tooltip itself (no gap between
   trigger and bubble, or a short close delay), and never auto-hides on a timer. `title` meets none of
