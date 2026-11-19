@@ -36,16 +36,7 @@ Cite design's `interaction.md` eight-state model (default, hover, focus, active,
 
 ## Loading-pattern-by-duration
 
-Treat these as guidance bands, not hard cutoffs; sources vary by tens to hundreds of ms:
-
-| Wait | Pattern |
-|---|---|
-| under ~100ms | no loading indicator |
-| ~100ms to 3s | skeleton matched to the final content's shape |
-| ~3s to 10s | spinner or determinate progress (prefer determinate once you can compute an estimate) |
-| beyond ~10s | move to background work, notify on completion |
-
-Never show a blank screen while loading. Never show a loading indicator at all for actions that reliably complete under roughly 100 to 400ms; the flash of a spinner costs more perceived latency than it saves.
+The thresholds are design's (`design` `interaction.md` "Feedback and latency ladder"). In code: delay the indicator, then hold it for a minimum time once shown so it never flashes; render a skeleton shaped like the final content; switch to determinate progress once you can compute it; never a blank screen.
 
 ## Empty-state taxonomy
 
@@ -61,7 +52,7 @@ Zero-results is a retention moment, not a dead end: treat a failed search as a p
 
 ## Error-prevention hierarchy
 
-Apply in this order before writing error-handling code, cheapest and most upstream first: **eliminate** the failure mode entirely (a date picker instead of free text) > **prevent** it at the point of entry (disable an invalid option rather than letting it be chosen) > **detect** it as early as possible (validate before submission, not after) > when it still happens, **recover** gracefully (retry, rollback, restore) > **explain** what happened in the user's terms > only then, if needed, offer a path to **diagnose** further. Most implementations skip straight to the explain step and never build the cheaper upstream layers.
+Apply in this order before writing error-handling code, cheapest and most upstream first: **eliminate** the failure mode entirely (a constrained control instead of free text) > **prevent** it at the point of entry (disable an invalid option rather than letting it be chosen) > **detect** it as early as possible (validate before submission, not after) > when it still happens, **recover** gracefully (retry, rollback, restore) > **explain** what happened in the user's terms > only then, if needed, offer a path to **diagnose** further. Most implementations skip straight to the explain step and never build the cheaper upstream layers.
 
 ## Error message anatomy and destructive actions
 
@@ -80,11 +71,11 @@ Default to undo, not confirm, for reversible and low-stakes actions: perform the
 
 Pick the surface by how transient and how blocking the situation is, lightest first: inline or contextual message (adjacent to the field or item it concerns) → toast (transient, non-blocking, auto-dismissing) → inline banner (a persistent condition scoped to the affected section) → modal (a decision that must block everything else). The same lightest-first logic applies to interactive overlays by anchoring and blocking need: tooltip → popover → dropdown → bottom sheet (mobile) → drawer → modal → full-screen. Pick the lightest surface that still does the job; don't reach for a modal when a popover would do. (`accessibility.md` owns the focus-trap and ARIA mechanics for whichever surface is chosen.)
 
-Toast rules: place bottom-center or a bottom/top-right corner, never top-center. Auto-dismiss success toasts in roughly 4 to 6 seconds; let error toasts persist until the user dismisses them. Never show more than one at a time, queue the rest. Pause the dismiss timer on hover or focus so a toast can't disappear mid-read, and while the tab is hidden. A toast carrying an action persists like an error toast, and an undo or critical fact never lives only in a toast; never move focus to one. Mount the toast region once at the document root, outside transformed, filtered, or overflow-clipping ancestors; keep hover alive across the gaps between stacked toasts; fire toasts from event handlers, not effects (Strict Mode double-fires effects), or pass a stable id.
+Toast rules (durations and persistence: design's ladder above): one position product-wide that never covers the primary action, bottom navigation, or the on-screen keyboard. Never show more than one at a time, queue the rest. Pause the dismiss timer on hover or focus so a toast can't disappear mid-read, and while the tab is hidden. A toast carrying an action persists like an error toast, and an undo or critical fact never lives only in a toast; never move focus to one. Mount the toast region once at the document root, outside transformed, filtered, or overflow-clipping ancestors; keep hover alive across the gaps between stacked toasts; fire toasts from event handlers, not effects (Strict Mode double-fires effects), or pass a stable id.
 
 ## Autosave and draft recovery
 
-For long-lived editing surfaces, autosave silently every 30 to 60 seconds instead of relying on an explicit save action. If an autosave attempt fails, say so without alarming the user ("changes stored locally, will retry") instead of failing silently. On return after a crash or unexpected close, offer an explicit Restore or Discard of the last unsaved snapshot instead of either silently restoring or silently discarding it.
+The save model is design's (`design` `forms.md`). Autosave: debounce ~1–2s after the last change and flush on blur, `visibilitychange` to hidden, and navigation; keep a periodic save only as a backstop. Show status in a polite live region ("Saving…" → "Saved"), announced at most once per burst. Never mount an immediate-apply control inside a form that has a Save button. If an autosave attempt fails, say so without alarming the user ("changes stored locally, will retry") instead of failing silently. On return after a crash or unexpected close, offer an explicit Restore or Discard of the last unsaved snapshot instead of either silently restoring or silently discarding it.
 
 ## Notification-center preferences
 

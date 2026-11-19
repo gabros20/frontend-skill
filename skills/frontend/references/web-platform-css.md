@@ -54,7 +54,10 @@ Ultra-wide containment: cap page-width content around 1200 to 1600px on web (Mat
 is roughly 1040dp) rather than letting text or layout stretch to the full viewport on very wide
 screens.
 
-Fluid values via `clamp(MIN, PREFERRED, MAX)`, for example `clamp(1.75rem, 1.2rem + 2vw, 3rem)`. The
+Fluid values via `clamp(MIN, PREFERRED, MAX)`; derive the preferred term, never guess it:
+`slope = (max − min) / (vwMax − vwMin)`, `preferred = (min − slope × vwMin)rem + (slope × 100)vw`
+(28→48px across 400→1280px gives `clamp(1.75rem, 1.182rem + 2.273vw, 3rem)`); a guessed `vw`
+coefficient reaches its max at the wrong width. The
 preferred term must mix a `vw` unit with a `rem` unit: a `vw`-only preferred value breaks
 browser-zoom accessibility (fails WCAG 1.4.4, Resize Text) because it never grows past the viewport
 regardless of the user's zoom or root font-size. Always keep a `rem` anchor in the preferred term
@@ -84,8 +87,9 @@ a container query styles only descendants, never the container itself.
 - **Bento/masonry-style grids:** `grid-auto-flow: dense` backfills gaps left by mixed-size cards but
   can reorder tiles away from DOM order; never rely on visual order for tab order or reading order.
   `grid-auto-rows: 1fr` on mobile creates large empty gaps, so restrict equal-height rows to desktop
-  via a min-width query. Native `grid-template-rows: masonry` is not universally shipped (per the
-  perishable rule above); feature-detect with `@supports` and fall back to an `aspect-ratio`-driven
+  via a min-width query. Native masonry is `display: grid-lanes` (the earlier `masonry`
+  value proposals are superseded; support is still partial per the perishable rule above);
+  feature-detect with `@supports (display: grid-lanes)` and fall back to an `aspect-ratio`-driven
   row-span trick (`grid-auto-rows: 8px` plus `grid-row: span var(--span)`). Masonry's visual reflow
   can scramble keyboard and screen-reader order, so keep DOM order logical regardless.
 - **`:has()`** replaces JS class-toggling on a parent based on a child's state, moving that coupling
@@ -194,8 +198,9 @@ a single-theme fallback outside `light-dark()`.
 controls, scrollbars, and system colors stay light if `color-scheme` / the meta tag is missing or
 wrong — unreadable inputs on dark pages. Set `<meta name="color-scheme" content="light dark">`
 early in `<head>` and mirror with `:root { color-scheme: light dark; }` (or the single scheme the
-page actually paints). Pair `theme-color` media variants with the same scheme. **`only dark` is
-invalid** — browsers ignore it and fall back to light. Declare `color-scheme` either path
+page actually paints). Pair `theme-color` media variants with the same scheme. `only` is a valid
+modifier (`color-scheme: only light`) that forbids the browser's forced darkening (Chrome Auto Dark
+Theme) for that element; use it only where a page must keep its own palette. Declare `color-scheme` either path
 (mechanism only; `prefers-contrast` / `forced-colors` a11y semantics are `accessibility.md`'s).
 Re-verify contrast in the dark palette explicitly; it is not just an inversion of the light one
 (see `accessibility.md`'s contrast table).

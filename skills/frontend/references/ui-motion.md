@@ -53,6 +53,7 @@ hand-typed `cubic-bezier()`s are a consolidation finding. Climb only as far as t
 | A just-inserted or just-shown element | `@starting-style` |
 | Predetermined loop or sequence | CSS `@keyframes` |
 | Programmatic, interruptible, no dependency | WAAPI `element.animate()` |
+| Spring or bounce toward a fixed target, no dependency | CSS transition with a `linear()` easing |
 | Velocity springs, shared layout, unmount exits, gestures | a motion library |
 
 Anything rAF-driven (GSAP, a library's layout animation, a motion value read each frame) shares
@@ -118,6 +119,10 @@ dialog[open] { opacity: 1; transition-duration: var(--dur-enter); }
   before porting or judging: **ζ = damping / (2·√(stiffness·mass))** (ζ ≥ 1 no overshoot, ζ < 1
   overshoots: 300/20/1 → ζ ≈ 0.58, visible bounce; 1000/10/1 → ζ ≈ 0.16, very springy). From
   design's values: stiffness = mass·(2π/response)², damping = 2ζ·√(stiffness·mass).
+- A `linear()` easing sampled from design's ζ and response gives plain CSS transitions a
+  spring-shaped curve: set the duration to the spring's settle time and declare a `cubic-bezier()`
+  fallback before it. It has a fixed duration and no velocity, so it can't take over from a gesture
+  release or retarget with momentum — those still need a physics library.
 - Re-triggerable UI (toggles, toasts, expand/collapse) animates with transitions or springs, which
   retarget from the current value; keyframes restart from zero. An interrupted animation starts
   from the element's live value, never the target. Drive 2D motion with independent X and Y springs

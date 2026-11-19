@@ -102,6 +102,15 @@ with JS off, then CSS, then JS. Each layer degrades to the one below it, not to 
   `aria-current` for the current page, step, or date; `aria-pressed` only on toggle buttons. Keep
   widget state in that one attribute and style from it (`[aria-selected="true"]`), never a parallel
   `.is-active` class that can drift.
+- **Hover and focus content (1.4.13):** a tooltip opens on hover *and* focus, closes on Escape
+  without moving focus, stays open while the pointer is over the tooltip itself (no gap between
+  trigger and bubble, or a short close delay), and never auto-hides on a timer. `title` meets none of
+  this. A tooltip that is the control's only name is wired with `aria-labelledby`, a supplementary
+  one with `aria-describedby`; interactive content belongs in a popover, not a tooltip.
+- **Single-key shortcuts (2.1.4):** ignore them while focus is in an input, textarea, select, or
+  `contenteditable`, and ship a setting to disable or remap them.
+- **Session timeout (2.2.1):** a warning dialog at least 20s before expiry with one "Stay signed in"
+  action; on expiry keep the draft and return to it after re-authentication.
 - **Common defects:** `aria-label` on a generic `div`/`span` (ignored); `role="menu"` on site
   navigation (it promises an app-menu key model — nav is `<nav>` plus a list); redundant roles
   (`<button role="button">`); `aria-labelledby`/`-describedby` pointing at a missing id (silently
@@ -138,7 +147,10 @@ focus. Enter in a textarea inserts a newline; ⌘/Ctrl+Enter submits only where 
   against every adjacent background, 2 to 3px thick, `outline-offset` 2 to 4px (not inset; inset
   clips on rounded corners). Default: keep the browser's ring and add `outline-offset: 2px` (it
   adapts to the platform and forced colors). A custom ring uses a focus token verified against every
-  color it crosses — fills, page, images, hover and selected states. `currentColor` is not
+  color it crosses — fills, page, images, hover and selected states. When one ring must cross unknown
+  backgrounds (images, themed sections, white-label), make it two-colour: `outline: 2px solid
+  var(--focus-dark); outline-offset: 2px; box-shadow: 0 0 0 2px var(--focus-light)` — one of the
+  pair clears 3:1 anywhere; forced colors drops the shadow and keeps the outline. `currentColor` is not
   pre-verified: a white-label button draws a white ring on a white page. Composite fields (an input
   with an icon inside one border) draw the ring on the wrapper with `:focus-within`.
 - Focus order follows visual/reading order. No positive `tabindex`, ever.

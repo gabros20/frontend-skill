@@ -182,7 +182,8 @@ body/paragraph text prevent ragged or orphaned line wraps. `tabular-nums` on any
 frequently-updating display value keeps digit-width changes from shifting layout.
 `truncate`/`line-clamp-*` handle dense single- or multi-line overflow instead of hand-rolled
 `overflow: hidden` plus ellipsis CSS. `size-*` replaces separate `w-*`/`h-*` pairs on square
-elements. Never modify `tracking-*` (letter-spacing) unless explicitly requested. Keep one small,
+elements. Tracking comes from the type-role tokens (`--tracking-*` theme variables or composite typography
+tokens); never an ad hoc `tracking-*` per element. Keep one small,
 fixed `z-*` scale for the project rather than arbitrary large values like `z-[9999]`, which invite
 stacking-context conflicts that are a distinct failure mode from ordering alone.
 

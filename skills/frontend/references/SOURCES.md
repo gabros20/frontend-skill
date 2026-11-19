@@ -297,6 +297,11 @@ component motion, `ui-motion.md`); type rendering got its own home (`typography-
 - Corrections verified at the primary source 2026-11-19: WCAG 2.2 large-scale text and SC 2.5.8
   spacing exception (w3.org), shadcn theming variable shape (ui.shadcn.com), `next/font` axes and
   weight (nextjs.org). Motion's accelerated shorthands: motion CHANGELOG 14.2.0.
+- Advisory pass (Task 15 corrections and proposals), checked at the primary source 2026-11-19: MDN
+  (`color-scheme` `only`, `:blank` unshipped, `:user-invalid`, `linear()`, `autocomplete` `webauthn`,
+  relative colours), designtokens.org Format 2025.10 (stable; group `$type`, object colours),
+  tailwindcss.com letter-spacing (`--tracking-*`), GOV.UK Design System date input, WebKit's
+  "Introducing CSS Grid Lanes", WebKit bugs 265956 and 270737 (transformed SVG content vanishing).
 - Unlicensed design-fold sources (DevMartinese/awwwards-animations-skill,
   tponscr-debug/claude-skill-awwwards) contributed nothing to this pack.
 

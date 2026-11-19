@@ -234,7 +234,7 @@ Flat icon SVGs may still work. Chromium often fine — verify real Safari, not h
 |---|---|---|
 | Ancestor `content-visibility: auto` | After skip → relevant, HTML repaints; **inline SVG paint not invalidated** | No `content-visibility` / `contain-intrinsic-size` on ancestors of critical inline SVG. See `performance.md` |
 | SVG `width`/`height`/`fill` **presentation attributes** + Tailwind v4 utilities | WebKit treats attrs as **unlayered** author CSS; unlayered beats `@layer utilities` → utilities lose | No sizing/fill presentation attrs when utilities own size/color. Use CSS `aspect-ratio` + `h-*`/`w-*` / `fill-*` |
-| `<g transform="…">` | Correct bbox; **group contents never paint** | Flatten transforms into path data. Prefer flat `<svg><path/>…` |
+| `<g transform="…">` (intermittent) | Transformed groups or text can vanish on some loads in WebKit's legacy SVG engine (open WebKit bugs), usually with a co-factor such as the row above | Don't flatten pre-emptively; if a group vanishes in Safari, flatten its transform into path data as a workaround |
 | Duplicate ids across inlined SVGs (`url(#id)` in clips, gradients, filters, masks, patterns) | Every engine resolves to the **first** in the document → the second SVG gets the first's filter or an empty clip | Prefix every id per instance, or drop redundant full-viewBox clips |
 | SVGO/svgr strips `viewBox` | Paths unscaled/clipped | Keep `removeViewBox: false` (Turbopack + webpack svgr). See `nextjs.md` |
 
@@ -369,13 +369,13 @@ Verify a 16×16 sprite scaled to 128px across Chrome/Safari/Firefox (4×–8× u
 - `currentColor`: set `color` once and reuse it in `border`/`background-image`/anywhere else on the
   same element or a descendant, instead of repeating a literal color value.
 - `color-scheme` meta/CSS must match the painted palette so native controls/scrollbars follow the
-  theme — full trap list (including invalid `only dark`) is in `web-platform-css.md` Color / Dark
+  theme — full trap list is in `web-platform-css.md` Color / Dark
   mode sections; this file only points.
 - Dynamic viewport units (`svh`/`dvh`/`lvh`) and the safe-unit choice per use case are already homed
   in `web-platform-runtime.md`'s Mobile Safari section — cite it rather than re-deriving the table.
 - **`:empty` whitespace trap:** `:empty { display: none }` is useful for empty error slots, but
   whitespace-only nodes are *not* empty (`<p> </p>` still matches as non-empty and stays visible).
-  Keep error containers truly empty in the DOM, or use `:blank` where supported with a fallback.
+  Keep error containers truly empty in the DOM (`:blank` ships in no engine).
 - **Broken-image UX:** style failed loads so the box still communicates — e.g. `img::before` with a
   short message and `img::after { content: "(url: " attr(src) ")"; }` (or project-equivalent). Silent
   broken icons are a common CMS/agent failure mode.

@@ -49,6 +49,15 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 - `design-handoff-and-tokens.md`: current shadcn stores full `oklch()` values mapped via
   `@theme inline` (the bare-triple claim was wrong).
 - `web-platform-runtime.md`: looping background video ships a 2.2.2 pause control.
+- Advisory corrections: dates are no longer "always a picker" (known dates are three numeric fields,
+  `forms.md`, `state-completeness.md`); submit, validation timing, loading thresholds, toast timing,
+  save model and surface colours now defer to `design` instead of restating it; Tailwind tracking
+  comes from type-role tokens; `color-scheme: only` is valid (it opts out of forced darkening);
+  `<g transform>` vanishing is scoped to intermittent WebKit bugs; `:blank` ships nowhere.
+- Advisory additions: hybrid validation timing with `:user-invalid`; 1.4.13 tooltip contract, 2.1.4
+  shortcuts, 2.2.1 timeout; two-colour focus ring; debounced autosave with flush and status;
+  `linear()` springs; relative-colour state derivation; DTCG 2025.10 format; derived `clamp()`;
+  password and passkey field mechanics; `display: grid-lanes` masonry.
 
 ## [0.4.0] — 2026-10-17
 

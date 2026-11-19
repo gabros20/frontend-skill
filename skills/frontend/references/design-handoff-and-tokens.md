@@ -58,9 +58,12 @@ from component-level code; that direct reference is what breaks the moment the t
 structure is design's authored decision, not frontend's to redefine; frontend's job is to wire it
 correctly, not to reinvent the tiering.
 
-Tokens interchange as W3C DTCG-format JSON: path-based (`color.paper.$value`), with `$type` required
-on every token (color, dimension, fontFamily, fontWeight, duration, cubicBezier, shadow, border, and
-more). A responsive value, such as a `clamp()` type-scale step, does not belong in the JSON at all;
+Tokens interchange as W3C DTCG-format JSON: path-based (`color.paper.$value`), each token typed
+(color, dimension, fontFamily, fontWeight, duration, cubicBezier, shadow, border, and more). Check
+which DTCG version the pipeline speaks: the stable format (2025.10) lets a group's `$type` apply to
+its tokens and writes colour as an object (`{ "colorSpace": "oklch", "components": [L, C, H] }`);
+older tooling expects CSS strings and per-token `$type`. Convert at the pipeline boundary, never by
+hand in the source. A responsive value, such as a `clamp()` type-scale step, does not belong in the JSON at all;
 keep a fixed, portable value in the token and leave the `clamp()` expression in CSS only. `oklch(...)`
 is accepted as a raw string by modern tooling (Style Dictionary, Token Studio, Cobalt), but convert
 it to hex or `color(oklch ...)` if the target pipeline doesn't support it, and flag that conversion
@@ -109,6 +112,11 @@ role names to map an arbitrary token set onto:
 `border`/`input`/`ring` (ring is the focus color), and a single `radius` token, since shadcn uses one
 radius value rather than a per-component scale.
 
+Interactive states are derived, not authored: implement design's deltas (`design` `color.md`
+"State derivation") with relative colour — `oklch(from var(--primary) calc(l - 0.03) c h)` — or
+`color-mix(in oklab, …)`, so a brand or theme change carries every state. Ship the computed static
+value first and the relative form inside `@supports (color: oklch(from red l c h))`.
+
 ## Building from a design file or image
 
 When the source is a Figma file or an approved comp image rather than a handoff package:
@@ -148,10 +156,9 @@ When the source is a Figma file or an approved comp image rather than a handoff 
 
 Pick one token strategy per project and hold it: Tailwind's `dark:` variant for utility-first
 projects, or CSS custom properties swapped under `[data-theme]`/`prefers-color-scheme` for
-token-driven or component-library projects. Don't mix both approaches in the same codebase. Never
-use pure `#000000`/`#ffffff`; an off-black or off-white keeps elevation and layering legible. Hold
-the same visual hierarchy and contrast floor in both modes; "make everything gray" is not a
-substitute for a designed dark theme. Respect `prefers-color-scheme` as the default unless the brand
+token-driven or component-library projects. Don't mix both approaches in the same codebase. Surface and
+ink values are design's (`design` `color.md` "Palette construction", "Dark mode"): implement what
+the tokens say, holding the same hierarchy and contrast floor in both modes. Respect `prefers-color-scheme` as the default unless the brand
 explicitly commits to a single mode. Test both modes before calling a surface done; a screen only
 ever viewed in light mode is unverified in dark mode specifically, not verified-by-default. The
 CSS-level mechanism behind `prefers-color-scheme`, `color-scheme`, and `forced-colors` lives in
