@@ -8,7 +8,47 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
-- Queue unreleased changes here.
+- **UI and component motion is now this pack's** (family decision D1): new `ui-motion.md`
+  (29th reference) — cheapest-driver ladder (CSS → `@starting-style` → keyframes → WAAPI →
+  library), library-free enter/exit with `allow-discrete` and `overlay` for top-layer exits,
+  fail-safe hidden start states, height-to-auto (`interpolate-size`/`calc-size`, grid `0fr→1fr`)
+  and FLIP, spring ζ conversion, interruption, track/release gestures with `pointercancel`/
+  `lostpointercapture`/`blur` cleanup (gesture section moved here from `web-platform-runtime.md`),
+  hover-flicker and press scoping, motion perf diagnosis (120 Hz budget, inherited-variable trap),
+  animated text a11y, scripted loops, SVG motion, safe removal and registry import, freeze-and-seek
+  verification. `react-native.md` gains RN/Expo motion principles. Router row, declared bundle,
+  description, Mission, AGENTS.md, and README now route motion code IN; values stay with
+  `design`, scroll-linked motion, entrances, and page transitions with `scroll-animation`.
+- `typography-css.md` (30th reference): unitless leading, synthesis, properties over raw OpenType
+  tags (the whole-list override trap), `text-box` trim, case and tracking, weight-on-hover reflow,
+  balance/hyphenation limits, decoration and drop caps, icon and colour fonts.
+- `design-handoff-and-tokens.md` **Building from a design file or image** (Figma read-at-source,
+  token rounding contract, drawn-only scope, comp-image medium rule, per-region gate, report
+  format); codebase token-extraction order, composite typography tokens, nested-theme trap.
+- `testing.md`: production build only, capture validity, overflow assertion, failed-reveal
+  signature and JS-disabled load, state drive, server HTML vs DOM, native screenshot loop, stress
+  harness and state workbench, removed-side diff review, no automation detection.
+- `site-rebuild.md`: effect and motion extraction traps, **Restyling in place** wiring inventory,
+  agent fetch rail. `css-craft.md`: browser-drawn surfaces, worst-case content table, gradient
+  borders, banding, progressive blur, clip-path focus/hit, SVG as `<img>`, cascade and image traps.
+- Smaller folds across `i18n.md` (logical-property limits, centring exception, Arabic-script
+  correctness, per-script fonts), `forms.md`, `performance.md` (font self-hosting, fallback choice,
+  WebGPU gate, measurement honesty), `web-platform-css.md`, `web-platform-runtime.md`,
+  `state-completeness.md`, `state-and-data.md`, `js-dom-craft.md`, `tailwind.md`, `shadcn.md`,
+  `nextjs.md`, Swift references. Evals: two motion activation positives, a scroll-linked negative,
+  three traversal cases.
+
+### Fixed
+- `accessibility.md`: WCAG large text is 24px / 18.66px bold (was 18px / 14px); the 2.5.8 spacing
+  exception is the non-intersecting 24px circle test; the `currentColor` focus ring is not
+  contrast-safe on filled buttons; the reduced-motion kill-switch is a last resort (it freezes
+  spinners and progress and does not stop scroll-driven animations) — motion is now authored
+  opt-in; WCAG 2.2.2 pause control, skip link, 1.4.12 text-spacing check added.
+- `forms.md`: the in-flight lock no longer uses native `disabled`/`fieldset disabled` on the
+  focused submit (focus fell to `<body>`).
+- `design-handoff-and-tokens.md`: current shadcn stores full `oklch()` values mapped via
+  `@theme inline` (the bare-triple claim was wrong).
+- `web-platform-runtime.md`: looping background video ships a 2.2.2 pause control.
 
 ## [0.4.0] — 2026-10-17
 

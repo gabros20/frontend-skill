@@ -25,6 +25,7 @@ Produces:
 - WTFPL (no attribution required)
 - No-license (facts re-expressed only)
 - Evaluated, not adopted as a target
+- Design-fold corpus (2026-11)
 - Underlying standards and references cited
 
 The pack was composed by mining our own `webdesign`/`design` skills plus the external frontend and
@@ -114,9 +115,9 @@ provenance in more detail.
 - **ibelick/baseline-ui** — Tailwind utility and runtime conventions. Drawn into `tailwind.md`,
   `web-platform-runtime.md`.
 - **antfu/skills** (`vitest`) — Vitest configuration and testing conventions. Drawn into `testing.md`.
-- **emilkowalski/skills** (`emil-design-eng`, `apple-design`) — runtime interaction conventions
-  (motion implementation itself routes OUT to the future animation skill). Drawn into
-  `web-platform-runtime.md`.
+- **emilkowalski/skills** (`emil-design-eng`, `apple-design`) — runtime interaction and gesture
+  conventions. Drawn into `ui-motion.md` (formerly `web-platform-runtime.md`); the 2026-11 pass is
+  under Design-fold corpus.
 - **web-quality-skills / accessibility skill** — WCAG 2.2 new criteria (focus-not-obscured),
   visually-hidden CSS, and live-region re-trigger recipe. Drawn into `accessibility.md`.
 - **yuschick/stylelint-plugin-defensive-css** — `require-scrollbar-gutter` and
@@ -169,7 +170,7 @@ copied.
   `tailwind.md`.
 - **safari-mobile-optimization**, **transparent-web-video**, **scroll-driven-video** — iOS Safari
   viewport/chrome hardening and web-video encoding/serving facts, re-expressed (scroll-scrub
-  choreography routes OUT to animation). Drawn into `web-platform-runtime.md`. **Consolidation
+  choreography belongs to `scroll-animation`). Drawn into `web-platform-runtime.md`. **Consolidation
   (2026-07-22):** full client-side surface of `transparent-web-video` + `safari-mobile-optimization`
   is merged into `web-platform-runtime.md` (patterns A–D, encode-breaking triad/bitrate bands,
   decorative video contract, chrome three layers + PWA verify checklist, input-zoom trade-off).
@@ -271,6 +272,33 @@ github-relay digests). Load-bearing facts re-expressed.
   idle-until-urgent + viewport idle prefetch. Drawn into `performance.md`.
 - **color-js gamut mapping**, Display-P3 SVG repeat bug reports — gamut map vs clip, pipeline table.
   Drawn into `web-platform-css.md`.
+
+## Design-fold corpus (2026-11)
+
+Ten reader lanes over external design, motion, and typography skills; folds re-expressed in this
+pack's words, code adapted, never pasted. Motion implementation became this pack's (UI and
+component motion, `ui-motion.md`); type rendering got its own home (`typography-css.md`).
+
+- **MIT** — emilkowalski/skills (animate, animation-performance, gestures, remove-animations,
+  animate-expo, mobile-native, break-ui, write-swift, Sonner principles) ·
+  iart-ai/web-animation-skills (micro-interaction, 60fps-animation, svg-animation,
+  accessible-animation, verify toolkit) · ibelick/motion-primitives and ui-layouts/uilayouts
+  (component parameters: spring presets, digit reel, progressive blur; reduced-motion gaps) ·
+  jakubkrehel/skills and jakubkrehel/make-interfaces-feel-better (better-accessibility, better-ui,
+  better-typography, better-layout, better-colors, build-design, break, state-machine,
+  interface-review, explain-interface) · jpoindexter/typography-skills (principles drawn from
+  Lupton, Rutter, Brown, Hochuli, Elam, Coles, Stocks, Santa Maria, Latin, Kupferschmid; no book
+  text reproduced) · madebymustafa/design-taste · Nutlope/hallmark v2 · Leonxlnx/taste-skill 2.5 ·
+  Aayan15728/majestic-ui-skill · juliobsz/skills · gcomartins/myfskills · MengTo/skills ·
+  nateherkai/scroll-craft · wheresryan22/anatomy · lucasmarkes/hairline · teddarific/skills (anatomy-asset; folder LICENSE)
+  · benjitaylor/skills (stageshow; folder LICENSE) · Leonxlnx/cinetic.
+- **Apache-2.0** — pbakaus/impeccable (current release; its iOS/Android verification loop is
+  distilled from ehmo/platform-design-skills, MIT, per its NOTICE).
+- Corrections verified at the primary source 2026-11-19: WCAG 2.2 large-scale text and SC 2.5.8
+  spacing exception (w3.org), shadcn theming variable shape (ui.shadcn.com), `next/font` axes and
+  weight (nextjs.org). Motion's accelerated shorthands: motion CHANGELOG 14.2.0.
+- Unlicensed design-fold sources (DevMartinese/awwwards-animations-skill,
+  tponscr-debug/claude-skill-awwwards) contributed nothing to this pack.
 
 ## Underlying standards and references cited (not copied)
 
