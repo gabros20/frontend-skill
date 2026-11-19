@@ -42,6 +42,10 @@ actual delegate target, robust against a click landing on an inner span or icon.
 declarative action map: read `element.dataset.action`/`.dataset.id` inside the handler and
 dispatch via a lookup object, instead of one handler per element.
 
+A pointer-driven hover state (cursor preview, hover card, magnetic target) sticks when the page
+scrolls under a still pointer, because no `pointerleave` fires: on scroll, re-check
+`document.elementFromPoint(lastX, lastY)` against the target and clear the state if it moved out.
+
 One `AbortController`/signal pair is a single cancellation token across everything that accepts a
 signal, not just `fetch`: `addEventListener(type, fn, { signal })` auto-detaches on abort,
 `fetch(url, { signal })` cancels the request, custom async logic checks `signal.aborted`.
@@ -92,7 +96,12 @@ destructure `[entry]`. Two gotchas recur in every framework wrapper, not only Re
 fresh options object literal on every render/call recreates the observer whenever it sits in a
 dependency check — hoist it to a stable reference; (2) cleanup reading the observed node from a
 ref that may have changed since `observe()` was called unobserves the wrong node — capture it in
-a local const at observe-time instead. Restrain `MutationObserver` to the narrowest
+a local const at observe-time instead. One IO callback can carry several entries for the same
+target, oldest first (it left and re-entered between callbacks): act on the latest entry per
+target, or a stop/start toggle ends stopped while the element is on screen. Scroll-spy ("which
+section am I in"): collapse the root to the viewport's centre line — `rootMargin: "-50% 0px -50%
+0px", threshold: 0` — and take the intersecting entry; picking the highest `intersectionRatio`
+lets short sections beat tall ones. Restrain `MutationObserver` to the narrowest
 `subtree`/`childList`/`attributes` combination needed; over-broad becomes its own perf problem.
 
 **IntersectionObserver for media.** `threshold: 1` rarely fires for tall videos that never reach
@@ -236,4 +245,4 @@ sendBeacon reliability (nicj.net), 0.1+0.2/Intl.NumberFormat; MDN - scrollIntoVi
 beforeinput, key vs code, IntersectionObserver options; web-media-perf C-web-26–29 - media IO
 rootMargin/threshold split, AbortController on leave, initial callback / double-fire, ResizeObserver
 loop (rAF batch, sentinel); TrackJS/Sentry RO loop reports; local-specialists C-16 debounce exit
-~120ms (re-expressed). -->
+~120ms (re-expressed); design-fold 2026-11: juliobsz/skills (MIT) pointerleave-on-scroll stuck hover; gcomartins/myfskills (MIT) centre-line scroll-spy; wheresryan22/anatomy (MIT) multiple IO entries per target. -->

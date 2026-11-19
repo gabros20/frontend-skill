@@ -145,7 +145,10 @@ function, so a stale response from a superseded request can't overwrite fresher 
 `.catch()`, not just `.finally()`, to an async chain that sets state: a rejection skips a trailing
 "reset the loading flag" line placed only after the await, so reset loading flags in `finally`.
 Never pass an `async` function directly as an effect callback; wrap the async work in an inner
-function instead.
+function instead. Async loaders (images, textures, data) that resolve after unmount check a disposed
+flag and dispose what they return. Libraries that rewrite an element's DOM (text splitting,
+scramble, typewriter) touch only text React never re-renders; never remove a React-owned node
+imperatively (`ui-motion.md` Animated text and numbers).
 
 ## Effects as synchronization; per-render closures
 
@@ -272,4 +275,5 @@ over renderX; vercel-labs/agent-skills @vercel-react-best-practices residual —
 in deps, module-level init once, memo default-param reference trap; alan2207/bulletproof-react —
 children isolation, multi error boundaries; TkDodo + @_nikhilsnayak_ auto-scroll without effect
 (human vs programmatic) — via authors-architecture.md, skills-finder.md, github-relay.md,
-x-bookmarks.md -->
+x-bookmarks.md; design-fold 2026-11: MengTo/skills optimize-web-animations (MIT) late-resolve
+dispose; juliobsz/skills (MIT) DOM-mutating effects vs React-owned nodes -->

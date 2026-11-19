@@ -65,7 +65,9 @@ Anything reachable via `localStorage`, `sessionStorage`, a public env-var prefix
 shipped client bundle is public, full stop — treat it as publication, not secrecy. A secret-shaped
 variable name behind a public prefix, or a secret committed to package metadata or a build
 artifact, ships to every visitor regardless of intent. Debug logs and dumps left in a public build
-output frequently leak source paths, internal routes, or tokens the same way.
+output frequently leak source paths, internal routes, or tokens the same way, and so do design notes:
+direction briefs never ride in comments, `data-*` attributes, hidden DOM, serialized props, RSC
+payloads, or metadata — a minifier stripping dev metadata is not a boundary.
 
 ## Auth storage ladder
 
@@ -334,4 +336,4 @@ frame-ancestors/XFO/meta-useless, DOM clobbering, XSS-defeats-CSRF) — digest-o
 github-relay.md; MDN/web.dev fetch credentials triad + credentialed CORS pairing —
 authors-architecture.md; X @devsterxyz OAuth cross-origin set-cookie-on-redirect; X
 @SixtusAgbakwuru Safari CORS checklist; X @iwashi86 auth storage ladder → BFF + DBSC —
-x-bookmarks.md; bulletproof-react client RBAC = UI only — github-relay / GAP_MAP -->
+x-bookmarks.md; bulletproof-react client RBAC = UI only — github-relay / GAP_MAP; design-fold 2026-11: pbakaus/impeccable craft-floor (Apache-2.0) design-brief leakage -->
