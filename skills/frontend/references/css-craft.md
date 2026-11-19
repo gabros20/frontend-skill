@@ -11,7 +11,7 @@ Read when:
 - Defensive flex wrap/gap defaults, hover-only affordances, Safari `filter` / blur paint failures, or
   inline SVG that lays out but never draws in Safari.
 - Stacking elements in one grid cell (crossfades, image-plus-badge overlays) instead of absolute
-  positioning.
+  positioning, or building a layered, collage, or poster-led composition.
 - A `position: sticky` element inside CSS Grid silently refuses to stick.
 - Choosing between the legacy padding-top intrinsic-ratio hack and `aspect-ratio`, or hitting its
   min/max sizing conflict.
@@ -44,6 +44,7 @@ Produces: CSS that degrades safely against unexpected content, viewport, or inte
 - Flex and gap defaults
 - Hover-capable media
 - Grid single-cell stacking
+- Composited layouts
 - Sticky-in-grid failure
 - `aspect-ratio`: legacy fallback and the min/max gotcha
 - Tabular numerals
@@ -107,6 +108,28 @@ Instead of `position: absolute; inset: 0` on every overlay layer, put `display: 
 and `grid-area: 1 / 1` on every child (Tailwind: `*:col-start-1 *:row-start-1`). Later children
 paint on top; to pin one on top regardless of DOM order (a badge over a crossfading image), use
 `z-index` inside an `isolation: isolate` context (`web-platform-css.md`).
+
+## Composited layouts
+
+The code side of layered, collage, and poster-led sections; design specifies the planes, kit, and
+stages (`design` `composition-layers.md` "The plane stack", "Text and image interleave",
+"Responsive stage or flow", "Floors and performance").
+
+- **Stage:** a size container with a locked `aspect-ratio`; place and size layers in container
+  units (`cqi`/`cqw`) so the picture scales as one, and swap stages (wide, tall) with a container
+  query. When text inside hits its size floor, switch stage — never shrink text further.
+- **Flow:** overlap through shared grid cells (Grid single-cell stacking above), not absolute
+  offsets, so layers restack in reading order on narrow screens.
+- **Interleave:** type behind a subject is real text under an alpha image, never text baked into
+  the picture; image-in-type is `background-clip: text` (declare the `-webkit-` form too) with a
+  solid `color` fallback; contour wrap is `shape-outside` on a float with a matching `clip-path`;
+  overprint is `mix-blend-mode: multiply` inside `isolation: isolate`, with contrast measured on the
+  blended result. Art-direct crops per stage with `<picture>`.
+- **Cost:** flatten planes that never move apart into one plate; priority-load the subject or
+  headline and lazy-load decoration.
+- **Floors:** DOM order is reading order whatever the z-order; decorative layers are `aria-hidden`
+  with `pointer-events: none` and never cover a control or its focus ring; at 320px and 200% zoom a
+  stage gives way to flow.
 
 ## Sticky-in-grid failure
 

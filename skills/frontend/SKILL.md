@@ -15,12 +15,8 @@ description: >-
 ## Mission and boundary
 
 Implement the production client — the code people actually run — across websites, web apps, iOS,
-and Android. That spans the whole register: bringing a distinctive, art-directed website design to
-pixel-perfect life is as much this skill's job as dense application UI. It covers component and
-state architecture, routing, data fetching and API integration, forms and auth flows, responsive
-and accessible interfaces, UI and component motion, the full state set in code, client-side
-security, frontend performance, and the tests that guard it. Own the implementation and its craft; consume design's intent rather
-than re-deciding it.
+and Android, from art-directed websites built pixel-perfect to dense application UI. Own the
+implementation and its craft; consume design's intent rather than re-deciding it.
 
 Adjacent work this pack does not own: experience intent, visual direction, tokens-as-decisions, and
 look-and-feel critique, and motion values and choreography decisions (`design`); scroll-linked
@@ -33,10 +29,39 @@ monitoring, and store delivery (`operate`) — but the client *build* config is 
 spanning systems you do not own — a client triggering a cross-vendor workflow is `automation`'s, not
 this pack's.
 
-When design supplies a `handoff.yaml` and `DESIGN.md`, consume them as the source of truth for
-tokens, states, and per-screen intent; implement that intent faithfully and report conflicts rather
-than silently overriding. Operate independently when invoked alone. Recommend adjacent skills when
+A design `handoff.yaml` and `DESIGN.md` are the source of truth for tokens, states, and per-screen
+intent. Operate independently when invoked alone. Recommend adjacent skills when
 useful; do not invoke them automatically unless the user requested a composition workflow.
+
+## Standalone context check
+
+Before producing anything the user will have to live with:
+1. **Look first.** Read `digital-product/LEDGER.md` (Context), `digital-product/<pack>/`, upstream
+   artifacts, the repo and this conversation. A fact found is never asked; a fact recorded is never
+   re-asked.
+2. **Size it.** Reversible and small → proceed, stating assumptions. New, costly or hard to undo →
+   check.
+3. **Ask only what the owner alone knows**, in their words: one round, at most four, highest
+   leverage first, each with a recommended answer ("ok" accepts all). Two rounds at most.
+4. **No or thin answers → decide as the expert.** Record each assumption with its basis and cost to
+   reverse; prefer the reversible option; show the cheapest proof early.
+5. **No way to ask → never block.** Proceed, and open the artifact with the assumptions and the
+   answers that would change it most.
+6. **Write it down.** Answers and assumptions go to the LEDGER's Context block.
+
+This pack's questions:
+1. Where will this run, and who maintains it? (Detect the stack first; ask only what the repo
+   can't tell you.)
+2. What is the design source of truth: a handoff, a Figma file, a comp, an existing site — or none?
+3. Where does the data come from: a real API (which), mocks, or static content? Is there sign-in?
+4. Who edits the content afterwards: developers, or non-developers through a CMS?
+5. What does "done" mean here: a prototype to react to, or production with tests and a deploy?
+6. Any targets beyond the defaults: older browsers, specific devices, languages, a performance
+   budget, an accessibility level above WCAG 2.2 AA?
+
+**No design source:** when `design` is installed, say so and recommend it; when it is not, build the
+category standard from the project's component library, state that no design direction was set, and
+keep tokens in one place so a direction can land later.
 
 ## Route before acting
 
@@ -48,12 +73,8 @@ useful; do not invoke them automatically unless the user requested a composition
    guidance to a SwiftUI or Compose screen.
 3. Add a web stack overlay **only when the platform is web AND a covered stack is named or detected**
    (React, Next.js, Tailwind, shadcn/ui). At most one framework, one styling, one component overlay.
-   For an uncovered stack (Vue, Svelte, Solid, Remix, Astro, UIKit, Flutter, and the rest), skip the
-   overlay: the core job ref plus the platform substrate carry the work, and the project's own
-   conventions win. Optional deeper skills + official docs for common uncovered or library stacks
-   are listed in the matching reference when one exists (`nextjs.md`, `data-fetching-libraries.md`,
-   `react-native.md`); for **Astro** (no dedicated overlay), see the short pointer block under
-   Concern below.
+   For an uncovered stack, skip the overlay: the core job ref plus the platform substrate carry the
+   work, and the project's own conventions win (pointers under Uncovered frameworks below).
 4. Add only the concern references that materially affect the output.
 5. Read every selected reference completely before writing the affected code. Do not load sibling
    platform or stack overlays you did not select.
@@ -83,7 +104,7 @@ Add the one substrate the request targets. At most one. Native overrides web def
 | When the platform is | Read | Expected contribution |
 |---|---|---|
 | The web (default substrate) | [Web platform CSS](references/web-platform-css.md) + [Web platform runtime](references/web-platform-runtime.md) | Modern CSS layout/stacking/margin collapse/color-gamut; SPA routing, storage, Safari/iOS hardening, transparent+scrub video traps, Popover/Anchor floors, View Transitions |
-| Polish or harden CSS details — scrollbars, stacking, overflow, blur/compositor, numeric alignment, defensive patterns | [CSS craft](references/css-craft.md) | Scrollbar/overscroll/grid patterns; Safari blur/backdrop-root/will-change layer craft; paint/texture budgets; aspect-ratio and micro-patterns |
+| Polish or harden CSS details — scrollbars, stacking, overflow, blur/compositor, numeric alignment, defensive patterns, composited (layered, collage, poster-led) layouts | [CSS craft](references/css-craft.md) | Scrollbar/overscroll/grid patterns; Safari blur/backdrop-root/will-change layer craft; paint/texture budgets; aspect-ratio and micro-patterns |
 | Typography in CSS — units, synthesis, OpenType features, cap-height trimming, wrapping, decoration | [Typography CSS](references/typography-css.md) | Unitless leading, no faked faces, properties over raw feature tags, `text-box` trim, hyphenation and balance limits, icon and colour fonts |
 | Vanilla DOM and browser-API mechanics — events, observers, clipboard, timing, measurement, cross-tab | [JS DOM craft](references/js-dom-craft.md) | Event delegation, AbortController-as-cleanup, microtask/macrotask/rAF timing, media IO+abort patterns, ResizeObserver loop, structuredClone, cross-tab sync |
 | Native iOS / iPadOS | [SwiftUI](references/swiftui.md) (+ [Swift concurrency and testing](references/swift-concurrency-and-testing.md) when async or tests are involved) | SwiftUI/HIG conformance in code; Swift concurrency correctness and Swift Testing |
@@ -104,7 +125,7 @@ Add only when the platform is web and the project names or uses the stack. Skip 
 | React components, hooks, effects, state placement | [React components and state](references/react-components-and-state.md) | Composition, hook discipline, you-might-not-need-effect, dependency correctness |
 | React rendering, RSC/client boundary, hydration, memoization | [React rendering and RSC](references/react-rendering-and-rsc.md) | Memo-defeat family, RSC serialization boundary, hydration, code-split shape |
 | Next.js App Router, server actions, caching, next/* primitives | [Next.js](references/nextjs.md) | File conventions, RSC/server-actions, caching model, image/font/link primitives |
-| Data-fetching libraries — TanStack Query, SWR, React Router data APIs, TanStack Start | [Data fetching libraries](references/data-fetching-libraries.md) | Current-API pointers per library; the cache/optimistic/no-waterfall principles themselves are homed in `state-and-data.md` |
+| Data-fetching libraries — TanStack Query, SWR, React Router data APIs, TanStack Start | [Data fetching libraries](references/data-fetching-libraries.md) | Current-API pointers per library (principles live in `state-and-data.md`) |
 | Tailwind CSS — theme, utilities, responsive variants | [Tailwind](references/tailwind.md) | v4 `@theme` canonical (v3 compat), `cn`/twMerge/CVA, the postcss trap |
 | shadcn/ui and component-library selection | [shadcn](references/shadcn.md) | Registry/CLI/ownership model, composition recipes, official-library selection table, icon discipline |
 | The Solid Glass theme, or a thick-glass material on a shadcn/ui app (replaces shadcn as the component overlay) | [Solid Glass](references/solid-glass.md) | Base UI requirement, pinned registry install, material and deltas from stock, agent components bound to run states, forced-colours and reduced-transparency fixes |
@@ -117,16 +138,14 @@ Add when the request involves it, on any platform.
 
 ### Uncovered frameworks: optional skills + docs (not full overlays)
 
-These stacks do **not** have a dedicated reference in this pack. Still run the core job + platform
-substrate (and project conventions). When the task is deeply framework-specific, install a
-specialist skill and open live docs rather than inventing conventions:
+No dedicated reference; run the core job + platform substrate. When the task is deeply
+framework-specific, install a specialist skill and open live docs rather than inventing conventions:
 
 | Stack | Deeper skill (skills.sh) | Official docs |
 |---|---|---|
 | **Astro** | `npx skills add astrolicious/agent-skills@astro` (~11K) · Clerk: `clerk/skills@clerk-astro-patterns` | [docs.astro.build](https://docs.astro.build) — prefer [on-demand rendering](https://docs.astro.build/en/guides/on-demand-rendering/) over legacy “SSR” slugs |
 | **Remix / React Router framework mode** | `npx skills add remix-run/agent-skills@react-router-framework-mode` (~3K, official) | [reactrouter.com](https://reactrouter.com/start/framework/installation) (Remix successor); archive: [remix.run/docs/en/main](https://remix.run/docs/en/main) |
-| **TanStack Start** | Covered as a **pointer** in [Data fetching libraries](references/data-fetching-libraries.md) + `npx skills add deckardger/tanstack-agent-skills@tanstack-start-best-practices` | [tanstack.com/start/latest](https://tanstack.com/start/latest) |
-| **TanStack Query / Router** | Same reference + Query/Router companion skills listed there | [tanstack.com/query/latest](https://tanstack.com/query/latest) · [tanstack.com/router/latest](https://tanstack.com/router/latest) |
+| **TanStack Start / Query / Router** | Pointers and companion skills in [Data fetching libraries](references/data-fetching-libraries.md) | [tanstack.com](https://tanstack.com) |
 
 Vue, Svelte, Solid, Flutter, UIKit: no high-signal single skill pinned here — use project docs +
 official framework docs; do not force Next/Expo patterns onto them.
@@ -170,38 +189,16 @@ Hold on every job, whether or not the reference that owns the detail is open:
 - **Preserve design intent and product constraints.** Implement the handoff faithfully; when code
   and a design, brand, or architecture constraint conflict, report it rather than silently override.
 
-## Core workflow
+## Workflow, artifact, and completion
 
-1. Inspect the request, the repository (stack, conventions, existing components), and any supplied
-   `handoff.yaml`/`DESIGN.md` or upstream artifacts.
-2. Route to the smallest sufficient set: one primary job, at most one platform overlay, at most one
-   web stack overlay per axis, only material concerns.
-3. State material assumptions, detected stack, and unresolved inputs.
-4. Write the production code — components, state, tests — matching the project's conventions.
-5. Validate against the request, the full state set, the accessibility and performance floors, and
-   the dev-loop self-check; fix what the check surfaces.
-6. Emit a compact handoff when downstream work (quality verification, operate/deploy) is expected.
-
-## Artifact contract
-
-Frontend work delivers production code, its tests, and short implementation notes — not a design
-document. Code conforms to the project's conventions and ships with the full state set, accessibility
-floors met, and the tests that guard the change. Implementation notes state the detected stack, the
-assumptions made, the states and edge cases covered or deferred, and what validation was run versus
-what remains. When the work feeds a downstream skill (quality for audit, operate for deployment),
-emit a dual-channel handoff: the code and tests plus a brief note of paths, public contracts touched,
-known gaps, and the recommended next skill.
-
-## Completion and handoff
-
-Before completion:
-
-- Confirm every requested change exists in code and its tests pass, or state precisely which do not.
-- Confirm the full state set, accessibility floors, and (where relevant) performance budget are met.
-- Run the `testing.md` dev-loop self-check, report what it surfaced, and distinguish validation
-  performed from validation remaining. Never present unrun code as verified.
-- When downstream work is expected, provide file paths, public contracts touched, remaining risks,
-  and a recommended next skill without duplicating the full artifact.
+1. Run the context check above, then route to the smallest sufficient set.
+2. Write the production code, tests included, matching the project's conventions. Implementation
+   notes state the detected stack, assumptions, states covered or deferred, and validation run versus
+   remaining — never a design document.
+3. Validate against the request, the full state set, the accessibility and performance floors, and
+   the `testing.md` dev-loop self-check; fix what it surfaces and report what remains.
+4. When quality or operate work follows, hand off paths, public contracts touched, known gaps, and
+   the recommended next skill, without duplicating the artifact.
 
 ## Artifact home
 

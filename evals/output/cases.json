@@ -63,5 +63,24 @@
       "Closing the tab or unmounting closes the stream only; cancel and approve are authenticated API calls with an idempotency key.",
       "The approval card shows the exact operation, target, normalized parameters, and expiry from the approval event."
     ]
+  },
+  {
+    "id": "standalone-no-design-context-check",
+    "prompt": "Build me a landing page for my bookkeeping app in Next.js. No designs yet \u2014 just make it look good.",
+    "assertions": [
+      "Before writing code it reads the repo and any digital-product/LEDGER.md Context, and asks nothing the repo already answers (stack, existing components).",
+      "It asks at most four questions in one round, each with a recommended answer (for example the design source, where content and data come from, and whether 'done' means prototype or production) \u2014 or, if it cannot ask, proceeds and opens the result with the assumptions that would change it most.",
+      "It says no design direction was set: it recommends the design skill if installed, or otherwise builds the category standard from the project's component library with tokens kept in one place.",
+      "Answers and assumptions are recorded in the LEDGER's Context block, each assumption with its basis and cost to reverse."
+    ]
+  },
+  {
+    "id": "composited-hero-code-contract",
+    "prompt": "Implement this collage hero from the design spec: a cutout photo over a giant headline, a few sticker labels, and a grain finish; it must work on phones.",
+    "assertions": [
+      "The headline is real text in the DOM, placed behind the alpha cutout image, never baked into the picture; DOM order is reading order regardless of z-order.",
+      "The stage is a size container with a locked aspect-ratio and layers sized in container units, or overlap is built with shared grid cells; a phone stage or flow fallback exists, with no clipped text or sideways scroll at 320px.",
+      "Decorative layers (stickers, grain) are aria-hidden with pointer-events: none and never cover a control or its focus ring; the subject or headline is priority-loaded and decoration lazy-loaded."
+    ]
   }
 ]

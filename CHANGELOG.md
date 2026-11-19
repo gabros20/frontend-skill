@@ -8,6 +8,14 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
+- SKILL.md **Standalone context check** (before routing): the family's common core (look first,
+  size it, ask at most four owner-only questions with recommended answers, decide as the expert,
+  never block, record in the LEDGER), six frontend questions, and the no-design-source rule.
+- `css-craft.md` **Composited layouts**: stages as size containers with container units, grid-cell
+  overlap for flow, real text behind alpha cutouts, `background-clip: text`, `shape-outside`
+  contour wrap, isolated overprint, flattening and load priority, reading-order and decoration
+  floors; points to `design` `composition-layers.md`. Evals: no-design standalone output case,
+  composited-hero output and traversal cases.
 - `solid-glass.md` (31st reference, deeplethe/solid-glass, MIT): adopting the Solid Glass theme on
   shadcn/ui: the Base UI vs Radix/AI Elements conflict, registry install and pinning, how the
   unlayered material hangs on `bg-card`/`bg-popover`/`bg-sidebar` and what that costs overrides and

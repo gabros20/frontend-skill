@@ -282,5 +282,20 @@
       "references/compose.md",
       "references/react-native.md"
     ]
+  },
+  {
+    "id": "collage-hero-composited-css",
+    "prompt": "Code the poster-style collage section from the handoff: layered cutouts, rotated labels and overlapping display type, in our Tailwind site.",
+    "expected_references": [
+      "references/css-craft.md",
+      "references/design-handoff-and-tokens.md",
+      "references/tailwind.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md",
+      "references/react-native.md",
+      "references/site-rebuild.md"
+    ]
   }
 ]
