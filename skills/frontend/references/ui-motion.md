@@ -12,8 +12,8 @@ Read when:
 - Removing, auditing, or verifying motion in an existing codebase.
 
 Skip when:
-- Choosing durations, curves, spring feel, choreography, or whether to animate at all: `design`
-  `motion.md`.
+- Choosing durations, curves, spring feel, or whether to animate at all: `design` `motion.md`;
+  ordering, stagger, exits, and gesture thresholds: `design` `choreography.md`.
 - Scroll-linked motion, scroll reveals and entrances, page transitions, smooth scroll:
   `scroll-animation`.
 - The reduced-motion floor and pause-control rule themselves: `accessibility.md` (Reduced motion).
@@ -43,7 +43,8 @@ verified frame by frame.
 ## Pick the cheapest driver
 
 Durations, curves, and spring parameters come from `design` `motion.md` ("Canonical scale",
-"Springs and gestures") or the project's motion tokens. Wire them as tokens; five near-identical
+"Springs") or the project's motion tokens; ordering and stagger from `design` `choreography.md`
+("Stagger", "Exits, swaps and direction"). Wire them as tokens; five near-identical
 hand-typed `cubic-bezier()`s are a consolidation finding. Climb only as far as the motion needs:
 
 | Need | Driver |
@@ -58,8 +59,9 @@ Anything rAF-driven (GSAP, a library's layout animation, a motion value read eac
 the main thread; CSS and WAAPI animations of `transform` and `opacity` can run on the compositor.
 Motion that plays during navigation, fetching, or hydration belongs in CSS or WAAPI: that is
 exactly when a rAF-driven indicator drops frames. Whether a library's `x`/`y`/`scale` shorthands
-are accelerated depends on its version (Motion accelerates time-based shorthands from 14.2;
-per-frame motion-value bindings never are), so check the installed version before rewriting
+are accelerated depends on its version (Motion accelerates time-based shorthands from 14.2; values
+computed in JS each frame — pointer-driven, `useTransform` chains — stay on the main thread), so
+check the installed version before rewriting
 working code. Library APIs live in the library's own docs or packaged skill.
 
 ## Enter and exit
@@ -120,7 +122,7 @@ dialog[open] { opacity: 1; transition-duration: var(--dur-enter); }
   retarget from the current value; keyframes restart from zero. An interrupted animation starts
   from the element's live value, never the target. Drive 2D motion with independent X and Y springs
   (one spring on a 2D distance desyncs when the axes' velocities differ). Never lock input during a
-  transition.
+  transition (`design` `choreography.md` "Timing family, overlap and interruptibility").
 
 ## Gestures and drag
 
@@ -130,10 +132,14 @@ dialog[open] { opacity: 1; transition-duration: var(--dur-enter); }
   release velocity to a spring (disable the library's own momentum when you do); clamp overshoot
   on dismiss, or the sheet springs past its edge and flashes a gap. Derive linked values (backdrop
   opacity, page scale) from the one drag value, never a parallel animation.
-- **Dismissal and edges:** dismiss once `velocity = |dragDistance| / elapsedTime` crosses roughly
-  `0.11`, regardless of distance, so a flick suffices; at a natural boundary apply
+- **Dismissal and edges:** commit on distance *or* velocity
+  (`velocity = |dragDistance| / elapsedTime`, in px/ms; thresholds are design's, `design`
+  `choreography.md` "Gestures"), so a flick and a slow drag both work; at a natural boundary apply
   `resistance(overshoot, dimension, c=0.55) = overshoot·dimension·c / (dimension + c·|overshoot|)`
-  instead of a hard stop. Thresholds and feel are design's ("Springs and gestures").
+  instead of a hard stop.
+- **Sheets and drawers:** use the project's maintained component (shadcn Drawer or equivalent)
+  before hand-rolling — momentum, the linked overlay, focus trap, and Escape are weeks of edge
+  cases; hand-roll only bespoke drags.
 - **Pointer mechanics:** `setPointerCapture(pointerId)` once a drag begins; ignore extra touch
   points mid-drag; keep a short `pointermove` history for release velocity; ~10px of hysteresis
   before committing a tap to a drag or a drag to an axis, detecting candidate gestures in parallel
@@ -143,7 +149,9 @@ dialog[open] { opacity: 1; transition-duration: var(--dur-enter); }
   release outside the control, and window `blur`, clear drag state and release capture; the next
   drag must work without a reload.
 - **Touch scoping:** `touch-action: pan-y` for vertical-scroll areas, `pan-x` for horizontal
-  strips, `none` for surfaces that own the gesture, `manipulation` on plain tappables.
+  strips, `none` for surfaces that own the gesture, `manipulation` on plain tappables. A dragged
+element takes the axis it doesn't move on (`pan-x` on a vertical-drag sheet) so the browser
+doesn't fight the drag.
   `{ passive: true }` on `touchstart`/`wheel` listeners that never `preventDefault()`, and never on
   one that does. `-webkit-tap-highlight-color: transparent` plus an explicit `:active` state.
 - **Native first:** a swipeable strip is `overflow-x` plus `scroll-snap` before it is a JS
@@ -165,9 +173,10 @@ dialog[open] { opacity: 1; transition-duration: var(--dur-enter); }
   stable parent or hit layer and animate an inner child (`.card:hover .card-surface`). Canvas and
   SVG figures hit-test the rest pose; logic reads a spring's target, not its position.
 - A hover preview puts its `transition-delay` on the `:hover` rule only, so leaving is instant.
-- Press feedback (values: `design` `motion.md` "Physical correctness and press feedback") fires on
+- Press feedback (values: `design` `motion.md` "Physical correctness, press and hover") fires on
   `:active` / `pointerdown`, never `click`; scope it to enabled controls (`:not(:disabled):active`),
   transition the exact property (`scale` or `transform`), and give the component an opt-out variant.
+  Scale the control or a wrapper, never a bare text node (it shimmers).
 
 ## Motion performance traps
 
@@ -197,14 +206,12 @@ Compositor-safe properties, `will-change`, and paint traps: `performance.md` and
 
 ## Scripted loops and demos
 
-- **Live figure loop:** one rAF loop per figure; `dt` from the rAF timestamp, clamped after a pause;
-  write attributes and `textContent` through refs, never re-render the framework per frame; stop
-  when every value and velocity is within epsilon of its target, and while offscreen or
-  `document.hidden`; re-append nodes for depth only when the order changed; budget ~1ms of script.
+- **Live figure loop:** one rAF loop; `dt` from the rAF timestamp, clamped after a pause; write
+  through refs, never re-render the framework per frame; stop when settled, offscreen, or
+  `document.hidden`; budget ~1ms of script.
 - **Clock-driven demos:** compute every frame from one time value `t`, so the demo scrubs, freezes
-  for screenshots, and renders its end frame under reduced motion; transitions only smooth between
-  `t`-derived states. Draw at a fixed stage size scaled by one `transform`, and prefix every class
-  and `@keyframes` per instance (keyframe names are global).
+  for screenshots, and renders its end frame under reduced motion. Prefix every class and
+  `@keyframes` per instance (keyframe names are global).
 - Background tabs throttle timers and pause rAF: a preloader or progress counter carries a hard
   time cap that always reveals the page.
 
@@ -239,21 +246,9 @@ Compositor-safe properties, `will-change`, and paint traps: `performance.md` and
   must stay in sync. The Performance panel shows no per-frame Layout or Paint for the moving element.
 - Judge gestures and feel on a real 120 Hz phone; a desktop trackpad and a 60 Hz monitor hide both.
 
-<!-- sources: emilkowalski/skills (MIT) — animate (tool ladder), animation-performance (diagnosis
-order, 120 Hz budget, inherited-variable trap, drop-shadow, visibility-after-fade, throttling caveat),
-gestures (track/release, linked values, overshoot clamp), remove-animations (removal hazards),
-emil-design-eng (@starting-style, transitions vs keyframes, percentage translate), mobile-native
-(touch-action manipulation, native snap); iart-ai/web-animation-skills (MIT) — micro-interaction +
-css-recipes (@starting-style, allow-discrete, overlay), 60fps-animation (height auto, FLIP),
-svg-animation (fill-box, pathLength, morph structure, SVGO), accessible-animation (registry gating),
-scripts/README (freeze-and-seek verification); ibelick/motion-primitives (MIT) — spring presets
-tallied for the ζ examples, sliding-number reel, text-effect a11y; ui-layouts/uilayouts (MIT) —
-spring tallies, per-frame lerp anti-pattern; jakubkrehel/skills (MIT) — enter-exit, press scoping,
-icon cross-fade grid stack, CSS stagger fill-mode, presence-wrapper first mount; pbakaus/impeccable
-(Apache-2.0) — interrupted-gesture cleanup and gesture evidence, hover moves a child; Nutlope/hallmark
-+ Leonxlnx/taste-skill (MIT) — content visible without script; juliobsz/skills (MIT) — pre-paint
-reveal class, DOM-mutating text effects; MengTo/skills (MIT) — clock-driven demos;
-wheresryan22/anatomy + lucasmarkes/hairline (MIT) — hover flicker loop; anatomy — live figure loop; gcomartins/myfskills (MIT) —
-background-tab preloader cap; motion CHANGELOG 14.2.0 (accelerated shorthands); MDN @starting-style,
-transition-behavior, interpolate-size. Gesture pointer mechanics moved here from
-web-platform-runtime.md (emilkowalski emil-design-eng + apple-design, ibelick baseline-ui). -->
+<!-- sources (MIT unless noted; detail in SOURCES.md "Design-fold corpus"): emilkowalski/skills,
+iart-ai/web-animation-skills, ibelick/motion-primitives, ui-layouts/uilayouts, jakubkrehel/skills,
+pbakaus/impeccable (Apache-2.0), Nutlope/hallmark, Leonxlnx/taste-skill, juliobsz/skills,
+MengTo/skills, wheresryan22/anatomy, lucasmarkes/hairline, gcomartins/myfskills; motion CHANGELOG
+14.2.0; MDN @starting-style, transition-behavior, interpolate-size. Gesture pointer mechanics moved
+here from web-platform-runtime.md (emilkowalski, ibelick/baseline-ui). -->

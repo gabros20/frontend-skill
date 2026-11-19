@@ -133,10 +133,9 @@ When the source is a Figma file or an approved comp image rather than a handoff 
   chrome, countable diagrams, and anything that moves are code.
 - **Measure; never grade a recreation from memory** — models believe their rebuild of an image
   succeeded when it didn't. Write a measured spec first (viewport and DPR, container, grid, bands,
-  type, color, radii, spacing), then build in passes (block-out, type, spacing, color, details,
-  other widths), diffing after each. Fix the highest shifted region first, since it pushes
-  everything below; change one thing per round and revert any change that lowers the score; don't
-  polish color while structure is off. Judge per region: *missing* needs its material,
+  type, color, radii, spacing), then build in passes, diffing after each. Fix the highest shifted
+  region first, since it pushes everything below; change one thing per round and revert any that
+  lowers the score. Judge per region: *missing* needs its material,
   *contradicted* needs its structure re-derived, *drift* is where size and spacing edits belong — a
   high overall score never excuses a missing region. The first viewport must hold across
   1280–1600px desktop widths, not only the comp's. After ~3 failed rounds on a region, escalate.

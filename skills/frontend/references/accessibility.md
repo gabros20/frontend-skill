@@ -221,7 +221,7 @@ commonly fails on secondary text and disabled states even when light mode passes
 
 Spacing exception, as tested: an undersized target passes when a 24 CSS px circle centred on its
 bounding box intersects no other target and no other undersized target's circle. Inline links,
-UA-styled controls, an equivalent control elsewhere, and essential sizes are also exempt.
+UA-styled controls, an equivalent control on the same page, and essential sizes are also exempt.
 
 The target is the interactive area, not the visual glyph. Expand hit area with padding or
 `::after { inset: -10px }`, never by enlarging the visible icon. Put the expansion on the `<label>`
@@ -246,7 +246,7 @@ The blanket kill-switch is a last-resort net for motion you can't scope, not the
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -256,16 +256,17 @@ The blanket kill-switch is a last-resort net for motion you can't scope, not the
 ```
 
 - It freezes indeterminate spinners, skeleton pulses, and progress bars at one iteration, which
-  erases their "busy" meaning: re-declare essential indicators inside the block, or swap them for
-  an opacity pulse. It also makes meaning-carrying state fades instant; audit for lost feedback.
+  erases their "busy" meaning: re-declare essential indicators inside the block with `!important`
+  at higher specificity, or swap them for an opacity pulse. It also makes meaning-carrying state fades instant; audit for lost feedback.
 - `0.01ms`, not `0s`, so code waiting on `transitionend`/`animationend` still runs.
 - It does not stop scroll-driven animations (their timeline ignores duration): reset those with
   `animation: none` (`scroll-animation` `accessibility.md` "Per engine and API").
 
 **Pause control (WCAG 2.2.2):** anything that moves on its own for more than five seconds beside
 other content — marquee, carousel, ticker, ambient loop, muted background video — ships a visible,
-focusable pause control (rendered only when script runs, since without script the loop never
-starts), pauses on hover and `:focus-within`, runs only while on screen, and stops in CSS, not only
+focusable pause control (start CSS loops under the same script-set class as hidden start states,
+`ui-motion.md` Enter and exit, so the no-script page is still, and render the control only with
+script), pauses on hover and `:focus-within`, runs only while on screen, and stops in CSS, not only
 JS, under reduced motion. Auto-updating content gets pause or frequency control. No content flashes
 above 3Hz (WCAG 2.3.1, seizure risk) regardless of the reduced-motion setting.
 

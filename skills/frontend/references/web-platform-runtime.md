@@ -655,13 +655,8 @@ Placement and silent-failure modes:
   bitmap ghost. Prefer a text-morph recipe that hides the old and shows a full-res new, not plain
   share of large type.
 - **One driver per navigation.** A custom page-transition curtain and React `<ViewTransition>`
-  never drive the same navigation; a route-level `loading.tsx` under a curtain lifts it onto a
-  skeleton.
-
-**Verify on sampled frames, normal and reduced:** old+new opacity sums to about 1 through a
-crossfade (a dip or flash otherwise), no entrance replays on content that persists, no old- or
-new-only layer outlives the transition, no paint swap or `box-shadow` snap at either end. During a
-transition judge the captured layers, not the live DOM.
+  never drive the same navigation. Curtain craft and transition verification: `scroll-animation`
+  `page-transitions.md`.
 
 Next wiring: `experimental.viewTransition: true` (Next 15+ canary / 16+). `addTransitionType` and
 programmatic navigation that participates in VT require Client Components.
@@ -683,5 +678,5 @@ failures, backdrop-root thin cross-ref); emilkowalski/emil-design-eng + apple-de
 ibelick/baseline-ui (MIT) - miner-ext-b.md; x-bookmarks #1 (@devongovett iOS 26 fixed-modal
 inner-viewport clip); skills-finder vercel-react-view-transitions (React VT mechanism, Next flag,
 canary rule, silent failures); github-relay phuocng/html-dom (modal scrollbar width compensation
-order-of-ops) -->
+order-of-ops)
 ; fold-wave-2b: SiteLint iOS video poster/preload; VisualViewport keyboard (MDN/bram.us/WebKit); mix-blend tall-page Safari reports; design-fold 2026-11: jakubkrehel/skills (MIT) iOS scaled-input variant, 2.2.2 pause on background video; jpoindexter/typography-skills + emilkowalski/skills mobile-native (MIT) text-size-adjust, touch-callout; pbakaus/impeccable (Apache-2.0) VT frame checks; juliobsz/skills (MIT) curtain vs ViewTransition, favicon set; gesture section moved to ui-motion.md -->

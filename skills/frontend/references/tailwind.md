@@ -98,9 +98,10 @@ More v4 wiring traps: default `@theme` drops variables no utility uses — use `
 hand-written CSS reads them; import a stylesheet of element rules with `layer(base)`, since unlayered
 element rules beat every utility; keep every `@import` above the first rule (a later one is
 dropped); and `--text-{xs…3xl}` and `--ease-in/out/in-out` are Tailwind's own names, so redefining
-them restyles every existing `text-lg` or `ease-out`. Semantic colors that `.dark` must repoint at
-runtime are declared in `@theme` without `inline` (an inlined value can't be overridden later), and
-a `--color-text-*` token doubles into `text-text-*` utilities.
+them restyles every existing `text-lg` or `ease-out`. Dark mode and `inline`: if `.dark` overrides
+a `--color-*` theme variable itself, declare it in `@theme` without `inline` (an inlined value can't
+be overridden later); if `.dark` repoints a raw variable the theme references (shadcn's `--primary`),
+keep `@theme inline`. A `--color-text-*` token doubles into `text-text-*` utilities.
 
 **SVG presentation attributes vs `@layer utilities` (Safari):** Tailwind v4 ships utilities inside
 `@layer utilities`. WebKit treats SVG presentation attributes (`width`, `height`, `fill`, …) as

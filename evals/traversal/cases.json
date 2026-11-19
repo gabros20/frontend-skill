@@ -239,7 +239,8 @@
       "references/swiftui.md",
       "references/compose.md",
       "references/react-native.md",
-      "references/web-platform-runtime.md"
+      "references/site-rebuild.md",
+      "references/typography-css.md"
     ]
   },
   {

@@ -2,13 +2,13 @@
 name: frontend
 description: >-
   Implement production frontend code for websites, web apps, iOS, and Android, from creative
-  website builds and faithful site rebuilds to dense product UI: components, state, data
-  fetching, forms, auth flows, chat and agent-run UIs, UI motion and micro-interactions,
-  responsive accessible interfaces, performance, client security, and tests.
-  Covers React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and React Native, and
-  builds from a design handoff, Figma file, or approved comp. Do not use for design direction or
-  motion specs, scroll-linked animation, SEO strategy, backend or system architecture, or QA audits
-  unless the request also requires frontend implementation.
+  builds and site rebuilds to dense product UI: components, state, data fetching, forms, auth
+  flows, chat and agent-run UIs, UI motion and micro-interactions, responsive accessible
+  interfaces, performance, client security, and tests. Covers React, Next.js, Tailwind, shadcn/ui,
+  SwiftUI, Jetpack Compose, and React Native, and builds from a design handoff, Figma file, or
+  approved comp. Do not use for design direction or motion specs, scroll-linked animation, SEO
+  strategy, backend or system architecture, or QA audits unless the request also requires frontend
+  implementation.
 ---
 
 # Frontend Engineering
@@ -92,7 +92,7 @@ Add the one substrate the request targets. At most one. Native overrides web def
 | Cross-platform native (React Native / **Expo default**) | [React Native](references/react-native.md) | Expo-first RN: Router, managed/prebuild, EAS, env/image/storage; core list/gesture/New Arch traps and motion principles; SwiftUI/Compose remain pure-native stacks |
 
 `css-craft.md`, `typography-css.md`, and `js-dom-craft.md` are supplementary web-substrate reads, not alternate
-substrates — add either alongside the web row (not instead of it) when the request specifically
+substrates — add any of them alongside the web row (not instead of it) when the request specifically
 needs that craft-level polish; they don't count against the "at most one" substrate rule above.
 
 ### Web stack overlay

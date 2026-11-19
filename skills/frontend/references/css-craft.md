@@ -88,66 +88,47 @@ a utility name; the raw longhand is `overscroll-behavior-x: contain`.
 
 ## Flex and gap defaults
 
-`flex-wrap` defaults to `nowrap`. `display: flex` alone does not wrap: when space is tight, items
-overflow or force scroll instead of wrapping. Whenever wrap is the intended behavior, set
-`flex-wrap: wrap` explicitly (or the Tailwind `flex-wrap` utility).
-
-Prefer `gap` over `justify-content: space-between` for rows with a **variable item count**.
-`space-between` looks fine with a fixed, full row; with two items on one breakpoint and five on
-another (or a last row with a single leftover), it creates awkward end-to-end stretches and
-inconsistent inter-item spacing. `gap` keeps spacing stable regardless of count; use space-between
-only when "push extremes apart" is the actual design intent for a known fixed set of children.
+`display: flex` doesn't wrap (`flex-wrap` defaults to `nowrap`): set `flex-wrap: wrap` whenever
+wrapping is intended. For rows with a variable item count use `gap`, not `justify-content:
+space-between`, which stretches a two-item or leftover row end to end; keep `space-between` for a
+known fixed set whose intent is "push extremes apart".
 
 ## Hover-capable media
 
-Gate hover-only affordances with `@media (hover: hover)` (optionally combined with
-`(pointer: fine)`). On touch devices, a half-tap while scrolling can leave `:hover` sticky until
-the next tap elsewhere, so hover-revealed controls, underline-on-hover links as the only affordance,
-or hover-dependent opacity can stick in a half-state. Apply hover styles only when the primary input
-can hover; for touch, use always-visible affordances or `:active`/`focus-visible` instead. Do not
-confuse this with `@media (pointer: coarse)` alone — some devices report coarse pointer but still
-synthesize sticky hover.
+Gate hover-only affordances with `@media (hover: hover)` (optionally `and (pointer: fine)`): on
+touch, a half-tap while scrolling leaves `:hover` stuck, so hover-revealed controls or
+hover-only underlines stick half-on. Touch gets always-visible affordances or `:active` /
+`:focus-visible`. `(pointer: coarse)` alone is not the gate — some coarse devices still synthesize
+sticky hover.
 
 ## Grid single-cell stacking
 
-Replace `position: absolute; inset: 0` boilerplate on every overlay layer: put `display: grid` on
-the parent, then give every child `grid-area: 1 / 1` (end lines default to `auto`, so all children
-land in the same cell). Paint order follows DOM order — later children sit on top by default.
-Tailwind form: `col-start-1 row-start-1` per child, or the arbitrary-child-variant shorthand
-`*:col-start-1 *:row-start-1` on the parent. Grid-stacking only controls layout position, not paint
-order — if a child must guarantee it sits on top regardless of DOM order (a badge over a
-crossfading image), add `z-index` inside an `isolation: isolate` stacking context (see
-`web-platform-css.md`), or reorder with `order` rather than moving markup.
+Instead of `position: absolute; inset: 0` on every overlay layer, put `display: grid` on the parent
+and `grid-area: 1 / 1` on every child (Tailwind: `*:col-start-1 *:row-start-1`). Later children
+paint on top; to pin one on top regardless of DOM order (a badge over a crossfading image), use
+`z-index` inside an `isolation: isolate` context (`web-platform-css.md`).
 
 ## Sticky-in-grid failure
 
-`position: sticky` silently doing nothing has two distinct causes, and only one is well known: an
-ancestor with `overflow: hidden | auto | scroll` clips the scroll container the sticky element would
-stick within (the classic cause). Less known: inside CSS Grid, a grid item's default
-`align-self: stretch` stretches the sticky element to fill its grid area's full height, leaving it
-nothing to stick relative to inside its own box. Fix: `align-self: start` alongside
-`position: sticky; top: ...`. Check both causes before concluding sticky "just doesn't work" on a
-grid layout.
+`position: sticky` silently doing nothing has two causes: an ancestor with `overflow: hidden |
+auto | scroll` (the well-known one), and, inside CSS Grid, the item's default `align-self:
+stretch`, which fills the grid area and leaves nothing to stick within. Fix the second with
+`align-self: start`. Check both before concluding sticky "doesn't work".
 
 ## `aspect-ratio`: legacy fallback and the min/max gotcha
 
-Modern: `aspect-ratio: 16 / 9` paired with `object-fit: cover` on the media so intrinsic content
-doesn't distort the box. Legacy padding-percentage fallback, still needed for pre-`aspect-ratio`
-rendering contexts (email, AMP, some CMS embeds):
+Modern: `aspect-ratio: 16 / 9` with `object-fit: cover` on the media. Legacy contexts (email, AMP,
+some CMS embeds) keep the padding hack — percentage padding resolves against the containing block's
+*width*, so `padding-bottom: 20%` holds 5:1:
 
 ```css
 .container { height: 0; padding-bottom: 20%; position: relative; }
 .container > * { position: absolute; inset: 0; }
 ```
 
-Percentage `padding` (including `padding-bottom`) resolves against the containing block's *width*,
-not its height — that's what makes a 20% bottom-padding hold a 5:1 ratio at any viewport width.
-
-Gotcha: `aspect-ratio` only applies to whichever dimension is `auto`-sized. If both dimensions (or
-an explicit `min-height`/`max-height`) are set, the explicit values win and the ratio is silently
-overridden on that axis — a box with `aspect-ratio` plus a `min-height` clamp does not automatically
-satisfy both at once. The existence of this conflict is settled; verify the precise resolution
-order against the CSS Sizing spec before hardening a specific case into a rule.
+`aspect-ratio` applies only to the `auto` axis: explicit sizes or a `min-height`/`max-height` clamp
+win on their axis and silently override the ratio (verify the exact resolution against CSS Sizing
+before hardening a case into a rule).
 
 ## Tabular numerals
 
@@ -458,7 +439,7 @@ MDN CSS length (`ch` = advance of "0" in the element's font); anonymous producti
 research-sweep-2 local-specialists C-25–C-26, C-28–C-30, C-33 (grid max-w + w-full, button nowrap,
 glass budget thresholds, grain opacity band, clip-path vs mask-image, layered shadow animation
 tax); Graffino/WebDong Safari filter:blur force-GPU; SiteLint blur stay-within-container;
-Josh Comeau backdrop-filter. -->
+Josh Comeau backdrop-filter.
 ; fold-wave-2b: Josh Comeau backdrop-filter frosted-glass near-edge mask craft + Firefox sticky glass bugs;
 WebKit inline SVG: content-visibility paint invalidation; @layer vs presentation attrs; g transform
 paint-no-draw; url(#id) clip collision; SVGO removeViewBox; design-fold 2026-11 (MIT unless noted; detail in SOURCES.md): Nutlope/hallmark, majestic-ui-skill, pbakaus/impeccable (Apache-2.0) - browser surfaces, whole-card link, carousel inset, tables/print; emilkowalski/skills break-ui - worst-case table; jakubkrehel/skills - will-change containing block, decorative layers, image outline; MengTo/skills - gradient borders, progressive blur, clip-path focus/hit, SVG id/stroke/seam traps, denser glass fallback, 3D raster scale (practitioner claim); Leonxlnx/cinetic + wheresryan22/anatomy - banding; teddarific/skills - SVG as img; nateherkai/scroll-craft - subtree ink, img attributes; juliobsz/skills - phone-only breaks -->
