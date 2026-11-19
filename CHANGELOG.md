@@ -8,6 +8,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
+- Queue unreleased changes here.
+
+## [0.5.0] — 2026-11-19
+
+### Added
 - SKILL.md **Standalone context check** (before routing): the family's common core (look first,
   size it, ask at most four owner-only questions with recommended answers, decide as the expert,
   never block, record in the LEDGER), six frontend questions, and the no-design-source rule.
@@ -206,6 +211,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 - Evaluation fixtures across four dimensions — activation, traversal, output, and
   compression-ablation — replacing the placeholder sets.
 
+[0.5.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.5.0
 [0.4.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.4.0
 [0.3.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.3.0
 [0.2.2]: https://github.com/gabros20/frontend-skill/releases/tag/v0.2.2
