@@ -1,14 +1,13 @@
 ---
 name: frontend
 description: >-
-  Implement production frontend code for websites, web apps, iOS, and Android, from creative
-  builds and site rebuilds to dense product UI: components, state, data fetching, forms, auth
-  flows, chat and agent-run UIs, UI motion and micro-interactions, responsive accessible
-  interfaces, performance, client security, and tests. Covers React, Next.js, Tailwind, shadcn/ui
-  (and its Solid Glass theme), SwiftUI, Jetpack Compose, and React Native, and builds from a design
-  handoff, Figma file, or approved comp. Do not use for design direction or motion specs, scroll-linked animation, SEO
-  strategy, backend or system architecture, or QA audits unless the request also requires frontend
-  implementation.
+  Implement production frontend for websites, web apps, iOS, and Android, from creative sites and
+  rebuilds to dense product UI: components, state, data fetching, forms, auth, chat and
+  agent-run UIs, UI motion and micro-interactions, accessible responsive UI, performance, client
+  security, and tests. Covers React, Next.js, Tailwind, shadcn/ui and Solid Glass, SwiftUI, Compose,
+  and React Native; builds from a handoff, Figma file, or comp. Not for design direction, motion
+  specs, scroll-linked animation, SEO strategy, backend or system architecture, or QA audits unless
+  frontend code is also needed.
 ---
 
 # Frontend Engineering

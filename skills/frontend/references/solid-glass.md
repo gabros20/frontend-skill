@@ -40,9 +40,9 @@ in its docs (deeplethe.github.io/solid-glass).
 
 It needs React 19, Tailwind 4 and the Base UI flavour (`base-nova`), and finds parts by `data-slot`
 plus Base UI state attributes (`data-popup-open`, `data-checked`). Radix reports those states as
-`data-state` (`open`, `checked`), so they will not light on a Radix project, and AI Elements needs
-Radix (`shadcn.md` "Setup and CLI"). Pick one agent-UI stack: Solid Glass's components on Base UI,
-or AI Elements on Radix.
+`data-state` (`open`, `checked`), so most will not light on a Radix project (one held-open rule also
+reads `data-state="open"`), and AI Elements needs Radix (`shadcn.md` "Setup and CLI"). Pick one
+agent-UI stack: Solid Glass's components on Base UI, or AI Elements on Radix.
 
 ## Install
 
@@ -77,12 +77,12 @@ controls from `--radius-control` (0.7rem). A handoff's tokens map onto these nam
 
 ## Deltas from stock shadcn
 
-So a diff against shadcn is not mistaken for a bug: `Button` gains
-`variant="glass"` (`data-strong` lights it a step), its one documented API change; the rest is CSS.
+So a diff against shadcn is not mistaken for a bug: `Button` gains `variant="glass"`, its one
+documented API change (variants and helper classes: its docs); the rest is CSS.
 Controls asking for `rounded-lg` get the control radius (no 32px pills); the 3px half-strength focus
 ring becomes `0 0 0 1px var(--background), 0 0 0 3px var(--focus-line)`, and fields swap the ring for
-a brighter border; hover, chosen and held-open share one pane (`glass-chosen`, `glass-held` on a
-trigger, `glass-control`, `glass-armed`; menu rows and sidebar items light from Base UI attributes);
+a brighter border; hover, chosen and held-open share one pane (menu rows and sidebar items light
+from Base UI attributes, other parts from its state classes);
 tooltips are popover glass without an arrow; the default chat bubble is clear glass, not ink; menus
 lose their `::before` blur sheet; hover greys become `--hover` behind `@media (hover: hover)`.
 
@@ -109,8 +109,8 @@ holding a once-a-second clock and a rolling token count, so the polite live regi
 constantly, and when it opens the role lands on a `<button>`, replacing its button role: keep one
 `role="status"` carrying only the activity label, the clock and count outside it, the button a plain
 button. `TaskNotice` gives the outcome only as an `aria-hidden` dot: add it in text. `DotLoader` has
-no name: hide it beside a word. Text faded to `/70`–`/80` and light-theme status hues as text miss
-4.5:1: keep full tokens. Reduced motion is already handled (the glyph holds a pose and pauses
+no name: hide it beside a word. Text faded to `/70` (either theme) or `/80` (light theme) and
+light-theme status hues as text miss 4.5:1: keep full tokens. Reduced motion is already handled (the glyph holds a pose and pauses
 offscreen; the CSS loops stop).
 
 ## Performance
