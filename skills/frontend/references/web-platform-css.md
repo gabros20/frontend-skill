@@ -61,7 +61,10 @@ regardless of the user's zoom or root font-size. Always keep a `rem` anchor in t
 and set a sane `MIN` so mobile stays readable. Container queries (`container-type: inline-size` plus
 `@container (min-width: ...)`) solve the case media queries structurally cannot: a component's
 appearance needs to depend on its own available space, not the viewport. A sidebar-embedded card and
-a full-width one need different internal layout at the same viewport width.
+a full-width one need different internal layout at the same viewport width. `container-type:
+inline-size` adds size containment: a shrink-to-fit container (a flex item with no width, an
+inline-block, an absolutely positioned box) collapses to zero width, so give it a definite width; and
+a container query styles only descendants, never the container itself.
 
 ## Modern layout
 
@@ -92,7 +95,9 @@ a full-width one need different internal layout at the same viewport width.
   type-checked value; required for smoothly interpolating a custom-property-driven gradient or
   animation (unregistered custom properties transition as discrete string swaps, never smoothly).
   `inherits: false` scopes a token so it does not cascade to children, useful for component-local
-  design tokens.
+  design tokens. To animate a whole palette swap (theme or chapter colours), register each palette
+  token and transition the variables so every consumer interpolates together; reserve it for
+  infrequent swaps, since it repaints.
 - **Cascade layers** (`@layer reset, base, components, utilities;`) give explicit, order-independent
   specificity control: an un-layered style always beats a layered one regardless of specificity, and
   layer declaration order, not source order within a layer, decides ties between layers.
@@ -195,6 +200,14 @@ invalid** — browsers ignore it and fall back to light. Declare `color-scheme` 
 Re-verify contrast in the dark palette explicitly; it is not just an inversion of the light one
 (see `accessibility.md`'s contrast table).
 
+**One switching mechanism, and no smear.** Tokens defined under both `prefers-color-scheme` and a
+`.dark` class half-theme on override; pick one. `light-dark()` reads `color-scheme`, so a class
+toggle driving it must set `color-scheme` too. A theme flip fires every color transition at once:
+inject `*, *::before, *::after { transition: none !important }`, force a style flush
+(`void document.body.offsetHeight`), and remove the override after two `requestAnimationFrame`s —
+for the OS-level change (a `matchMedia` listener) as well as your toggle (a library's
+`disableTransitionOnChange` covers only its own toggle).
+
 ## Color (OKLCH, gamut, color-management)
 
 **OKLCH tokens:** `oklch(L C H)` is the practical perceptually-uniform color space for a CSS
@@ -239,7 +252,8 @@ vs the same SVG as a repeating background on a P3 display.
 
 - **Text truncation:** single-line `overflow: hidden; text-overflow: ellipsis; white-space: nowrap`;
   multi-line `-webkit-line-clamp` plus `-webkit-box-orient: vertical` plus `overflow: hidden`; safe
-  wrap `overflow-wrap: break-word; hyphens: auto`. `min-width: 0` on a flex/grid child is required
+  wrap `overflow-wrap: break-word; hyphens: auto` (hyphenation needs a correct `lang`; balance,
+  pretty, and hyphenation limits are in `typography-css.md`). `min-width: 0` on a flex/grid child is required
   for any of this to work; without it, the child will not shrink below its content's intrinsic size.
 - **Specificity discipline:** classes over IDs, cap selector nesting around 3 levels, `!important`
   as a last resort for utility overrides only, `:where()` to apply a rule at zero specificity when
@@ -253,4 +267,4 @@ vs the same SVG as a repeating background on a P3 display.
   remove that block, or layout collapses site-wide (see `tailwind.md`'s `@theme` mechanics for the
   Tailwind-specific version of this gotcha).
 
-<!-- sources: ehmo_platform-design-skills (MIT) - content-driven breakpoints, fluid CSS/clamp, container queries; pbakaus_impeccable (Apache-2.0) - breakpoint conflict note; thedaviddias/Front-End-Checklist (no license, re-expressed; MDN/web.dev cited) - container-queries, @property, containment, :has(), subgrid, specificity, dark-mode-css, color-oklch; miner-webdesign (MIT, ours) - breakout/bento/subgrid grid mechanisms, stacking-context gotchas (isolation, backdrop-filter fallback, background-attachment:fixed), container-token collision, minifier-comment gotcha, text-truncation cookbook; dembrandt_dembrandt-skills (no license, facts re-expressed; MDN/WCAG/web.dev cited) - z-index scale, sticky/fixed decision rule; wondelai_skills web-typography (MIT) - clamp() fluid-typography formula; authors-architecture Josh Comeau margin-collapse + stacking-context full model; Ahmad Shadeed defensive multi-column grid gate; x-bookmarks #9 light-dark() + color-scheme modern dark-mode path; research-sweep-2 web-media-perf C-web-9–12 (color-scheme meta/CSS match + only-dark invalid, color-gamut:p3 gate, untagged rasters sRGB vs P3-tagged divergence, Display-P3 SVG background-repeat desaturate bug); web.dev color-scheme; MDN meta color-scheme / color-gamut; WebKit wide-gamut P3; Chrome HD color guide; tylergaw.com Display-P3 background-repeat bug (2026). -->
+<!-- sources: ehmo_platform-design-skills (MIT) - content-driven breakpoints, fluid CSS/clamp, container queries; pbakaus_impeccable (Apache-2.0) - breakpoint conflict note; thedaviddias/Front-End-Checklist (no license, re-expressed; MDN/web.dev cited) - container-queries, @property, containment, :has(), subgrid, specificity, dark-mode-css, color-oklch; miner-webdesign (MIT, ours) - breakout/bento/subgrid grid mechanisms, stacking-context gotchas (isolation, backdrop-filter fallback, background-attachment:fixed), container-token collision, minifier-comment gotcha, text-truncation cookbook; dembrandt_dembrandt-skills (no license, facts re-expressed; MDN/WCAG/web.dev cited) - z-index scale, sticky/fixed decision rule; wondelai_skills web-typography (MIT) - clamp() fluid-typography formula; authors-architecture Josh Comeau margin-collapse + stacking-context full model; Ahmad Shadeed defensive multi-column grid gate; x-bookmarks #9 light-dark() + color-scheme modern dark-mode path; research-sweep-2 web-media-perf C-web-9–12 (color-scheme meta/CSS match + only-dark invalid, color-gamut:p3 gate, untagged rasters sRGB vs P3-tagged divergence, Display-P3 SVG background-repeat desaturate bug); web.dev color-scheme; MDN meta color-scheme / color-gamut; WebKit wide-gamut P3; Chrome HD color guide; tylergaw.com Display-P3 background-repeat bug (2026); design-fold 2026-11: jakubkrehel/skills (MIT) - container-query size-containment trap, theme-switch transition suppression incl. OS change, light-dark class toggle; gcomartins/myfskills (MIT) - registered-token palette transition; jpoindexter/typography-skills (MIT) - hyphens needs lang. -->

@@ -182,8 +182,20 @@ rather than restating it.
 for body text where zero CLS matters most (cached-only after first load); `block`/`fallback`/`auto`
 for narrower cases. Subsetting a font to the characters actually used cuts payload 60 to 80%. Font
 preload requires `crossorigin` even for same-origin fonts, since the font spec requires CORS.
-Variable fonts: use the `font-weight: 100 900` range syntax and `font-variation-settings` only when
-a standard property (`font-weight: 450`) cannot express the value.
+
+- **Self-host.** HTTP cache partitioning ended cross-site font-CDN cache reuse, so a font CDN is just
+  one more origin. Never load fonts via CSS `@import`. Load a display face only on the routes and
+  regions that render it.
+- **Variable fonts:** declare the axis range on `@font-face` (`font-weight: 100 900`), or the browser
+  treats the file as one weight and fakes bold. A variable file carries the whole design space:
+  replacing one or two static weights usually costs bytes, four or more usually saves — measure both
+  after subsetting, and keep named weights tokenized even on a continuous axis. Feature and axis
+  settings in CSS: `typography-css.md`.
+- **Subset by script** with `unicode-range`, never to Latin-basic where user names, UGC, or
+  currencies render.
+- **Fallback face:** choose it by x-height, then width, then the `G W a y g` shapes, *then*
+  metric-match with `size-adjust`/overrides. `font-size-adjust: ex-height from-font` evens apparent
+  size without moving the line box (progressive enhancement). Run once with fonts blocked.
 
 ## Layout thrashing and compositor-safe animation
 
@@ -193,8 +205,9 @@ one app-wide measure queue then mutate queue per frame so libraries do not thras
 dev-only strict mode that throws on un-batched layout access catches regressions; clear jobs that
 race unmount. Animate only `transform`/`opacity` (the GPU compositor thread); animating
 `left`/`width`/`top`/`height`/`margin` forces layout recalculation on the main thread and is
-CPU-bound. Budget 16ms per frame for 60fps; use `requestAnimationFrame` for JS-driven animation, not
-`setTimeout`. `IntersectionObserver` is the efficient pattern for viewport-entry detection (lazy
+CPU-bound. Budget 16.7ms per frame at 60 Hz and 8.3ms at 120 Hz — design against the smaller; use
+`requestAnimationFrame` for JS-driven animation, not `setTimeout`. Driver choice, jank diagnosis
+order, and motion-specific traps: `ui-motion.md`. `IntersectionObserver` is the efficient pattern for viewport-entry detection (lazy
 loading, scroll-triggered work) over scroll-event polling.
 
 **Long tasks / INP chunking:** break main-thread work with `await scheduler.yield()` when present;
@@ -297,7 +310,11 @@ concurrent downloads.
 mounting Three/r3f/canvas; pause rAF/`useFrame` when offscreen and resume on enter; cap DPR
 (`Math.min(devicePixelRatio, 1.5–2)` or `dpr={[1, 2]}`); scale particle/mesh budget with viewport
 and device; `pointer-events: none` on decorative canvas; dispose GL context/resources on unmount.
-Static CSS gradient/grain fallback for reduced-motion and no-WebGL. Verify: main-thread idle until
+Static CSS gradient/grain fallback for reduced-motion and no-WebGL. Detect WebGPU by a non-null
+`await navigator.gpu.requestAdapter()`, not by `'gpu' in navigator` (blocklisted or headless GPUs
+return null), then fall back to WebGL2, then CSS. A tiny capability-gate module decides before the
+heavy chunk downloads (reduced motion or transparency, `forced-colors`, fine pointer, visibility),
+and the fallback stays until the module reports ready. Verify: main-thread idle until
 hero intersects; offscreen/tab-background CPU near zero; mobile GPU not pegged.
 
 ## Bundle size, code-splitting, and resource budgets
@@ -345,5 +362,13 @@ regression: bundle-size budgets (catch an accidentally heavy dependency) and run
 budgets alone do not catch field regressions that only show up after deploy on real networks and
 devices.
 
-<!-- sources: wondelai_skills high-perf-browser (MIT) - network fundamentals, resource hints, caching strategies, Core Web Vitals depth, streaming SSR; wondelai_skills web-typography (MIT) - font-loading mechanics; thedaviddias/Front-End-Checklist (no license, re-expressed; MDN/web.dev cited instead) - CWV thresholds, resource-hint ordering, bfcache, virtualization a11y contract, service-worker lifecycle; dembrandt_dembrandt-skills (no license, facts re-expressed; MDN/WCAG/web.dev cited) - CLS/LCP fix specifics, font-display table; ehmo_platform-design-skills (MIT) - layout-thrashing, will-change scoping, compositor-friendly animation, virtualize-long-lists; pbakaus_impeccable (Apache-2.0) - layout-thrashing, content-visibility, responsive-images cookbook; millionco/react-doctor (Modified MIT, re-expressed) - bundle-size import-shape rules, srcset/fetchpriority perf rules; miner-webdesign (MIT, ours) - CLS/object-fit mechanics referenced from web-platform-css.md; fold-wave research-extend: X @vponamariov content-visibility+contain-intrinsic-size CLS pair; Addy Osmani / web.dev third-party facades (~224× lite-youtube), adaptive loading (effectiveType/saveData/deviceMemory/hardwareConcurrency); addyosmani/web-quality-skills speculation eagerness ladder + document.prerendering analytics gate + resource size budgets; Vercel react-best-practices intent preload on hover/focus; fold-wave-2 research-sweep-2: web.dev/TuneTheWeb/DebugBear responsive preload imagesrcset+fetchpriority, Early Hints allowlist + Safari 103 preconnect-only, unused preload/CORS font double-fetch, modulepreload vs preload as=script, preload scanner vs CSS/JS LCP; Barry Pollard decoding=async paint-wait; LQIP CLS + pre-blur assets; srcset x vs w overfetch; EXIF/canvas orientation; will-change layer explosion + box-shadow/SVG filter paint hangs; dual CSS-hidden video double-fetch (C-03); WebGL hero lazy/dpr/dispose (C-32). -->
+Local numbers need method: the median of three or more loads with the spread reported, on an idle
+machine (a busy host's timings are warnings at best); compare locally rendered FCP/LCP across your
+own pages, never against field data. Flag images whose natural width exceeds ~2.2× their rendered
+width. Before quoting a frame rate, confirm the effect rendered where you measured: headless and
+preview browsers can skip `backdrop-filter`, blend modes, and heavy filters (`CSS.supports` true,
+computed style `none`) while rAF sampling reads uncapped. The evidence is a Performance trace on real
+hardware, or a statement that it wasn't measured.
+
+<!-- sources: wondelai_skills high-perf-browser (MIT) - network fundamentals, resource hints, caching strategies, Core Web Vitals depth, streaming SSR; wondelai_skills web-typography (MIT) - font-loading mechanics; thedaviddias/Front-End-Checklist (no license, re-expressed; MDN/web.dev cited instead) - CWV thresholds, resource-hint ordering, bfcache, virtualization a11y contract, service-worker lifecycle; dembrandt_dembrandt-skills (no license, facts re-expressed; MDN/WCAG/web.dev cited) - CLS/LCP fix specifics, font-display table; ehmo_platform-design-skills (MIT) - layout-thrashing, will-change scoping, compositor-friendly animation, virtualize-long-lists; pbakaus_impeccable (Apache-2.0) - layout-thrashing, content-visibility, responsive-images cookbook; millionco/react-doctor (Modified MIT, re-expressed) - bundle-size import-shape rules, srcset/fetchpriority perf rules; miner-webdesign (MIT, ours) - CLS/object-fit mechanics referenced from web-platform-css.md; fold-wave research-extend: X @vponamariov content-visibility+contain-intrinsic-size CLS pair; Addy Osmani / web.dev third-party facades (~224× lite-youtube), adaptive loading (effectiveType/saveData/deviceMemory/hardwareConcurrency); addyosmani/web-quality-skills speculation eagerness ladder + document.prerendering analytics gate + resource size budgets; Vercel react-best-practices intent preload on hover/focus; fold-wave-2 research-sweep-2: web.dev/TuneTheWeb/DebugBear responsive preload imagesrcset+fetchpriority, Early Hints allowlist + Safari 103 preconnect-only, unused preload/CORS font double-fetch, modulepreload vs preload as=script, preload scanner vs CSS/JS LCP; Barry Pollard decoding=async paint-wait; LQIP CLS + pre-blur assets; srcset x vs w overfetch; EXIF/canvas orientation; will-change layer explosion + box-shadow/SVG filter paint hangs; dual CSS-hidden video double-fetch (C-03); WebGL hero lazy/dpr/dispose (C-32); design-fold 2026-11: jpoindexter/typography-skills (MIT) font self-hosting rationale, range declaration, variable break-even, fallback choice order, font-size-adjust, script subsetting; jakubkrehel/skills (MIT) static vs variable; madebymustafa/design-taste (MIT) display face per route, no @import; emilkowalski/skills animation-performance (MIT) 120 Hz budget; pbakaus/impeccable (Apache-2.0) WebGPU adapter gate; MengTo/skills (MIT) capability-gate module; Leonxlnx/taste-skill (MIT) local timing method, oversized images; gcomartins/myfskills (MIT) headless FPS honesty. -->
 ; fold-wave-2b: MDN/web.dev contain-intrinsic-size auto retained size after first paint; fold-wave-2b: MDN/web.dev contain-intrinsic-size auto retained size after first paint -->

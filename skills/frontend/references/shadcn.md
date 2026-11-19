@@ -101,7 +101,12 @@ Next.js recipe: the `next-themes` package, a `ThemeProvider` client wrapper, roo
 with `attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange`, `<html
 suppressHydrationWarning>`, and a `useTheme()` hook driving the toggle. Non-Next fallback:
 `document.documentElement.classList.toggle('dark')` plus `localStorage` plus
-`matchMedia('(prefers-color-scheme: dark)')`. This section is the toggle mechanism only; the token
+`matchMedia('(prefers-color-scheme: dark)')`. `disableTransitionOnChange` covers only the library's
+own toggle; the OS-level flip needs the same suppression (`web-platform-css.md` Dark mode). Role
+collision: shadcn's `accent` is a hover surface and `muted` a quiet background, so a design system's
+`--color-accent` (brand signal) or `--color-muted` (muted text) must map onto shadcn roles
+explicitly, never share the same `@theme` names. Animated components copied from registries rarely
+gate reduced motion — audit each on import (`ui-motion.md` Removing and importing motion). This section is the toggle mechanism only; the token
 strategy behind the two modes (which values should and shouldn't change, contrast parity) lives in
 `design-handoff-and-tokens.md`.
 
@@ -112,7 +117,11 @@ of it. On a greenfield project, two defensible defaults exist, and sources disag
 lead with: Lucide (the broadest existing baseline adoption) and Phosphor (weight variants). Pick
 one and never mix libraries within the same UI. Whichever is chosen: one consistent stroke weight
 throughout, `aria-hidden` on every decorative icon, and never hand-roll an SVG for a concept the
-chosen library already ships a named icon for.
+chosen library already ships a named icon for. Stroke follows the adjacent text weight as rendered:
+a 24-grid icon drawn at 16px thins its stroke by a third unless you use the library's absolute
+stroke option or `vector-effect: non-scaling-stroke`. Recolor through `currentColor` and CSS state,
+never per-state assets; outline is the resting state, fill the selected one. Never an icon font
+(`typography-css.md` Icon and colour fonts).
 
 Resolve a concept to a verified export name before importing it — never guess one. Lucide ships a
 name→tags map (`lucide-static`'s `tags.json`) and Tabler a richer manifest (`@tabler/icons`'
@@ -176,4 +185,4 @@ CSS-variable shape (MIT) — miner-ext-c.md; icon/asset integration verified 202
 unpkg.com/lucide-static/tags.json (ISC), unpkg.com/@tabler/icons/icons.json (MIT),
 iconify.design/docs/api/search.html + @iconify-json packages, github.com/phosphor-icons/react
 README + package exports (MIT), simple-icons DISCLAIMER.md (project CC0, per-icon licences vary;
-follow each brand's guidelines) -->
+follow each brand's guidelines); design-fold 2026-11: jakubkrehel/skills better-ui icons (MIT) stroke matching and scaled-stroke trap; Nutlope/hallmark export-formats (MIT) accent/muted role collision; ibelick/motion-primitives + ui-layouts/uilayouts (MIT) registry reduced-motion audit -->

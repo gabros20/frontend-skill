@@ -242,7 +242,9 @@ loader (a CDN image service, for example). The broader responsive-image/CLS doct
 once, in the root layout — importing per-component creates a redundant font instance each time.
 Always specify `subsets`; `display: 'swap'` is the sane default among the five loading strategies.
 Never hand-roll a Google Fonts `<link>`/`@import` — it blocks render and skips optimization
-entirely.
+entirely. Extra variable axes (`axes: ['wdth', 'opsz']`) load only with the variable weight: omit
+`weight` (it defaults to `variable`) rather than pinning one, which `next/font` rejects alongside
+`axes`. Site icons use the file conventions (`app/icon.svg`, `app/apple-icon.png`).
 
 **Scripts**: `next/script` over a raw `<script>` tag; an inline script needs an explicit `id`;
 never place `next/script` inside `next/head`. Loading-strategy choice: `afterInteractive` (default,
@@ -345,4 +347,6 @@ vercel-labs/agent-skills @vercel-react-best-practices residual — after() for n
 logging/analytics; View Transition Next flag cross-ref — skills-finder / CANDIDATES #10;
 optional deeper skills + nextjs.org/docs table (canonical getting-started/guides paths; install counts as of fold; re-check skills.sh);
 anonymous production site-rebuild runs (2026, re-expressed) — per-environment media host in
-remotePatterns, shared-layout fetch blast radius -->
+remotePatterns, shared-layout fetch blast radius; design-fold 2026-11: gcomartins/myfskills (MIT)
+next/font axes vs weight (nextjs.org/docs font reference checked 2026-11-19: axes optional, weight
+defaults to variable); juliobsz/skills (MIT) icon file conventions -->

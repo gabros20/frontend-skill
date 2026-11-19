@@ -94,6 +94,14 @@ And a literal `*` inside a CSS comment near a `@theme` block can make some minif
 entire token block while only printing a soft warning; treat any such parser warning as a hard
 failure and verify computed styles directly rather than trusting a green build.
 
+More v4 wiring traps: default `@theme` drops variables no utility uses — use `@theme static` when
+hand-written CSS reads them; import a stylesheet of element rules with `layer(base)`, since unlayered
+element rules beat every utility; keep every `@import` above the first rule (a later one is
+dropped); and `--text-{xs…3xl}` and `--ease-in/out/in-out` are Tailwind's own names, so redefining
+them restyles every existing `text-lg` or `ease-out`. Semantic colors that `.dark` must repoint at
+runtime are declared in `@theme` without `inline` (an inlined value can't be overridden later), and
+a `--color-text-*` token doubles into `text-text-*` utilities.
+
 **SVG presentation attributes vs `@layer utilities` (Safari):** Tailwind v4 ships utilities inside
 `@layer utilities`. WebKit treats SVG presentation attributes (`width`, `height`, `fill`, …) as
 **unlayered** author declarations, which beat layered utilities — so `h-24 w-auto` can lose to
@@ -177,6 +185,12 @@ elements. Never modify `tracking-*` (letter-spacing) unless explicitly requested
 fixed `z-*` scale for the project rather than arbitrary large values like `z-[9999]`, which invite
 stacking-context conflicts that are a distinct failure mode from ordering alone.
 
+Version deltas that change behaviour: v4's `hover:` compiles inside `@media (hover: hover)` (v3's
+doesn't — wrap it yourself); v4's `scale-*` writes the `scale` property and `transition-transform`
+covers `transform`, `translate`, `scale`, and `rotate`, so a mixed transition is
+`transition-[scale,opacity,filter]`. Alpha modifiers under text can't be contrast-checked — use
+solid tokens; `text-white` on most `500` fills fails 4.5:1.
+
 Lean on Tailwind's automatic unused-class purging (JIT scanning of source files) rather than
 fighting it: avoid dynamically constructed class name strings assembled by concatenation or
 interpolation (`` `text-${color}-500` ``), since the scanner cannot statically find them and they
@@ -200,4 +214,7 @@ nextlevelbuilder ui-ux-pro-max-skill ui-styling/references/{tailwind-customizati
 (no license, re-expressed) — miner-local.md; Leonxlnx taste-skill SKILL.md postcss trap, Nutlope/hallmark
 export-formats.md spacing-key trap (both MIT) — miner-ext-c.md; x-bookmarks.md #5 (@diegohaz) —
 Tailwind v4 multi-entry: @import "tailwindcss"; @source not "./internal" vs @import "tailwindcss"
-source(none); @source "./internal" for unused utility drop from main bundle / CSSOM cost -->
+source(none); @source "./internal" for unused utility drop from main bundle / CSSOM cost;
+design-fold 2026-11: Nutlope/hallmark v2 export-formats (MIT) @theme static, layer(base), @import
+order, reserved token names; jakubkrehel/skills (MIT) v4 hover media, scale property, transition
+families, semantic colors outside inline, alpha text contrast -->

@@ -17,8 +17,9 @@ Read when:
   min/max sizing conflict.
 - Aligning numeric columns, counters, or timers so digits don't jitter width as they update.
 - Applying form/media reset micro-patterns or avoiding `transition: all`.
-- Budgeting glass/`backdrop-filter`, grain overlays, soft masks, or multi-layer shadows without
-  jank; promoting layers with `will-change` without exploding GPU memory.
+- Budgeting glass/`backdrop-filter`, grain overlays, soft masks, gradient borders, banding, or
+  multi-layer shadows without jank; promoting layers with `will-change` without exploding GPU memory.
+- Theming browser-drawn surfaces, or hardening a component against worst-case content.
 
 Skip when:
 - Breakpoints, subgrid, container queries, `:has()`, the z-index scale, cascade layers, or
@@ -27,6 +28,8 @@ Skip when:
   CSS craft baseline.
 - Color scheme / wide-gamut / P3 pipelines: `web-platform-css.md` Color section.
 - Tailwind's `text-balance`/`text-pretty`/`tabular-nums` utility classes: `tailwind.md`.
+- Type rendering (units, OpenType features, trimming, wrapping): `typography-css.md`.
+- Animating anything: `ui-motion.md`.
 - Dynamic viewport units (`svh`/`dvh`/`lvh`) and the 16px input-zoom floor: `web-platform-runtime.md`.
 - Long-task paint budgets for box-shadow / SVG filter hangs / image decode: `performance.md`.
 
@@ -36,6 +39,7 @@ Produces: CSS that degrades safely against unexpected content, viewport, or inte
 
 ## Contents
 - Scrollbars
+- Browser-drawn surfaces
 - Overscroll containment
 - Flex and gap defaults
 - Hover-capable media
@@ -43,49 +47,44 @@ Produces: CSS that degrades safely against unexpected content, viewport, or inte
 - Sticky-in-grid failure
 - `aspect-ratio`: legacy fallback and the min/max gotcha
 - Tabular numerals
+- Worst-case content
 - One-line modern layouts
 - Safari compositor traps
-- Inline SVG Safari paint traps
+- Inline SVG paint traps and SVG as an image
 - Paint and texture craft
 - Reset micro-patterns
 - Micro-patterns
 
 ## Scrollbars
 
-Hide the scrollbar, keep the scroll, cross-browser triad: `scrollbar-width: none;`
-(Firefox/modern Chromium) plus `&::-webkit-scrollbar { display: none; }` (Safari/older Chromium)
-plus `-ms-overflow-style: none;` (legacy Edge). Caveat: hiding the scrollbar removes an affordance
-sighted pointer users rely on to notice more content exists — hide it only where another visual cue
-(fade edge, arrows, snap dots) already signals scrollability.
+Hide the scrollbar, keep the scroll: `scrollbar-width: none;` plus `&::-webkit-scrollbar { display:
+none; }` (plus `-ms-overflow-style: none;` for legacy Edge) — only where another cue (fade edge,
+arrows, snap dots) signals more content. Thin styled scrollbars: `scrollbar-color: <thumb> <track>`
+plus `scrollbar-width: thin`, as progressive enhancement (verify Safari); forced colors resets them
+to `auto`; hand-picked thumbs contrast ≥3:1 with the track. Don't emulate a hover-reveal overlay
+scrollbar — the browser's native overlay behavior is the honest default.
 
-Styled thin scrollbars, standards-based: `scrollbar-color: <thumb> <track> | auto;` plus
-`scrollbar-width: auto | thin | none;`. Verify current Safari support before relying on it and treat
-it as progressive enhancement, not the only scrollbar affordance; in forced-colors mode the browser
-overrides to `scrollbar-color: auto` regardless of author styles. Contrast the thumb against the
-track at least 3:1 when hand-picking colors (WCAG G183). No verified custom hover-reveal
-overlay-scrollbar pattern exists in current sources — the honest default is the browser's native
-overlay behavior (e.g. macOS "show scrollbars only on scroll"); don't ship an unverified emulation
-of it.
+`scrollbar-gutter: stable` (`stable both-edges` for RTL or symmetric centring) reserves space so a
+late scrollbar doesn't shift layout; apply it to `overflow: auto | scroll` containers (not
+`hidden`). It also fixes the modal-open sideways shift from body `overflow: hidden`; without it,
+measure scrollbar width *before* locking and compensate (`web-platform-runtime.md`, Modal body-lock
+scrollbar compensation).
 
-`scrollbar-gutter: stable` (also `stable both-edges`) reserves scrollbar space in advance so a
-later-appearing scrollbar doesn't shift layout or re-wrap text. Apply it to any container styled
-`overflow: auto | scroll`; skip it on `overflow: hidden`, which has nothing to reserve. Use
-`both-edges` when a scrollbar might appear on either edge (RTL layouts) and centering must stay
-symmetric. This also fixes the classic modal-open sideways content shift caused by body
-`overflow: hidden` removing the page scrollbar. When `scrollbar-gutter` is unavailable or
-insufficient, measure scrollbar width *before* locking overflow and compensate with margin/padding
-— order of ops in `web-platform-runtime.md` (Modal body-lock scrollbar compensation).
+## Browser-drawn surfaces
+
+Wire what the browser draws to tokens — defaults are the tell of an assembled page: `::selection`,
+`caret-color`, `accent-color` on native checkboxes, radios, and ranges, `scrollbar-color`, the
+focus ring, link `text-underline-offset`, `tabular-nums` in data, and `<meta name="theme-color">`.
+Give native `<select>` an explicit background and text color, or Windows dark mode can render it
+unreadable.
 
 ## Overscroll containment
 
-`overscroll-behavior-y: contain` (or the shorthand `overscroll-behavior: contain`) on any
-independently scrollable region — a modal body, a drawer, a chat pane — stops that region's scroll
-from chaining into page scroll once it hits its own boundary. `overscroll-behavior: none` also
-suppresses the pull-to-refresh/rubber-band bounce where that's undesirable. The property has no
-effect until scroll actually reaches the boundary, so it's safe to apply broadly: pair it with
-`overflow-y: auto` on the same element, and default to it on any `overflow: auto | scroll`
-container. Distinguish from Tailwind's utility name `overscroll-x-contain`, which maps to the raw
-`overscroll-behavior-x: contain` longhand — don't copy the utility class name into raw CSS.
+`overscroll-behavior: contain` (or `-y: contain`) on any independently scrollable region — modal
+body, drawer, chat pane — stops its scroll chaining into the page at its boundary; `none` also
+suppresses pull-to-refresh and rubber-band bounce. It does nothing until scroll hits the boundary,
+so default it onto every `overflow: auto | scroll` container. Tailwind's `overscroll-x-contain` is
+a utility name; the raw longhand is `overscroll-behavior-x: contain`.
 
 ## Flex and gap defaults
 
@@ -156,8 +155,31 @@ order against the CSS Sizing spec before hardening a specific case into a rule.
 to any numeric display that updates in place (timers, counters, prices, live scores, table columns)
 so digits don't jitter the layout as they change. It only works if the loaded font ships the
 OpenType `tnum` feature; if it doesn't, the declaration is a silent no-op with no CSS-level fallback
-or detection, so verify per font or fall back to a monospace font for that element. Tailwind
-projects get the same effect from the `tabular-nums` utility class (`tailwind.md`).
+or detection, so verify per font or fall back to a monospace font for that element. Columns pair
+`tabular-nums lining-nums` (oldstyle tabular figures still jitter vertically), right- or
+decimal-aligned, with headers aligned like their column. Tailwind projects get the same effect
+from the `tabular-nums` utility class (`tailwind.md`).
+
+## Worst-case content
+
+Feed components plausible worst cases at the data boundary (longest real string, one unbreakable
+token, 0/1/many items, emoji, RTL) and fix the signature, not the symptom:
+
+| Signature | Fix |
+|---|---|
+| Avatar or icon squished beside text | `flex-shrink: 0` on it |
+| Text overflows its flex/grid cell | `min-width: 0` (grid `minmax(0, 1fr)`) |
+| Email or URL breaks the layout | `overflow-wrap: anywhere` (never `word-break: break-all`) |
+| Trailing action pushed off the row | `min-width: 0` on the text, `flex-shrink: 0` on the action |
+| Badge wraps | `white-space: nowrap`, then decide what yields |
+| Avatar drifts beside wrapped text | `align-items: flex-start` |
+| Diacritics clipped | loosen `line-height` or drop the `overflow: hidden` clip |
+| Broken avatar image | `onError` → initials (grapheme clusters, skipping Jr/Sr/II/III) |
+
+Ellipsis always pairs with a way to read the full value; file names, paths, and hashes truncate in
+the middle; numbers, amounts, and dates never truncate. Buttons and primary nav never wrap at
+320–1920px: shorten the label, then `white-space: nowrap`, then collapse the row into a menu.
+Keep the worst-case fixture behind a dev-only toggle as the regression test.
 
 ## One-line modern layouts
 
@@ -212,9 +234,17 @@ many cards after a hover storm keeps layers forever → scroll memory pressure a
 on promoted layers. Apply `will-change` just before interaction (or on `:hover` of one active item)
 and **clear after `transitionend`**. Composite-budget target under load is roughly mid-single-digit
 ms per frame; see `performance.md` for paint long-task verification. Never leave permanent
-`will-change` on a card grid.
+`will-change` on a card grid. `will-change: transform` (or `filter`) also makes the element the
+containing block for `position: fixed` descendants — a fixed tooltip inside stops tracking the
+viewport — and opens a stacking context: name the exact animated property (`will-change: scale`),
+never `all`.
 
-## Inline SVG Safari paint traps
+**3D contexts rasterise at layout size (Chromium, verify per engine):** content under
+`perspective`, `preserve-3d`, or a 3D matrix can be rasterised at its layout size and stretched, so
+`scale()` above 1 on a tilted card goes soft whatever the image resolution. Lay the element out at
+its shown size and push it back in Z instead.
+
+## Inline SVG paint traps and SVG as an image
 
 **Symptom (WebKit):** SVG has correct layout/`getBBox`; HTML siblings paint; **paths do not draw**.
 Flat icon SVGs may still work. Chromium often fine — verify real Safari, not headless Chrome only.
@@ -224,11 +254,21 @@ Flat icon SVGs may still work. Chromium often fine — verify real Safari, not h
 | Ancestor `content-visibility: auto` | After skip → relevant, HTML repaints; **inline SVG paint not invalidated** | No `content-visibility` / `contain-intrinsic-size` on ancestors of critical inline SVG. See `performance.md` |
 | SVG `width`/`height`/`fill` **presentation attributes** + Tailwind v4 utilities | WebKit treats attrs as **unlayered** author CSS; unlayered beats `@layer utilities` → utilities lose | No sizing/fill presentation attrs when utilities own size/color. Use CSS `aspect-ratio` + `h-*`/`w-*` / `fill-*` |
 | `<g transform="…">` | Correct bbox; **group contents never paint** | Flatten transforms into path data. Prefer flat `<svg><path/>…` |
-| Shared `clip-path="url(#id)"` across multiple inlined SVGs | Duplicate IDs → WebKit resolves to **first** in document → empty clip | Unique IDs per instance, or drop redundant full-viewBox clips |
+| Duplicate ids across inlined SVGs (`url(#id)` in clips, gradients, filters, masks, patterns) | Every engine resolves to the **first** in the document → the second SVG gets the first's filter or an empty clip | Prefix every id per instance, or drop redundant full-viewBox clips |
 | SVGO/svgr strips `viewBox` | Paths unscaled/clipped | Keep `removeViewBox: false` (Turbopack + webpack svgr). See `nextjs.md` |
 
 **Default inline mark:** flat paths, no transform groups, no width/height attrs, stable viewBox;
-explicit fills when `currentColor` is not required.
+explicit fills when `currentColor` is not required. Strokes in a scaled group drift: divide widths
+by the scale or use `vector-effect: non-scaling-stroke`. Abutting same-colour fills show hairline
+seams at 2×: give each a thin self-coloured stroke. An SVG that must survive a host page's CSS uses
+presentation attributes, not `class` or `<style>`. Animating SVG: `ui-motion.md`.
+
+**SVG as `<img>`:** it must be well-formed XML — a valueless attribute or a stray `&` renders
+nothing, because the image parser doesn't forgive what HTML does (validate with an XML parser).
+Scripts don't run and page CSS can't reach in, but its own CSS animations do: inline styles in a
+CDATA `<style>` scoped to the SVG's root id. Give it `width`/`height` plus `viewBox` and an `alt`;
+theme with two files behind `<picture><source media="(prefers-color-scheme: dark)">`. In Next,
+serve it `unoptimized`.
 
 ## Paint and texture craft
 
@@ -246,7 +286,13 @@ Procedural budgets only — not art direction.
 
 Include `saturate()` plus a 1px low-opacity edge and optional inset top highlight so glass reads as
 material, not grey smear. Needs a busy/colorful backdrop or the effect goes dull-flat. Always ship
-the solid `@supports not (backdrop-filter: …)` fallback. Verify 60fps scroll on a mid-range phone
+the `@supports not (backdrop-filter: …)` fallback, with a denser fill than the glass (roughly
+0.45 → 0.6 alpha) so text keeps contrast without the blur behind it.
+
+**Progressive edge blur:** stack a few `backdrop-filter` layers with stepped radii, each masked to an
+overlapping band, `pointer-events: none`. Every layer is a backdrop pass and counts against the
+glass budget: cost grows with band count × area, so cut steps on mobile, never animate it, and
+verify scroll fps. Verify 60fps scroll on a mid-range phone
 with glass in view; re-check the backdrop-root trap above when blur "does nothing."
 
 **Frosted glass: sample content near the edge (Comeau craft).** Default `backdrop-filter: blur`
@@ -277,11 +323,27 @@ section-scoped (not full-document forever). Fine grain: `baseFrequency` ~0.6–0
 `stitchTiles='stitch'`. **Never animate `feTurbulence` every frame** (CPU path); keep grain static
 and animate content under it with transform/opacity only.
 
+**Gradient borders:** an opaque fill takes `background: linear-gradient(var(--fill) 0 0)
+padding-box, linear-gradient(135deg, …) border-box; border: 1px solid transparent`. A translucent
+or glass fill shows that gradient through the whole box, so use a `::before` with `padding: 1px`,
+`border-radius: inherit`, and `mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0
+0); mask-composite: exclude` (`-webkit-mask-composite: xor`). Remove any leftover `border-color`
+(double border) and keep focus on a real outline.
+
+**Banding:** browsers render CSS gradients in 8 bits, so a ramp spanning fewer than ~30 code values
+(a dark glow) shows contour rings. Fix with the static grain layer over it, or a baked dithered
+plate drawn at full strength — opacity or a blend mode scales the dither away and the bands return.
+Interpolate distant colours `in oklab` (the sRGB midpoint goes muddy).
+
 **`clip-path` vs `mask-image` for soft edges:** `clip-path` = hard edge, GPU-friendly, morphable
 when command counts match — good for geometric crops and inset reveals. Soft/organic alpha edges
 need `mask-image` (partial alpha); `clip-path` aliases on curves. Pair either with
 `object-fit: cover` and per-breakpoint `object-position` for focal framing. Prefer compositing
 `clip-path: inset()` over animating mask rect width/height when the motion is a simple reveal.
+`clip-path` also clips the element's own `outline` and `box-shadow`, so a clipped (chamfered)
+control puts its focus ring on an unclipped wrapper or a parent `drop-shadow()`; hit-testing follows
+the clip, while a chamfer only painted into the background keeps rectangular hit corners.
+`clipPathUnits="objectBoundingBox"` (0–1 coordinates) makes SVG clip shapes responsive.
 
 **Layered shadow animation tax:** 3–6 stacked `box-shadow`s are fine **static**. Animating blur,
 offset, or multi-shadow stacks on large elements forces paint every frame (not compositor-only).
@@ -310,6 +372,7 @@ Verify a 16×16 sprite scaled to 128px across Chrome/Safari/Firefox (4×–8× u
   auto-zoom on focus. Pairs with the 16px input floor in `web-platform-runtime.md`.
 - **Media as block:** `img, picture, video, canvas, svg { display: block; max-width: 100%; }` kills
   the mysterious ~4px baseline gap under images and stops intrinsic-width overflow.
+- **`figure { margin: 0; }`:** the UA's 40px inline margins take 80px off a 390px phone.
 - **Never `transition: all`.** List the exact properties you intend to animate
   (`opacity`, `transform`, `color`, …). `all` quietly animates inherited and layout properties
   (including things you did not mean to tween) and is a common source of janky theme toggles and
@@ -346,6 +409,28 @@ Verify a 16×16 sprite scaled to 128px across Chrome/Safari/Firefox (4×–8× u
   element it is set on, so `max-width: 20ch` on a wrapper measures the wrapper's small body font,
   not the display heading inside it — the heading wraps a word per line and can overflow a
   fixed-height frame. Put the cap on the heading or paragraph itself.
+- **Decorative layers over controls** (glow, gradient scrim, sheen, full-bleed pseudo-element) take
+  `pointer-events: none` (plus `aria-hidden` on elements), or the control underneath looks live and
+  does nothing. A dismissing scrim keeps its events.
+- **Whole-card link:** one real link inside the card carries the name and stretches its hit area
+  with `::before { position: absolute; inset: 0 }` (card `position: relative`); other controls in
+  the card sit above it with their own `position: relative; z-index`. Never `onClick` on the card
+  `div`.
+- **Image edge:** an inset 1px `outline` (`outline-offset: -1px`) at ~10% black or white — it never
+  changes size and follows the radius, unlike a border.
+- **Carousels and tab panels:** equal inset at both ends at rest (`scroll-padding-inline` plus
+  matching padding); a card flush to one edge with a gutter on the other means the track is wider
+  than its clip box. A popover inside an `overflow: hidden` ancestor is clipped: move it to the top
+  layer or a portal.
+- **A token redefined on a subtree doesn't re-ink it:** `color` inherits as a computed value, so
+  text below keeps the ancestor's ink — restate `color: var(--ink)` where the token is restated.
+- **`<img>` with `width`/`height` attributes:** override one in CSS and the other resolves to the
+  attribute's pixels (`width: 100%` on a 1920×1080 image → 1080px tall); set `height: auto` with it.
+- **Phone-only breaks:** a hero grid whose rows fill height (`1fr`) needs `auto` rows on phones or
+  tall screens show a hole; a short display word sized in `vw` needs `white-space: nowrap` and a
+  size checked at 390px.
+- **Narrow tables and print:** rows become labelled cards (`data-label` via `attr()`); a print
+  stylesheet expands link URLs, breaks at sections, and hides nav and controls.
 - **Fixed header, no hero:** a `position: fixed` header overlaps the first content of every route
   that lacks a full-bleed hero underneath it; give those routes a top offset equal to the header's
   block size (`--header-block-size`, the variable `accessibility.md` uses for `scroll-margin`).
@@ -376,4 +461,4 @@ tax); Graffino/WebDong Safari filter:blur force-GPU; SiteLint blur stay-within-c
 Josh Comeau backdrop-filter. -->
 ; fold-wave-2b: Josh Comeau backdrop-filter frosted-glass near-edge mask craft + Firefox sticky glass bugs;
 WebKit inline SVG: content-visibility paint invalidation; @layer vs presentation attrs; g transform
-paint-no-draw; url(#id) clip collision; SVGO removeViewBox -->
+paint-no-draw; url(#id) clip collision; SVGO removeViewBox; design-fold 2026-11 (MIT unless noted; detail in SOURCES.md): Nutlope/hallmark, majestic-ui-skill, pbakaus/impeccable (Apache-2.0) - browser surfaces, whole-card link, carousel inset, tables/print; emilkowalski/skills break-ui - worst-case table; jakubkrehel/skills - will-change containing block, decorative layers, image outline; MengTo/skills - gradient borders, progressive blur, clip-path focus/hit, SVG id/stroke/seam traps, denser glass fallback, 3D raster scale (practitioner claim); Leonxlnx/cinetic + wheresryan22/anatomy - banding; teddarific/skills - SVG as img; nateherkai/scroll-craft - subtree ink, img attributes; juliobsz/skills - phone-only breaks -->
