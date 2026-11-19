@@ -12,9 +12,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   `scroll-animation`'s, a component's state transition is frontend's. `web-platform-runtime.md`
   "View Transitions wiring" keeps the shared mechanism and the component-level React placement
   traps, and points to `scroll-animation` `page-transitions.md` "The view-transitions block" for
-  the one browser-support matrix and "Which tool" for React and Next requirements. Removed the
-  duplicated browser floor, the Next flag line and the nested-layout trap (route-level);
-  `nextjs.md` and `ui-motion.md` point the same way.
+  the one browser-support matrix, "Which tool" for the Next App Router route wiring, and "Reduced
+  motion and pointer events" for React's reduced-motion handling. The React layer keeps a
+  version-neutral check (outside Next, the installed `react` must export `ViewTransition`) and the
+  Client Component rule for `addTransitionType`. Removed the duplicated browser floor, the Next flag
+  line and the nested-layout trap (route-level); `nextjs.md` and `ui-motion.md` point the same way.
 
 ### Fixed
 - `ui-motion.md` "Animated text and numbers": expose the final value through an `sr-only` copy, or

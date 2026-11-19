@@ -600,8 +600,8 @@ Animating a popover or dialog in and out of the top layer (`@starting-style`, `o
 
 **Who owns which.** A route-level view transition and its wiring (a navigation's
 `startViewTransition`, React `<ViewTransition>` on pages, cross-document `@view-transition`, types,
-curtains, verification) is `scroll-animation`'s: `page-transitions.md` "The view-transitions block",
-which holds the one browser-support matrix and the measured React and Next requirements. This file
+curtains, verification) is `scroll-animation`'s: `page-transitions.md` "The view-transitions block"
+holds the one browser-support matrix, and "Which tool" the Next App Router route wiring. This file
 owns a view transition for a UI state change inside a component (a tab or view swap, a toggle, a
 list reorder or filter) and the mechanism both share.
 
@@ -611,16 +611,20 @@ list reorder or filter) and the mechanism both share.
 snapshots; elements sharing a `view-transition-name` morph. Names must be unique per active
 snapshot: a duplicate aborts the transition. Feature-detect and let unsupported engines apply the
 update without a transition; never polyfill, and never rely on transition types without fallback
-CSS. Reduced motion becomes an instant swap or an in-place crossfade (`accessibility.md`), not a
-suppressed attempt. Keyframes, easing and durations inside `::view-transition-*` are `design`
-`motion.md` values.
+CSS. Reduced motion becomes an instant swap or an in-place crossfade, not a suppressed attempt (the
+floor: `accessibility.md`; React's transitions, which no stylesheet can stop: `scroll-animation`
+`page-transitions.md` "Reduced motion and pointer events"). Keyframes, easing and durations inside
+`::view-transition-*` are `design` `motion.md` values.
 
 ### React `<ViewTransition>` layer
 
 React's `<ViewTransition>` assigns the names and starts the transition. **Never call
 `document.startViewTransition` yourself when using the component**: a double start cancels or
-corrupts the transition. Never force-install canary React into a Next app to get it; the versions
-it needs are in `scroll-animation` `page-transitions.md` "Which tool".
+corrupts the transition. Outside Next it needs a React release that exports `ViewTransition`: check
+the installed `react`'s exports (or the React docs) before wiring, and never polyfill. Never
+force-install canary React into a Next app: Next ships its own React. `addTransitionType` (inside
+`startTransition`) and programmatic navigation that takes part in a transition run only in a Client
+Component.
 
 Placement and silent-failure modes:
 - **`default="none"` liberally.** A bare VT without `default="none"` fires a cross-fade on *every*

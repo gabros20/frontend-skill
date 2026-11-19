@@ -288,9 +288,9 @@ Server Actions must self-authenticate exactly like a public API endpoint — see
 provider wiring (Clerk/Descope-style `<Provider>` + hooks) lives in `state-and-data.md`. Core Web
 Vitals thresholds and the responsive-image/font-loading doctrine underlying the primitives above
 live in `performance.md`. Independent-verification/screenshot-based acceptance checks live in
-`testing.md`. View Transitions: route-level wiring, including what your Next version needs, is `scroll-animation`
-`page-transitions.md` "Which tool"; component-level mechanics and React `ViewTransition` caveats
-live in `web-platform-runtime.md`; do not install canary React solely for VT on a stable Next release.
+`testing.md`. View Transitions: App Router route wiring is `scroll-animation` `page-transitions.md`
+"Which tool"; component-level mechanics and React `ViewTransition` caveats live in
+`web-platform-runtime.md`; do not install canary React solely for VT on a stable Next release.
 
 ## Optional deeper skills (install when the task is Next-heavy)
 
