@@ -131,6 +131,11 @@ provenance in more detail.
   `Array.prototype.at`/`includes` traps. Drawn into `js-dom-craft.md`.
 - **lydiahallie/javascript-questions** — the microtask/macrotask worked-ordering example. Drawn into
   `js-dom-craft.md`.
+- **deeplethe/solid-glass** (github.com/deeplethe/solid-glass, © 2026 DeepLethe) — the Solid Glass
+  shadcn/ui theme: install path, theming mechanism, component deltas, agent-component states, and
+  the import fixes found by reading its sources (live-region chatter, colour-only outcome, forced
+  colours, Safari reduced transparency). Adapted, no code copied beyond its documented commands.
+  Its shadcn/ui-derived files (NOTICE.md) were not used. Drawn into `shadcn.md`.
 
 ## CC0-1.0 (public domain; verbatim reuse permitted)
 

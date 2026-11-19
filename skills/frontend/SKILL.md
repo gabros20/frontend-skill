@@ -107,7 +107,7 @@ Add only when the platform is web and the project names or uses the stack. Skip 
 | Next.js App Router, server actions, caching, next/* primitives | [Next.js](references/nextjs.md) | File conventions, RSC/server-actions, caching model, image/font/link primitives |
 | Data-fetching libraries — TanStack Query, SWR, React Router data APIs, TanStack Start | [Data fetching libraries](references/data-fetching-libraries.md) | Current-API pointers per library; the cache/optimistic/no-waterfall principles themselves are homed in `state-and-data.md` |
 | Tailwind CSS — theme, utilities, responsive variants | [Tailwind](references/tailwind.md) | v4 `@theme` canonical (v3 compat), `cn`/twMerge/CVA, the postcss trap |
-| shadcn/ui and component-library selection | [shadcn](references/shadcn.md) | Registry/CLI/ownership model, composition recipes, official-library selection table, icon discipline |
+| shadcn/ui and component-library selection, or the Solid Glass theme | [shadcn](references/shadcn.md) | Registry/CLI/ownership model, composition recipes, official-library selection table, icon discipline, Solid Glass adoption |
 
 ### Concern
 

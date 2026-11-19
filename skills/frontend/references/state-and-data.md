@@ -153,6 +153,9 @@ must carry arrives in `ai`'s handoff (`handoff.md` "What `ai` hands downstream")
   event schema over their own networking stack — ideally a typed client generated from the same
   contract — with no dependence on React hooks, a web framework's server actions, or browser
   cookies for auth.
+- **Prebuilt agent components render states, not the contract.** Solid Glass's `turn-status`,
+  `tool-steps`, `ask-card` and kin map onto these events; the mapping and the live-region and
+  approval gaps to fix on import are in `shadcn.md` "Solid Glass theme".
 
 Test it: drop the connection mid-run, reload, and open the same run on a second device; both
 replays render with no duplicate or superseded output, and the run kept running.
