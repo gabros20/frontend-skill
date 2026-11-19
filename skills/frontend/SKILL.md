@@ -49,7 +49,7 @@ Before producing anything the user will have to live with:
    answers that would change it most.
 6. **Write it down.** Answers and assumptions go to the LEDGER's Context block.
 
-This pack's questions:
+This pack's questions (a pool — ask the top four that step 1 left open):
 1. Where will this run, and who maintains it? (Detect the stack first; ask only what the repo
    can't tell you.)
 2. What is the design source of truth: a handoff, a Figma file, a comp, an existing site — or none?
