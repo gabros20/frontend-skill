@@ -110,7 +110,7 @@ Canonical doctrine (WCAG ratios, touch-target table, reduced-motion kill-switch)
 - Ternary over if/else view branching (avoids `_ConditionalContent` recreation); avoid `AnyView`, prefer `@ViewBuilder`/`Group`/generics. Extract dedicated `View` structs rather than computed `some View` properties.
 - `body` runs frequently — hoist sorting/filtering out of it. `LazyVStack`/`LazyHStack` for large scrollable data. `.task()` over `.onAppear()` for async work — auto-cancels on disappear.
 - Don't store `DateFormatter`-like formatters — use `Text(date, format:)`/`Text(number, format:)`.
-- Animation: prefer `@Animatable` macro over manual `animatableData`; never a bare `.animation(_:)` — always pair a `value:`.
+- Animation: prefer `@Animatable` macro over manual `animatableData`; never a bare `.animation(_:)` — always pair a `value:`. Stop `repeatForever` animations when the scene phase leaves `.active`; profile motion on a release build on a device.
 
 ## Swift conventions
 
@@ -119,4 +119,4 @@ Canonical doctrine (WCAG ratios, touch-target table, reduced-motion kill-switch)
 - Never silently swallow a user-triggered error with `print()` — surface it via alert.
 - Hygiene: `@AppStorage` must never store credentials — use Keychain; unit-test core logic (view models, not views — Swift Testing API is in `swift-concurrency-and-testing.md`).
 
-<!-- sources: ehmo_platform-design-skills ios/SKILL.md (MIT); swiftui-pro (MIT, Paul Hudson/twostraws); wondelai_skills ios-hig-design (MIT); twostraws/SwiftUI-Agent-Skill (MIT — diffed against swiftui-pro; no material net-new content found beyond what's listed here) -->
+<!-- sources: ehmo_platform-design-skills ios/SKILL.md (MIT); swiftui-pro (MIT, Paul Hudson/twostraws); wondelai_skills ios-hig-design (MIT); twostraws/SwiftUI-Agent-Skill (MIT — diffed against swiftui-pro; no material net-new content found beyond what's listed here); design-fold 2026-11: MengTo/skills performance-profiling (MIT) — repeatForever off scene phase -->

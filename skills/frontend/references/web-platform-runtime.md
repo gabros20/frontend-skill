@@ -1,14 +1,12 @@
 # Web Platform Runtime
 
 Purpose: Browser-runtime mechanics that sit outside CSS layout — SPA routing and History API
-behavior, storage, service workers/PWA installability, gesture and pointer handling, mobile
-Safari/viewport hardening, background/transparent video, scroll-scrub media traps, and View
+behavior, storage, service workers/PWA installability, mobile Safari/viewport hardening, background/transparent video, scroll-scrub media traps, and View
 Transitions wiring. Framework-agnostic; sharpen with a stack overlay (e.g. `nextjs.md`) when one
 applies.
 
 Read when:
 - Building client-side routing/navigation in a single-page app.
-- Implementing drag, swipe, or other pointer-driven gestures.
 - Fixing mobile browser-chrome, viewport, or safe-area bugs (especially iOS Safari).
 - Adding an installable PWA, offline caching, or a background/hero video.
 - Wiring scroll-scrubbed or seek-driven media (client traps only — not choreography).
@@ -18,15 +16,16 @@ Skip when:
 - The question is CSS layout, breakpoints, or container queries — read `web-platform-css.md`.
 - The question is touch-target sizing or reduced-motion itself — read `accessibility.md` (this
   file cites it, never restates the numbers).
-- The question is scroll-driven choreography, easing, or spring values — that is animation's
-  domain; this file keeps only the reduced-motion no-op and mechanism wiring.
+- The question is drag, swipe, or component motion (`ui-motion.md`), scroll-driven choreography or
+  page-transition motion (`scroll-animation`), or easing and spring values (`design` `motion.md`);
+  this file keeps only the reduced-motion no-op and mechanism wiring.
 
 Inputs:
 - Whether the app is a full SPA (client router) or uses framework-native navigation.
 - Target platforms (iOS Safari needs the most hardening).
 
 Produces:
-- Correct SPA navigation behavior (URL, title, focus, scroll), gesture-handling code, viewport/
+- Correct SPA navigation behavior (URL, title, focus, scroll), viewport/
   safe-area fixes, video/scrub media contracts, and a working offline/installable shell where
   relevant.
 
@@ -74,7 +73,9 @@ Installability requires all of: HTTPS, a manifest with `name`, `icons` (192×192
 minimum, plus a maskable variant for Android), `start_url`, and `display`; and a service worker
 whose `fetch` handler actually responds (registration alone is not sufficient). Choose `display`
 deliberately — `standalone` is the default for an installed-app feel, `fullscreen` suits
-games/media, avoid `browser` if the point is to hide browser chrome.
+games/media, avoid `browser` if the point is to hide browser chrome. Site icons beyond the
+manifest: an SVG favicon, a 32px ICO/PNG fallback, and a 180px `apple-touch-icon`, from design's
+small-size drawing when the full mark blurs at 16px.
 
 For the service worker's caching lifecycle (install/activate handlers, per-resource-type strategy,
 repeat-visit gains), see `performance.md`'s Caching strategy section — this file owns only the
@@ -97,30 +98,10 @@ Rendering an agent run over this transport (resume cursor, provisional text, app
 
 ## Gesture and pointer handling
 
-Momentum-based dismissal: don't gate on a fixed drag distance. Compute
-`velocity = |dragDistance| / elapsedTime` and dismiss once velocity crosses a threshold
-(roughly `0.11` in practice) regardless of distance travelled — a quick flick should be enough on
-its own. At a drag's natural boundary, apply progressive resistance rather than a hard stop
-(rubber-banding): `resistance(overshoot, dimension, constant=0.55) = overshoot·dimension·constant /
-(dimension + constant·|overshoot|)`.
-
-Call `setPointerCapture(pointerId)` once a drag begins so tracking continues even if the pointer
-leaves the element's bounds. Ignore additional touch points once a drag has started — switching
-fingers mid-drag without this guard jumps the element. Track a short history of recent
-`pointermove` events and timestamps (not just the current point) so release velocity can actually
-be computed. Add roughly 10px of hysteresis before committing a tap to a drag, or a drag to a
-direction; detect all plausible gestures in parallel from the first move and cancel losers once
-intent is clear, rather than using a recognizer that only reports a final state like `swipeleft`.
-Respond to input on pointer-down and track continuously during the gesture — feedback that only
-appears on release reads as laggy, not just less "juicy."
-
-Scope touch behavior with `touch-action`: `pan-y` for vertical-scroll areas, `pan-x` for
-carousels, `none` for canvas/map surfaces that fully own the gesture. `{ passive: true }` on
-`touchstart`/`wheel` listeners that never call `preventDefault()` removes the browser's forced wait
-before scrolling — never set it on a listener that does call `preventDefault()` (breaks
-custom-gesture handling). `-webkit-tap-highlight-color: transparent` plus an explicit custom
-`:active` state replaces the default tap flash. Touch-target sizing itself is `accessibility.md`'s
-table — cite it, don't restate the numbers here.
+Drag, swipe, sheets, and pointer followers — tracking and release, velocity dismissal,
+rubber-banding, pointer capture, hysteresis, `pointercancel`/`blur` cleanup, `touch-action` and
+passive listeners — live in `ui-motion.md` (Gestures and drag). Touch-target sizing and the
+single-pointer alternative for every drag are `accessibility.md`'s.
 
 ## Mobile Safari and viewport hardening
 
@@ -232,7 +213,16 @@ Text). Setting input `font-size` to at least 16px (and form controls `font: inhe
 fall back to the UA's ~13.3px — `css-craft.md`) stops the auto-zoom at the source *and* preserves
 pinch-zoom, and is the preferred fix wherever feasible. **Do not silently flip an existing
 `maximumScale` / `maximum-scale` choice** — it is often deliberate for a locked app UI; note the
-trade-off rather than removing it blind. Content sites should prefer the 16px floor.
+trade-off rather than removing it blind. Content sites should prefer the 16px floor. When the
+design needs a smaller-looking field on iOS, keep the input at 16px and scale it (`scale(13/16)`):
+widen it by the inverse, divide its line-height by the factor, set the origin to the inline start
+(flip in RTL), and let a clipping wrapper draw the surface, border, and `:focus-within` ring, since
+the scaled box shrinks its own ring and hit area; drop the transform at the desktop breakpoint.
+
+Never set `text-size-adjust: none` (it blocks user text enlargement); `-webkit-text-size-adjust:
+100%` only stops iOS landscape inflation, so add it deliberately, not by reflex (`font-size-adjust`
+is the unrelated fallback-metrics property). `-webkit-touch-callout: none` belongs on controls and
+drag handles only, never the body.
 
 ## Desktop vs iOS Safari divergences
 
@@ -429,6 +419,8 @@ autoplay gate); `preload="none"` below the fold, a **poster image** above the fo
 frame but downloads media bytes (costlier than a static poster). Strip audio at encode time —
 required for autoplay reliability and saves bytes. Guard against silent autoplay refusal
 (low-power mode, data saver) by calling `.play()` in an effect and handling the rejected promise.
+Muted does not exempt a loop from WCAG 2.2.2: background video running longer than five seconds
+ships a visible pause control (`accessibility.md` Reduced motion).
 
 **Decorative background video contract:** no `controls`; overlays that sit on top use
 `pointer-events: none` so they don't steal taps; treat as decorative for a11y (not a second
@@ -600,6 +592,8 @@ double-manages focus/escape.
 **Order of ops:** progressive enhance — popover for top-layer / light-dismiss; CSS anchor where
 supported; fallback `@supports (anchor-name: --a)` or JS position. Don't assume top-layer z-index
 fights old modals the same way. Verify Chromium vs Safari/Firefox; light dismiss and focus return.
+Animating a popover or dialog in and out of the top layer (`@starting-style`, `overlay` with
+`allow-discrete`): `ui-motion.md` (Enter and exit).
 
 ## View Transitions wiring (browser + React layer)
 
@@ -612,7 +606,8 @@ active snapshot, a duplicate breaks the transition. Wrap the trigger in a
 `prefers-reduced-motion` check so reduced-motion becomes a no-op swap, not a suppressed animation
 attempt (cite `accessibility.md`'s reduced-motion doctrine — don't restate the media query here).
 The keyframes/easing/duration values applied inside `::view-transition-*` pseudo-elements are
-motion values and route to the animation skill; this file owns only the mechanism.
+motion values (`design` `motion.md`); route-change transition craft is `scroll-animation`'s
+(`page-transitions.md`); this file owns only the mechanism.
 
 Browser floor (verify current support before relying): Chromium 111+, Firefox 144+, Safari 18.2+;
 **graceful no-op elsewhere** — never polyfill. Unsupported engines simply apply the DOM update
@@ -642,7 +637,7 @@ Placement and silent-failure modes:
   break shared morphs. Scope names by ID (`hero-${id}`), never a static component-local string.
 - **`share` takes precedence over `enter`/`exit`.** When a pair exists, share wins; when no pair,
   enter/exit fire. Plan fallbacks. Do not fade-out exit on pages that rely on shared morphs (use a
-  directional slide recipe in the animation skill).
+  directional slide recipe from `scroll-animation` `page-transitions.md`).
 - **Force re-enter via remounting `key` on Suspense with caution** — remounts the boundary and
   **refetches**.
 - **Persistent chrome / floating UI** (header, popover, tooltip): assign a unique
@@ -659,6 +654,14 @@ Placement and silent-failure modes:
 - **Shared-element morphs are raster snapshots.** Large text size morphs (`h3` → `h1`) scale a
   bitmap ghost. Prefer a text-morph recipe that hides the old and shows a full-res new, not plain
   share of large type.
+- **One driver per navigation.** A custom page-transition curtain and React `<ViewTransition>`
+  never drive the same navigation; a route-level `loading.tsx` under a curtain lifts it onto a
+  skeleton.
+
+**Verify on sampled frames, normal and reduced:** old+new opacity sums to about 1 through a
+crossfade (a dip or flash otherwise), no entrance replays on content that persists, no old- or
+new-only layer outlives the transition, no paint swap or `box-shadow` snap at either end. During a
+transition judge the captured layers, not the live DOM.
 
 Next wiring: `experimental.viewTransition: true` (Next 15+ canary / 16+). `addTransitionType` and
 programmatic navigation that participates in VT require Client Components.
@@ -681,4 +684,4 @@ ibelick/baseline-ui (MIT) - miner-ext-b.md; x-bookmarks #1 (@devongovett iOS 26 
 inner-viewport clip); skills-finder vercel-react-view-transitions (React VT mechanism, Next flag,
 canary rule, silent failures); github-relay phuocng/html-dom (modal scrollbar width compensation
 order-of-ops) -->
-; fold-wave-2b: SiteLint iOS video poster/preload; VisualViewport keyboard (MDN/bram.us/WebKit); mix-blend tall-page Safari reports; fold-wave-2b: SiteLint iOS video poster/preload; VisualViewport keyboard (MDN/bram.us/WebKit); mix-blend tall-page Safari reports -->
+; fold-wave-2b: SiteLint iOS video poster/preload; VisualViewport keyboard (MDN/bram.us/WebKit); mix-blend tall-page Safari reports; design-fold 2026-11: jakubkrehel/skills (MIT) iOS scaled-input variant, 2.2.2 pause on background video; jpoindexter/typography-skills + emilkowalski/skills mobile-native (MIT) text-size-adjust, touch-callout; pbakaus/impeccable (Apache-2.0) VT frame checks; juliobsz/skills (MIT) curtain vs ViewTransition, favicon set; gesture section moved to ui-motion.md -->

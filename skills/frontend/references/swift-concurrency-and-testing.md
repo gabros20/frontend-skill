@@ -50,6 +50,8 @@ in-flight `Task` handles in a dictionary and have late callers `await` the exist
 - `@MainActor` propagates to subclasses, through actor-isolated property-wrapper storage, and to a type conforming to a `@MainActor` protocol (e.g. SwiftUI's `View`) — but **not** into closures passed to non-isolated functions.
 - `isolated` parameters accept any actor without hard-coding one: `func updateUI(on actor: isolated MainActor)`. `assertIsolated()` halts debug builds off the expected executor — debugging aid only, compiled out of release.
 - Flag custom actors that mostly forward work or own little mutable state — probably unnecessary.
+- Actors run queued work by priority, not arrival order: when order matters, funnel it through one task or an `AsyncStream`.
+- Closures SwiftUI marks `@Sendable` (`visualEffect`, `onGeometryChange`, `Shape.path(in:)`, `Layout`) run off the main actor — never touch main-actor state there. Delegate callbacks you don't own: `nonisolated` plus `MainActor.assumeIsolated {}`, which traps loudly when wrong. Start `withAnimation` synchronously inside the gesture or scroll callback, in the same frame.
 
 ## Structured and unstructured concurrency
 
@@ -119,4 +121,4 @@ No built-in floating-point tolerance — use Swift Numerics' `isApproximatelyEqu
 - Never test SwiftUI views directly (unpredictable `@State` behavior) — test view models/`@Observable` classes instead. Expose hidden dependencies (`URLSession`, `UserDefaults`) via injected, default-valued, ideally protocol-typed parameters so tests can substitute mocks.
 - `#require` throws and stops the test — use for start-of-test preconditions/unwraps; `#expect` for the actual assertions, always naming the specific expected error type, never a bare `Error.self`.
 
-<!-- sources: swift-concurrency-pro (MIT, Paul Hudson/twostraws); swift-testing-pro (MIT, Paul Hudson/twostraws) -->
+<!-- sources: swift-concurrency-pro (MIT, Paul Hudson/twostraws); swift-testing-pro (MIT, Paul Hudson/twostraws); design-fold 2026-11: emilkowalski/skills write-swift (MIT) — actor ordering, @Sendable SwiftUI closures, assumeIsolated, synchronous withAnimation -->

@@ -3,11 +3,12 @@ name: frontend
 description: >-
   Implement production frontend code for websites, web apps, iOS, and Android, from creative
   website builds and faithful site rebuilds to dense product UI: components, state, data
-  fetching, forms, auth flows, chat and agent-run UIs, routing, responsive accessible interfaces,
-  performance, client security, and tests. Covers React, Next.js, Tailwind, shadcn/ui, SwiftUI,
-  Jetpack Compose, and React Native, and consumes a design handoff (handoff.yaml, DESIGN.md). Do
-  not use for design direction, motion or animation implementation, SEO strategy, backend or system
-  architecture, or QA audits unless the request also requires frontend implementation.
+  fetching, forms, auth flows, chat and agent-run UIs, UI motion and micro-interactions,
+  responsive accessible interfaces, performance, client security, and tests.
+  Covers React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and React Native, and
+  builds from a design handoff, Figma file, or approved comp. Do not use for design direction or
+  motion specs, scroll-linked animation, SEO strategy, backend or system architecture, or QA audits
+  unless the request also requires frontend implementation.
 ---
 
 # Frontend Engineering
@@ -18,13 +19,14 @@ Implement the production client — the code people actually run — across webs
 and Android. That spans the whole register: bringing a distinctive, art-directed website design to
 pixel-perfect life is as much this skill's job as dense application UI. It covers component and
 state architecture, routing, data fetching and API integration, forms and auth flows, responsive
-and accessible interfaces, the full state set in code, client-side security, frontend performance,
-and the tests that guard it. Own the implementation and its craft; consume design's intent rather
+and accessible interfaces, UI and component motion, the full state set in code, client-side
+security, frontend performance, and the tests that guard it. Own the implementation and its craft; consume design's intent rather
 than re-deciding it.
 
 Adjacent work this pack does not own: experience intent, visual direction, tokens-as-decisions, and
-look-and-feel critique (`design`); motion and animation beyond wiring reduced-motion and consuming
-motion tokens (animation, future); anything done for search beyond semantic markup (seo, future);
+look-and-feel critique, and motion values and choreography decisions (`design`); scroll-linked
+motion, scroll entrances, page transitions, and smooth scroll (`scroll-animation`) — UI and
+component motion code is IN; anything done for search beyond semantic markup (seo, future);
 system decisions, stack-selection rationale, and API/event contracts (`architecture`); server
 behavior, databases, and server APIs (`backend`) — but SSR and RSC runtime inside the client framework
 is IN; independent verification, WCAG audits, and release gates (`quality`); deployment, CI/CD,
@@ -67,10 +69,11 @@ useful; do not invoke them automatically unless the user requested a composition
 | Implement accessibility — ARIA patterns, focus management, semantic HTML, keyboard support | [Accessibility](references/accessibility.md) | ARIA pattern code, focus/keyboard mechanics, and the canonical contrast/target/reduced-motion floors |
 | Engineer performance — Core Web Vitals, bundle/code-split, images, fonts, rendering cost | [Performance](references/performance.md) | CWV thresholds/fix ladder; responsive preload (`imagesrcset`/`fetchpriority`); image decode/sizes; compositor paint traps; idle/adaptive loading; virtualization |
 | Handle client security and privacy — token storage, XSS sinks, CSP, CSRF, credentialed fetch, OAuth cookie traps | [Client security](references/client-security.md) | Client attack-surface rules, credentials/CSRF ladders, sanitize sinks, security-header consumption |
-| Write client tests and run the dev-loop self-check — unit/component/UI, coverage, screenshot verification | [Testing](references/testing.md) | Test doctrine, RTL query ladder, TS strict baseline, and the green-build-is-not-looks-right loop |
+| Write client tests and run the dev-loop self-check — unit/component/UI, coverage, screenshot verification, stress and state harnesses | [Testing](references/testing.md) | Test doctrine, RTL query ladder, TS strict baseline, the green-build-is-not-looks-right loop, stress harness and state workbench |
 | Internationalize — logical properties, Intl APIs, direction/language, text-expansion resilience | [i18n](references/i18n.md) | Logical-property mapping, Intl usage, dir/lang wiring, text-expansion budget |
-| Consume a design handoff — read handoff.yaml and DESIGN.md, wire tokens, dark mode | [Design handoff and tokens](references/design-handoff-and-tokens.md) | handoff.yaml acceptance, 3-tier token model, never-edit-generated, dark-mode token strategy |
-| Rebuild or migrate an existing site the client owns, faithfully, onto a new stack | [Site rebuild](references/site-rebuild.md) | Render capture + full asset harvest, identity map, no-substitution rules, measured tokens, pixel-diff fidelity gate |
+| Consume a design handoff — handoff.yaml and DESIGN.md, or build from a Figma file or approved comp image; wire tokens, dark mode | [Design handoff and tokens](references/design-handoff-and-tokens.md) | handoff.yaml acceptance, 3-tier token model, build-from-file rounding contract and per-region gate, dark-mode token strategy |
+| Implement UI motion — micro-interactions, popover/dialog/drawer/toast enter and exit, height and layout animation, springs, drag and gestures, animated numbers | [UI motion](references/ui-motion.md) | Cheapest-driver ladder, `@starting-style`/`allow-discrete` exits, height-auto and FLIP, spring conversion, track/release gestures with cleanup, motion perf traps, freeze-and-seek verification |
+| Rebuild or migrate an existing site the client owns, faithfully, onto a new stack — or restyle an app in place keeping its wiring | [Site rebuild](references/site-rebuild.md) | Render capture + full asset harvest, identity map, no-substitution rules, measured tokens, pixel-diff fidelity gate, in-place wiring inventory |
 | Structure or restructure a client codebase — folders, feature boundaries, import discipline, token file layout, CMS/section registries | [Client architecture](references/client-architecture.md) | Feature-vs-type decision, import layering, barrels, token layout; content-driven section registry + visual acceptance |
 | Wire a production SPA shell — API client, single-flight 401 refresh, multi-tab session, feature flags, error boundaries, public runtime config | [Client app wiring](references/client-app-wiring.md) | Shared fetch client, refresh mutex, logout fanout, flag bootstrap, multi-level error reporting, build-once config |
 
@@ -82,12 +85,13 @@ Add the one substrate the request targets. At most one. Native overrides web def
 |---|---|---|
 | The web (default substrate) | [Web platform CSS](references/web-platform-css.md) + [Web platform runtime](references/web-platform-runtime.md) | Modern CSS layout/stacking/margin collapse/color-gamut; SPA routing, storage, Safari/iOS hardening, transparent+scrub video traps, Popover/Anchor floors, View Transitions |
 | Polish or harden CSS details — scrollbars, stacking, overflow, blur/compositor, numeric alignment, defensive patterns | [CSS craft](references/css-craft.md) | Scrollbar/overscroll/grid patterns; Safari blur/backdrop-root/will-change layer craft; paint/texture budgets; aspect-ratio and micro-patterns |
+| Typography in CSS — units, synthesis, OpenType features, cap-height trimming, wrapping, decoration | [Typography CSS](references/typography-css.md) | Unitless leading, no faked faces, properties over raw feature tags, `text-box` trim, hyphenation and balance limits, icon and colour fonts |
 | Vanilla DOM and browser-API mechanics — events, observers, clipboard, timing, measurement, cross-tab | [JS DOM craft](references/js-dom-craft.md) | Event delegation, AbortController-as-cleanup, microtask/macrotask/rAF timing, media IO+abort patterns, ResizeObserver loop, structuredClone, cross-tab sync |
 | Native iOS / iPadOS | [SwiftUI](references/swiftui.md) (+ [Swift concurrency and testing](references/swift-concurrency-and-testing.md) when async or tests are involved) | SwiftUI/HIG conformance in code; Swift concurrency correctness and Swift Testing |
 | Native Android | [Compose](references/compose.md) (+ [Kotlin and Compose state](references/kotlin-and-compose-state.md) when state, coroutines, or Flow are involved) | Material 3 conformance in code; Kotlin doctrine and Compose state/recomposition |
-| Cross-platform native (React Native / **Expo default**) | [React Native](references/react-native.md) | Expo-first RN: Router, managed/prebuild, EAS, env/image/storage; core list/gesture/New Arch traps; SwiftUI/Compose remain pure-native stacks |
+| Cross-platform native (React Native / **Expo default**) | [React Native](references/react-native.md) | Expo-first RN: Router, managed/prebuild, EAS, env/image/storage; core list/gesture/New Arch traps and motion principles; SwiftUI/Compose remain pure-native stacks |
 
-`css-craft.md` and `js-dom-craft.md` are supplementary web-substrate reads, not alternate
+`css-craft.md`, `typography-css.md`, and `js-dom-craft.md` are supplementary web-substrate reads, not alternate
 substrates — add either alongside the web row (not instead of it) when the request specifically
 needs that craft-level polish; they don't count against the "at most one" substrate rule above.
 
@@ -123,8 +127,6 @@ specialist skill and open live docs rather than inventing conventions:
 | **Remix / React Router framework mode** | `npx skills add remix-run/agent-skills@react-router-framework-mode` (~3K, official) | [reactrouter.com](https://reactrouter.com/start/framework/installation) (Remix successor); archive: [remix.run/docs/en/main](https://remix.run/docs/en/main) |
 | **TanStack Start** | Covered as a **pointer** in [Data fetching libraries](references/data-fetching-libraries.md) + `npx skills add deckardger/tanstack-agent-skills@tanstack-start-best-practices` | [tanstack.com/start/latest](https://tanstack.com/start/latest) |
 | **TanStack Query / Router** | Same reference + Query/Router companion skills listed there | [tanstack.com/query/latest](https://tanstack.com/query/latest) · [tanstack.com/router/latest](https://tanstack.com/router/latest) |
-| **Next.js** | Full overlay [Next.js](references/nextjs.md) + optional skills/docs tables in that file | [nextjs.org/docs](https://nextjs.org/docs) |
-| **Expo / RN** | Full overlay [React Native](references/react-native.md) + Expo skills/docs tables | [docs.expo.dev](https://docs.expo.dev) |
 
 Vue, Svelte, Solid, Flutter, UIKit: no high-signal single skill pinned here — use project docs +
 official framework docs; do not force Next/Expo patterns onto them.
@@ -141,6 +143,7 @@ Read these together — the router encodes the pairing so no lateral hop is requ
 - **Expo / React Native app** → [React Native](references/react-native.md) (+ [React components and state](references/react-components-and-state.md) for shared React discipline). Overrides the web-platform substrate. Prefer Expo-managed unless the repo is already bare.
 - **Consume a design handoff** → [Design handoff and tokens](references/design-handoff-and-tokens.md) + the relevant primary job ref + the target platform/stack overlay.
 - **Faithful site rebuild** → [Site rebuild](references/site-rebuild.md) + [Design handoff and tokens](references/design-handoff-and-tokens.md) for the token pipeline + the target platform/stack overlay.
+- **Animated web component** → [UI motion](references/ui-motion.md) + the primary job ref (+ [Accessibility](references/accessibility.md) when reduced motion or a pause control is in play). Scroll-linked motion routes to `scroll-animation`.
 - **Any surface where accessibility or performance is explicit** → the primary job ref + [Accessibility](references/accessibility.md) and/or [Performance](references/performance.md).
 
 ## Universal invariants

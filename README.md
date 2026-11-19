@@ -33,12 +33,14 @@ Use `frontend` when the request needs one or more of:
   and code-splitting, virtualization.
 - Client security — token storage, XSS sinks, CSP/CSRF/credentials ladders, client-reachable-is-public.
 - Production SPA shell — shared API client, single-flight 401 refresh, multi-tab session, flags.
+- UI motion — micro-interactions, enter/exit (`@starting-style`, top-layer exits), height and layout
+  animation, springs, drag and gestures, built from design's motion spec.
 - Web platform craft — Safari/iOS viewport and chrome, dual-codec transparent video patterns,
   scroll-scrub media traps, View Transitions wiring, CSS/DOM craft.
 - Unit, component, and UI tests, plus the dev-loop self-check (screenshot every route, two
   viewports, reduced motion emulated).
-- Internationalization, and consuming a design handoff (`handoff.yaml` plus `DESIGN.md`) — tokens,
-  states, and per-screen intent, faithfully implemented.
+- Internationalization, and consuming a design handoff (`handoff.yaml` plus `DESIGN.md`, or a Figma
+  file or approved comp) — tokens, states, and per-screen intent, faithfully implemented.
 - The covered stacks: React, Next.js, Tailwind, shadcn/ui, SwiftUI, Jetpack Compose, and
   **Expo / React Native** (Expo is the default greenfield RN path, like Next.js for web; bare RN
   when the project already is or needs it). Plus the native web platform substrate. An uncovered
@@ -46,7 +48,8 @@ Use `frontend` when the request needs one or more of:
   plus the platform substrate; the project's own conventions win.
 
 It does **not** own experience intent, visual direction, or look-and-feel critique (`design`);
-motion and animation beyond wiring reduced-motion and consuming motion tokens; anything done for
+motion values and choreography decisions (`design`); scroll-linked motion, scroll entrances, page
+transitions, and smooth scroll (`scroll-animation`); anything done for
 search beyond semantic markup; system decisions and API/event contracts (`architecture`); server
 behavior, databases, and server APIs (`backend`) — though SSR/RSC runtime inside the client
 framework is in scope; independent verification, WCAG audits, and release gates (`quality`); or
@@ -126,10 +129,10 @@ Documentation may use `/frontend` as shorthand. Other clients may expose a slash
 experience/visual design, system architecture, marketing/SEO, or independent release verification
 unless the request also requires frontend implementation.
 
-## The 28 references
+## The 30 references
 
 The router selects from a primary-job set, a platform overlay, and a web stack overlay. It loads
-the smallest sufficient set — never all 28.
+the smallest sufficient set — never all 30.
 
 **Primary job**
 
@@ -147,6 +150,7 @@ the smallest sufficient set — never all 28.
 | [client-architecture.md](skills/frontend/references/client-architecture.md) | Feature-vs-type decision rule, unidirectional import layering, colocation doctrine, barrel-vs-public-API reconciliation, token file layout |
 | [client-app-wiring.md](skills/frontend/references/client-app-wiring.md) | API client, single-flight 401 refresh, multi-tab session, feature flags, error boundaries → reporting, public runtime config |
 | [site-rebuild.md](skills/frontend/references/site-rebuild.md) | Faithful rebuild/migration of an owned site: render capture, full asset harvest + identity map, no-substitution rules, measured tokens, pixel-diff fidelity gate |
+| [ui-motion.md](skills/frontend/references/ui-motion.md) | UI motion code: cheapest-driver ladder, `@starting-style` and top-layer exits, height-auto and FLIP, spring conversion, track/release gestures with cleanup, freeze-and-seek verification |
 
 **Platform overlay** (the web substrate by default, native when named or implied — native overrides web)
 
@@ -160,6 +164,7 @@ the smallest sufficient set — never all 28.
 | [kotlin-and-compose-state.md](skills/frontend/references/kotlin-and-compose-state.md) | Kotlin doctrine and Compose state/recomposition, added when state, coroutines, or Flow are involved |
 | [react-native.md](skills/frontend/references/react-native.md) | Expo-first RN (Router, managed/prebuild, EAS, env/media); core list/gesture/New Arch traps; optional `expo/skills` + [docs.expo.dev](https://docs.expo.dev) deeper dives; bare when required |
 | [css-craft.md](skills/frontend/references/css-craft.md) | Scrollbars, Safari blur/backdrop roots, will-change layers, frosted-glass craft, micro-patterns |
+| [typography-css.md](skills/frontend/references/typography-css.md) | Unitless leading, synthesis, properties over raw OpenType tags, `text-box` trim, wrapping and hyphenation limits, icon and colour fonts |
 | [js-dom-craft.md](skills/frontend/references/js-dom-craft.md) | Delegation, AbortController, media IntersectionObserver + abort, ResizeObserver loop, timing, clipboard |
 
 **Web stack overlay** (only when the platform is web and the project names or uses the stack)
@@ -220,7 +225,7 @@ prose. Full attribution and licenses:
 ```text
 .codex-plugin/plugin.json  Codex plugin and release metadata
 AGENTS.md / CLAUDE.md      repository and client-specific maintainer guidance
-skills/frontend/           portable runtime skill and client metadata (28 references)
+skills/frontend/           portable runtime skill and client metadata (30 references)
 evals/                     activation, traversal, output, and compression fixtures
 docs/                      installation, usage, and recipes
 site/                      visual guide (deployed to frontendengskill.vercel.app)

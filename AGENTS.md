@@ -8,10 +8,13 @@ plugin package name is `frontend-skill`; the runtime identifier and Codex invoca
 
 `frontend` owns the production client — component and state architecture, SPA wiring (API client,
 session refresh, flags, error reporting), routing, data fetching and API integration, forms and
-auth flows, responsive and accessible UI, the full state set in code, client-side security,
-frontend performance, and the tests that guard it — across websites, web apps, iOS, and Android. It consumes design's intent (a `handoff.yaml` and `DESIGN.md`) rather
+auth flows, responsive and accessible UI, UI and component motion (micro-interactions, enter/exit,
+springs, gestures and drag, layout animation, React Native motion), the full state set in code,
+client-side security, frontend performance, and the tests that guard it — across websites, web apps, iOS, and Android. It consumes design's intent (a `handoff.yaml` and `DESIGN.md`) rather
 than re-deciding it, and never presents prototype or unverified code as production-ready. It does
-not absorb experience intent and visual direction (design), system decisions and API/event
+not absorb experience intent, visual direction, and motion values or choreography decisions
+(design), scroll-linked motion, scroll entrances, page transitions, and smooth scroll
+(`scroll-animation`), system decisions and API/event
 contracts (architecture), server behavior and databases (backend) — though SSR/RSC runtime inside
 the client framework is in scope — independent audits and release gates (quality), or deployment
 and store delivery (operate) — though client build config is in scope. When an adjacent capability
@@ -27,7 +30,8 @@ into a lifecycle composer.
 - **Canonical homes — one source of truth, others point to it, never restate.** The two-layer state
   model lives in `state-completeness.md`. Universal accessibility floors (contrast, target sizes,
   focus, zoom, reduced-motion) live in `accessibility.md`. Design-handoff token acceptance lives in
-  `design-handoff-and-tokens.md`. TypeScript strict baseline lives in `testing.md`.
+  `design-handoff-and-tokens.md`. Motion implementation lives in `ui-motion.md`; it consumes design's
+  values and never defines them. TypeScript strict baseline lives in `testing.md`.
 
 ## Change rules
 

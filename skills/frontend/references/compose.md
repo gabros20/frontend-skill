@@ -77,8 +77,8 @@ standalone composable `PredictiveBackHandler(enabled) { progress: Flow<BackEvent
 extension. Do not suppress the system-provided back preview
 animation. If implementing a custom transition, interpolate using `BackEventCompat.progress`
 (0.0 to 1.0) and respect `BackEventCompat.swipeEdge` (`EDGE_LEFT`/`EDGE_RIGHT`) so the exiting
-screen tracks the initiating edge; the specific scale/offset math is a choreography value (OUT to
-the animation skill); this file keeps only the API names and the "don't suppress the system
+screen tracks the initiating edge; the specific scale/offset math is a choreography value
+(`design` `motion.md`); this file keeps only the API names and the "don't suppress the system
 preview" rule. Back gesture navigates back in the stack; the Up button navigates up the
 hierarchy; they may differ. Never override the deprecated `onBackPressed()`.
 

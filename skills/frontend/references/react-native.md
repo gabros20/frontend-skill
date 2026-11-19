@@ -92,7 +92,28 @@ Gesture and animation work must run on the UI thread via Reanimated and `react-n
 never driven by JS-thread mechanisms like `PanResponder` or a `setState` call inside an `onScroll`
 handler; JS-thread-driven gestures drop frames under any JS-thread load. This is the same
 "continuous value shouldn't live in React state" principle as `react-components-and-state.md`'s
-motion-value guidance, applied at the native-thread level.
+motion-value guidance, applied at the native-thread level. Principles that survive the library
+(API names: Reanimated and gesture-handler docs):
+
+- Cross back to the JS runtime only at gesture end or a threshold, never per frame from an update or
+  scroll handler; never read or write a shared value during render; memoize gesture objects
+  (rebuilding one mid-drag drops the drag).
+- Entering animations on virtualized rows replay on recycle: animate the container, or use a
+  reflow-only layout animation. Collapse a header by translating content inside a fixed box, never
+  by animating its height (text scales with the user's font size, so never animate to a hard-coded
+  height). Keyboard-following UI reads the keyboard's real per-frame position, never `Keyboard`
+  events plus a guessed curve. A pan inside a scroll view declares its axis, or it steals scroll.
+- Animate transform and opacity; an absolute, childless element (tab pill, progress fill) may
+  animate `width`, keeping the corner radius a `scaleX` would smear. Transform order matters
+  (translate before scale). Never animate Android `elevation` or blur intensity — cross-fade a
+  pre-rendered layer.
+- Screens use the native stack's transitions (tab switches: none; reduced motion: fade); sheets are
+  designed for at most three detents (Android's cap) with explicitly sized content for
+  fit-to-contents. Press feedback fires on press-in and commits on press-out; `hitSlop` widens hits
+  to the target floor. Haptics: one per commit, on the same frame.
+- Judge feel on a release build on the slowest supported device — Expo Go and dev builds are not
+  performance environments; 120 fps on ProMotion needs the `CADisableMinimumFrameDurationOnPhone`
+  Info.plist flag and an 8ms budget.
 
 ## Correctness traps that don't exist on web
 
@@ -296,4 +317,4 @@ library change.
 <!-- sources: millionco/react-doctor (Modified MIT, react-native category, 33 rules, recommendation-string quotes attributed);
 callstackincubator/agent-skills, react-native-best-practices skill (MIT, "The Ultimate Guide to React Native Optimization" by Callstack);
 Expo docs at docs.expo.dev (home, Router, config, CNG, plugins, env, dev builds, EAS Build/Update/Submit, SDK upgrade, image/securestore, Expo UI) — linked under Official Expo docs; facts re-expressed, SDK majors perishable;
-skills.sh expo/skills + vercel-labs/callstackincubator RN skills — optional deeper-dive install table (install counts as of fold date; re-check skills.sh) -->
+skills.sh expo/skills + vercel-labs/callstackincubator RN skills — optional deeper-dive install table (install counts as of fold date; re-check skills.sh); design-fold 2026-11: emilkowalski/skills animate-expo + mobile-native (MIT) — runtime crossing, shared values in render, recycled entering, collapsing header, keyboard tracking, pan axis, width on childless pills, elevation/blur, native stack and sheet detents, press-in/hitSlop, haptics frame, release-build judging, ProMotion flag -->

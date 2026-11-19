@@ -148,5 +148,20 @@
     "id": "positive-agent-run-chat-ui",
     "prompt": "Build the chat UI for our research agent: stream its progress, show tool calls, and let the user approve a send-email action.",
     "should_trigger": true
+  },
+  {
+    "id": "positive-dialog-enter-exit-motion",
+    "prompt": "Our dialog and dropdown popovers snap closed instead of animating out \u2014 implement smooth enter and exit transitions without adding a motion library.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-drag-sheet-gesture",
+    "prompt": "Build a drag-to-dismiss bottom sheet in React: it should follow the finger, spring back or dismiss on release, and never get stuck after a scroll interrupts the drag.",
+    "should_trigger": true
+  },
+  {
+    "id": "negative-scroll-linked-parallax",
+    "prompt": "Pin the hero section and scrub a parallax image sequence as the user scrolls, with Lenis smooth scrolling.",
+    "should_trigger": false
   }
 ]

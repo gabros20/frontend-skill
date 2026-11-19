@@ -227,5 +227,46 @@
       "references/compose.md",
       "references/site-rebuild.md"
     ]
+  },
+  {
+    "id": "accordion-height-motion-react",
+    "prompt": "Animate this React accordion's panel height open and closed and make the chevron rotate; it must respect reduced motion.",
+    "expected_references": [
+      "references/ui-motion.md",
+      "references/react-components-and-state.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md",
+      "references/react-native.md",
+      "references/web-platform-runtime.md"
+    ]
+  },
+  {
+    "id": "button-label-sits-low-typography",
+    "prompt": "The label text sits visibly low inside our pill buttons and badges, and bolding the nav on hover shifts its neighbours \u2014 fix the CSS.",
+    "expected_references": [
+      "references/typography-css.md",
+      "references/web-platform-css.md"
+    ],
+    "forbidden_references": [
+      "references/swiftui.md",
+      "references/compose.md",
+      "references/ui-motion.md"
+    ]
+  },
+  {
+    "id": "figma-file-to-code",
+    "prompt": "Build this pricing section from the linked Figma file in our Next.js + Tailwind app, matching the design's spacing and tokens.",
+    "expected_references": [
+      "references/design-handoff-and-tokens.md",
+      "references/nextjs.md",
+      "references/tailwind.md"
+    ],
+    "forbidden_references": [
+      "references/site-rebuild.md",
+      "references/swiftui.md",
+      "references/compose.md"
+    ]
   }
 ]
