@@ -112,6 +112,9 @@ dialog[open] { opacity: 1; transition-duration: var(--dur-enter); }
 - Offset by the element's own size with percentage translates (`translateY(100%)` hides a drawer of
   any height), never a measured pixel value. A sidebar slides with `translateX`; animating its
   `width` or `margin` re-lays out the page beside it.
+- Product-UI list reorders, filters, and component layout changes live here; an editorial grid
+  opening into a detail or a card morphing into a panel: `scroll-animation` `page-transitions.md`
+  "6. Inside one route: Flip and layoutId".
 
 ## Springs and interruption
 

@@ -8,7 +8,7 @@ Read when:
 - Wiring file upload, progressive enhancement across hydration, or choosing a form library.
 
 Skip when:
-- The question is form layout or visual hierarchy (design's `interaction.md` forms section owns that).
+- The question is form layout or visual hierarchy (`design` `forms.md` "Layout" owns that).
 - The question is the submission's state machine, retry behavior, or optimistic update (`state-and-data.md`).
 - The question is touch-target sizing or focus-ring treatment (`accessibility.md`).
 - The question is text-expansion allowance or locale-correct formatting (`i18n.md`).
@@ -58,7 +58,7 @@ Group related inputs (a radio set, a checkbox set, an address block) inside a `<
 
 The rule is design's (`design` `forms.md` "Validation timing"): submit and Continue stay enabled, and pressing them validates and moves focus to the first error. A disabled button gives a keyboard or screen-reader user no reason they can act on. The one legitimate lock is against a double submission while a valid submission is in flight, and it must not use native `disabled` on the focused submit (focus falls to `<body>`): mark it `aria-disabled="true"`, ignore repeat clicks in the handler, and keep its label with a spinner beside it ("Save" plus spinner tells assistive tech which button is busy). Show "Sending…" only after design's indicator delay (`design` `interaction.md` "Feedback and latency ladder").
 
-**Success is the server's to declare.** A success state renders only from the server's 2xx; a form with no endpoint yet validates, sends nothing, and says so ("Nothing was sent — this form isn't connected yet"). A failed send keeps every typed value and offers retry. On an invalid submit, focus the first invalid field and announce the error count once in a status line; success is announced politely. Add `novalidate` to a form that renders its own errors, or native validation blocks submit first.
+**Success is the server's to declare.** Render success only from the server's 2xx; the unconnected-form behaviour is design's (`design` `interaction.md` "Feedback and latency ladder"). A failed send keeps every typed value and offers retry. On an invalid submit, focus the first invalid field and announce the error count once in a status line; success is announced politely. Add `novalidate` to a form that renders its own errors, or native validation blocks submit first.
 
 ## Progressive enhancement and hydration
 

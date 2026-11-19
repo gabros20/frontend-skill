@@ -603,7 +603,8 @@ Animating a popover or dialog in and out of the top layer (`@starting-style`, `o
 `@view-transition { navigation: auto }` for cross-document (MPA) transitions. Assign
 `view-transition-name` to elements that should morph between states — names must be unique per
 active snapshot, a duplicate breaks the transition. Wrap the trigger in a
-`prefers-reduced-motion` check so reduced-motion becomes a no-op swap, not a suppressed animation
+`prefers-reduced-motion` check so reduced-motion becomes an instant swap or an in-place crossfade
+(`scroll-animation` `page-transitions.md` "8. Reduced motion and pointer events"), not a suppressed animation
 attempt (cite `accessibility.md`'s reduced-motion doctrine — don't restate the media query here).
 The keyframes/easing/duration values applied inside `::view-transition-*` pseudo-elements are
 motion values (`design` `motion.md`); route-change transition craft is `scroll-animation`'s
@@ -654,8 +655,7 @@ Placement and silent-failure modes:
 - **Shared-element morphs are raster snapshots.** Large text size morphs (`h3` → `h1`) scale a
   bitmap ghost. Prefer a text-morph recipe that hides the old and shows a full-res new, not plain
   share of large type.
-- **One driver per navigation.** A custom page-transition curtain and React `<ViewTransition>`
-  never drive the same navigation. Curtain craft and transition verification: `scroll-animation`
+- Curtain craft, driver choice, and transition verification: `scroll-animation`
   `page-transitions.md`.
 
 Next wiring: `experimental.viewTransition: true` (Next 15+ canary / 16+). `addTransitionType` and

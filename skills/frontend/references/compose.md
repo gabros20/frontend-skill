@@ -130,8 +130,8 @@ expression of them:
   `Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)`. Pad, never shrink, to hit the floor.
 - Android has no direct Compose equivalent of iOS's `accessibilityReduceMotion`. Check the OS
   "remove animations" toggle via the system animator-duration-scale setting before starting a
-  non-essential Compose animation; treat it as this platform's expression of the reduced-motion
-  kill-switch in `accessibility.md`.
+  non-essential Compose animation; treat it as this platform's expression of `accessibility.md`
+  "Reduced motion" (the complete-state rule).
 - `contentDescription` on every interactive element (`null` only if purely decorative), describing
   the action, not the appearance ("Add to favorites", not "Heart icon"). Group a compound element
   into one TalkBack focus unit with `Modifier.semantics(mergeDescendants = true)`; expose

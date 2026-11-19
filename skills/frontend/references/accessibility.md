@@ -1,8 +1,7 @@
 # Accessibility implementation
 
-Purpose: canonical home for accessibility implementation mechanics: ARIA patterns, semantic HTML,
-focus management, and the numeric floors (contrast, touch target, reduced motion, focus ring) as
-implemented in code. Cites design-skill's `accessibility.md` as the decision-owner of these same
+Purpose: home for accessibility implementation mechanics: ARIA patterns, semantic HTML, focus
+management, and code for design's contrast, touch-target, reduced-motion, and focus-ring floors. Cites design-skill's `accessibility.md` as the decision-owner of these same
 floors; this file owns the wiring, not the decision of which floor to target.
 
 Read when:
@@ -253,7 +252,8 @@ still page: wrap movement, scale, and blur in `@media (prefers-reduced-motion: n
 (Tailwind `motion-safe:`). Reduced motion targets vestibular triggers, not feedback: drop parallax,
 autoplay and loops, large travel, zoom, and spin; swap slides and scales for a short cross-fade;
 jump instead of smooth-scrolling; start carousels paused. Keep spinners and progress indicators
-running, plus hover color, focus-ring transitions, and brief press feedback. Design may author a
+running, plus hover color and brief press feedback (the focus ring itself never animates: `design`
+`motion.md` "Canonical scale"). Design may author a
 calmer-but-not-zero variant per moment (`design` `motion.md` "Reduced motion").
 
 The blanket kill-switch is a last-resort net for motion you can't scope, not the default:

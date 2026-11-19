@@ -269,7 +269,7 @@ Turbopack equivalent exists yet, `bundler: 'webpack'` is the escape hatch. **SVG
 `removeViewBox: false` (preset-default otherwise drops viewBox when width/height attrs exist and
 breaks coordinate scaling). Wire that into **Turbopack and webpack** svgr rules — Next 16
 `next build` is Turbopack-first. Prefer no width/height presentation attrs; size logos with CSS
-`aspect-ratio` (`css-craft.md` Inline SVG Safari paint traps).
+`aspect-ratio` (`css-craft.md` Inline SVG paint traps and SVG as an image).
 
 `import 'server-only'` at the top of a module enforces the server/client import boundary at build
 time — the build fails if that module is imported from a client component.

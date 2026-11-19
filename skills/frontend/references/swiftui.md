@@ -85,7 +85,7 @@ HIG-conformant accessibility wiring.
 
 ## Accessibility API surface
 
-Canonical doctrine (WCAG ratios, touch-target table, reduced-motion kill-switch) lives in `accessibility.md`; this is the SwiftUI API surface implementing it.
+Canonical doctrine (WCAG ratios, touch-target table, and "Reduced motion" — the complete-state rule) lives in `accessibility.md`; this is the SwiftUI API surface implementing it.
 
 - `.accessibilityLabel()`, `.accessibilityValue()`, `.accessibilityHint()`, `.accessibilityElement(children: .combine)`, `.accessibilityHidden(true)` for decorative images. Labels are nouns, hints are actions.
 - Decorative images → `Image(decorative:)`/`.accessibilityHidden()`; meaningful images → `.accessibilityLabel()`. Flag unhelpful auto-derived names.
