@@ -55,7 +55,8 @@ is roughly 1040dp) rather than letting text or layout stretch to the full viewpo
 screens.
 
 Fluid values via `clamp(MIN, PREFERRED, MAX)`; derive the preferred term, never guess it:
-`slope = (max − min) / (vwMax − vwMin)`, `preferred = (min − slope × vwMin)rem + (slope × 100)vw`
+with all four values in px, `slope = (max − min) / (vwMax − vwMin)` and
+`preferred = ((min − slope × vwMin) ÷ 16)rem + (slope × 100)vw`
 (28→48px across 400→1280px gives `clamp(1.75rem, 1.182rem + 2.273vw, 3rem)`); a guessed `vw`
 coefficient reaches its max at the wrong width. The
 preferred term must mix a `vw` unit with a `rem` unit: a `vw`-only preferred value breaks
@@ -87,8 +88,8 @@ a container query styles only descendants, never the container itself.
 - **Bento/masonry-style grids:** `grid-auto-flow: dense` backfills gaps left by mixed-size cards but
   can reorder tiles away from DOM order; never rely on visual order for tab order or reading order.
   `grid-auto-rows: 1fr` on mobile creates large empty gaps, so restrict equal-height rows to desktop
-  via a min-width query. Native masonry is `display: grid-lanes` (the earlier `masonry`
-  value proposals are superseded; support is still partial per the perishable rule above);
+  via a min-width query. Native masonry is `display: grid-lanes` (support is still partial per the
+  perishable rule above);
   feature-detect with `@supports (display: grid-lanes)` and fall back to an `aspect-ratio`-driven
   row-span trick (`grid-auto-rows: 8px` plus `grid-row: span var(--span)`). Masonry's visual reflow
   can scramble keyboard and screen-reader order, so keep DOM order logical regardless.

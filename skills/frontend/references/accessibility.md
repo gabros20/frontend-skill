@@ -106,8 +106,8 @@ Which of the next three a product must meet is decided in `design` `accessibilit
 decisions design owns"; this is the wiring.
 - **Hover and focus content (1.4.13):** a tooltip opens on hover *and* focus, closes on Escape
   without moving focus, stays open while the pointer is over the tooltip itself (no gap between
-  trigger and bubble, or a short close delay), and never auto-hides on a timer. `title` meets none of
-  this. A tooltip that is the control's only name is wired with `aria-labelledby`, a supplementary
+  trigger and bubble, or a short close delay), and never auto-hides on a timer. `title` is unreachable by
+  keyboard and touch; don't rely on it. A tooltip that is the control's only name is wired with `aria-labelledby`, a supplementary
   one with `aria-describedby`; interactive content belongs in a popover, not a tooltip.
 - **Single-key shortcuts (2.1.4):** ignore them while focus is in an input, textarea, select, or
   `contenteditable`, and ship a setting to disable or remap them.

@@ -234,7 +234,7 @@ Flat icon SVGs may still work. Chromium often fine — verify real Safari, not h
 |---|---|---|
 | Ancestor `content-visibility: auto` | After skip → relevant, HTML repaints; **inline SVG paint not invalidated** | No `content-visibility` / `contain-intrinsic-size` on ancestors of critical inline SVG. See `performance.md` |
 | SVG `width`/`height`/`fill` **presentation attributes** + Tailwind v4 utilities | WebKit treats attrs as **unlayered** author CSS; unlayered beats `@layer utilities` → utilities lose | No sizing/fill presentation attrs when utilities own size/color. Use CSS `aspect-ratio` + `h-*`/`w-*` / `fill-*` |
-| `<g transform="…">` (intermittent) | Transformed groups or text can vanish on some loads in WebKit's legacy SVG engine (open WebKit bugs), usually with a co-factor such as the row above | Don't flatten pre-emptively; if a group vanishes in Safari, flatten its transform into path data as a workaround |
+| `<g transform="…">` (intermittent) | Transformed groups or text can vanish on some loads in WebKit's legacy SVG engine (open WebKit bugs) | Don't flatten pre-emptively; if a group vanishes in Safari, flatten its transform into path data as a workaround |
 | Duplicate ids across inlined SVGs (`url(#id)` in clips, gradients, filters, masks, patterns) | Every engine resolves to the **first** in the document → the second SVG gets the first's filter or an empty clip | Prefix every id per instance, or drop redundant full-viewBox clips |
 | SVGO/svgr strips `viewBox` | Paths unscaled/clipped | Keep `removeViewBox: false` (Turbopack + webpack svgr). See `nextjs.md` |
 
