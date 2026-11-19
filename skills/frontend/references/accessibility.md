@@ -38,7 +38,8 @@ cited floors.
 - Contrast (implementation reference)
 - Touch targets
 - Reduced motion
-- Forced colors and prefers-contrast
+- Text spacing and reflow
+- Forced colors, prefers-contrast, reduced transparency
 - Boundary and routing
 
 ## Semantic HTML
@@ -52,6 +53,21 @@ Enter/Space already fire `click`, so it double-triggers. Never set `tabindex` ab
 
 Progressive enhancement holds structure to three layers: HTML content, links, and forms must work
 with JS off, then CSS, then JS. Each layer degrades to the one below it, not to nothing.
+
+- **Skip link (WCAG 2.4.1):** the first focusable element is a "Skip to content" link to
+  `<main id="main">` (add `tabindex="-1"` on `main` if focus doesn't land), off-screen until
+  `:focus-visible`, then shown above sticky chrome. The first Tab press must reveal it. One visible
+  `<main>`; repeated landmarks get distinguishing labels (`<nav aria-label="Primary">`).
+- **`alt` by purpose:** empty for decoration or redundancy; the meaning for information; the action
+  or destination for a functional image ("Search", not "magnifying glass"); the exact text for an
+  image of text; a short summary plus nearby data for a chart. Never omit `alt` (the filename gets
+  read). Meaningful inline SVG: `role="img"` plus a name; decorative: `aria-hidden="true"`.
+- **Scrolling tables:** a horizontally scrolling wrapper is `role="region"` with an `aria-label`
+  and `tabindex="0"` so keyboard users can scroll it, around a real `<table>` with `<caption>` and
+  `scope`. Give the wrapper `position: relative`: visually hidden text in cells is absolutely
+  positioned and otherwise escapes the scroller and widens the page on phones.
+- **Embedded demos and faux UI** sit inside someone else's outline: their titles are `div`s, never
+  `h1`–`h6`; a decorative demo is `aria-hidden` or one `role="img"` with a label.
 
 ## ARIA patterns
 
@@ -72,10 +88,26 @@ with JS off, then CSS, then JS. Each layer degrades to the one below it, not to 
 - **Combobox/listbox:** reach for the native `<select>` first. A custom combobox needs
   `role="combobox"` plus `aria-expanded` and `aria-controls` pointing at the listbox, arrow-key
   navigation, and `aria-activedescendant` or roving focus inside the popup.
-- **Live regions:** `aria-live="polite"` for non-urgent updates (waits for a pause); `role="alert"`
-  or `aria-live="assertive"` for time-sensitive updates; `role="status"` for status updates. To
-  re-announce the identical message twice, clear the container's `textContent` then set it inside
-  `requestAnimationFrame`; without a real DOM mutation nothing is announced.
+- **Live regions:** pick the channel by ladder — focus moves there anyway → nothing extra; tied to
+  a control → `aria-describedby`; non-urgent → `role="status"` (polite, atomic); urgent →
+  `role="alert"`. Never assertive for success, never focus a toast. **Mount the region empty, then
+  set its text:** a region rendered together with its message is often silent. Loading: `aria-busy`
+  on the region plus a polite "Loading…" then "Loaded, 12 results". To re-announce an identical
+  message, clear `textContent`, then set it inside `requestAnimationFrame`.
+- **Live figures** (a slider-driven diagram, an animated readout): write `aria-valuetext` when the
+  user's choice changes, never from the frame loop (a focused slider announces every change); keep
+  the visual readout separate from the accessible value; a hidden polite region carries only phase
+  changes, debounced (~700ms of quiet for a continuous control).
+- **State attributes are not interchangeable:** `aria-selected` for tabs, options, and grid cells;
+  `aria-current` for the current page, step, or date; `aria-pressed` only on toggle buttons. Keep
+  widget state in that one attribute and style from it (`[aria-selected="true"]`), never a parallel
+  `.is-active` class that can drift.
+- **Common defects:** `aria-label` on a generic `div`/`span` (ignored); `role="menu"` on site
+  navigation (it promises an app-menu key model — nav is `<nav>` plus a list); redundant roles
+  (`<button role="button">`); `aria-labelledby`/`-describedby` pointing at a missing id (silently
+  no name); both `disabled` and `aria-disabled`; a tooltip on a natively disabled control (it never
+  opens for keyboard or touch — show the reason beside it, or use `aria-disabled`); a navigating
+  "button" that isn't a styled `<a>` (loses Cmd/Ctrl/middle-click).
 - **`aria-hidden` must agree with focusability:** no focusable descendant inside `aria-hidden`, no
   `aria-hidden` on `<body>`, no `aria-hidden` on a focusable element itself. A focused-but-invisible-
   to-AT state is a real failure mode, not a style nit.
@@ -95,14 +127,20 @@ with JS off, then CSS, then JS. Each layer degrades to the one below it, not to 
 For the ten most common composite patterns (tabs, accordion, modal, combobox, alert, tooltip, menu,
 tree, breadcrumb, live region), build from the ARIA Authoring Practices Guide (MDN/W3C) using the
 rules above as the cross-cutting constraints; do not invent a bespoke attribute set per component.
+Escape closes the most recently opened layer first (tooltip, then menu, then dialog). A menu button
+opens on Enter/Space/↓ focusing the first item and on ↑ focusing the last; Escape closes and returns
+focus. Enter in a textarea inserts a newline; ⌘/Ctrl+Enter submits only where wired.
 
 ## Focus management
 
 - **`:focus-visible` is the canonical fix** for "never `outline: none` without a replacement": hide
   the ring on `:focus` (mouse), show it on `:focus-visible` (keyboard). Ring at least 3:1 contrast
   against every adjacent background, 2 to 3px thick, `outline-offset` 2 to 4px (not inset; inset
-  clips on rounded corners). Safe default recipe: `outline: 2px solid currentColor;
-  outline-offset: 2px` (inherits text color, already contrast-checked).
+  clips on rounded corners). Default: keep the browser's ring and add `outline-offset: 2px` (it
+  adapts to the platform and forced colors). A custom ring uses a focus token verified against every
+  color it crosses — fills, page, images, hover and selected states. `currentColor` is not
+  pre-verified: a white-label button draws a white ring on a white page. Composite fields (an input
+  with an icon inside one border) draw the ring on the wrapper with `:focus-within`.
 - Focus order follows visual/reading order. No positive `tabindex`, ever.
 - **Focus not obscured** (WCAG 2.4.11/2.4.12): a focused element must not sit fully behind a sticky
   header or footer. Size `scroll-margin-top`/`scroll-margin-bottom` to the sticky element's height
@@ -130,7 +168,8 @@ Set `--header-block-size` to the real sticky header block size (update when the 
 `:where()` keeps specificity zero so local overrides win. Apply the equivalent
 `scroll-margin-block-end` when a sticky footer can obscure focus. Order of operations: define the
 margin before relying on hash navigation or `scrollIntoView` — without it, the browser scrolls the
-target flush to the viewport edge under the chrome.
+target flush to the viewport edge under the chrome. Scroller `scroll-padding` and target
+`scroll-margin` add up: use one per sticky element, or targets land a header-height too low.
 
 ## Label-in-Name (WCAG SC 2.5.3)
 
@@ -141,38 +180,22 @@ existing visible text.
 
 ## CSS generated content — accessible name
 
-CSS `content:` / `::before` / `::after` can produce text that some assistive tech exposes and some
-ignore, depending on browser and whether the content is treated as decorative. Order of operations
-when using generated content:
-
-1. **Prefer real DOM text** for anything meaningful (labels, status words, icons that carry meaning
-   via a visible character). Generated content is a last resort for meaningful names.
-2. **Decorative only:** keep `content: ""` (empty) or purely ornamental glyphs, and ensure the
-   accessible name comes from the element or an associated label — not from `content`.
-3. **If generated text must convey meaning:** provide an accessible name strategy on the host
-   element (`aria-label` / visually-hidden text / `alt` on replaced content) that matches what
-   sighted users see. Do not assume `content: "…"` alone is announced everywhere.
-4. **Speech/`/` alt for CSS content** (Sara Soueidan / emerging support): where the platform
-   supports alternative text for generated content, supply it; still ship a DOM-level name so older
-   AT is covered.
-
-Agents commonly emit decorative `::before` icons with no name plan — treat that as a review fail
-when the control would otherwise be unlabeled.
+CSS `content:` text is exposed by some assistive tech and ignored by others. Meaningful names come
+from real DOM text or the host element (`aria-label`, visually hidden text, `alt`), never from
+`content` alone; keep generated content decorative (`content: ""` or ornamental glyphs), and where
+the platform supports alternative text for generated content (`content: "★" / ""`), supply it as
+well as a DOM-level name. A decorative `::before` icon on an otherwise unlabeled control is a review
+fail. Decorative copies of real text (echo, outline, or shadow layers, marquee duplicates, a
+letter-roll's second span) sit outside headings and links as `aria-hidden` siblings; a copy inside
+`<h1>` reads "Name Name" to search and screen readers.
 
 ## Container-query art direction and `alt`
 
-Container queries and `<picture>` can swap crops, aspect ratios, or entirely different art per
-container size. **`alt` cannot change with the active source** — there is one accessible name for
-the image, not one per candidate. Risk: art direction that changes *meaning* (product A → product
-B, face → logo, warning → decoration) creates a content mismatch for AT users. Order of operations:
-
-1. Keep art-direction variants the **same subject**; only crop/scale/lighting changes.
-2. If meaning must change by breakpoint, use separate images in the DOM (with their own `alt`) or
-   change the surrounding copy — do not rely on one `<img alt>` spanning contradictory sources.
-3. Decorative swaps use `alt=""` only when every candidate is decorative.
-
-Responsive-image performance mechanics live in `performance.md`; this section owns the a11y
-constraint on art direction.
+`<picture>` and container queries can swap crops or whole images per size, but `alt` cannot change
+with the active source. Keep art-direction variants the same subject (crop, scale, lighting only);
+when meaning must change by breakpoint, use separate images with their own `alt`, or change the
+surrounding copy. `alt=""` only when every candidate is decorative. Responsive-image performance:
+`performance.md`.
 
 ## Contrast (implementation reference)
 
@@ -181,8 +204,8 @@ verifying an implementation against them.
 
 | Content | WCAG 2 ratio |
 |---|---|
-| Normal text (<18px / <14px bold) | 4.5:1 AA, 7:1 AAA |
-| Large text (≥18px / ≥14px bold) | 3:1 AA, 4.5:1 AAA |
+| Normal text (<24px / <18.66px bold) | 4.5:1 AA, 7:1 AAA |
+| Large text (≥24px, or ≥18.66px bold — WCAG's 18pt / 14pt) | 3:1 AA, 4.5:1 AAA |
 | UI components, graphical objects, focus rings | 3:1 AA |
 
 Error and success colors must themselves clear 4.5:1. Re-verify contrast separately in dark mode; it
@@ -192,18 +215,34 @@ commonly fails on secondary text and disabled states even when light mode passes
 
 | Surface | Minimum interactive target | Source |
 |---|---|---|
-| Web | 24×24 CSS px, ≥24px spacing between adjacent targets (comfortable/AAA: 44×44) | WCAG 2.2 SC 2.5.8 AA |
+| Web | 24×24 CSS px, or the spacing exception below (comfortable/AAA: 44×44) | WCAG 2.2 SC 2.5.8 AA |
 | iOS / iPadOS | 44×44 pt | Apple HIG |
 | Android | 48×48 dp | Material 3 |
 
+Spacing exception, as tested: an undersized target passes when a 24 CSS px circle centred on its
+bounding box intersects no other target and no other undersized target's circle. Inline links,
+UA-styled controls, an equivalent control elsewhere, and essential sizes are also exempt.
+
 The target is the interactive area, not the visual glyph. Expand hit area with padding or
-`::after { inset: -10px }`, never by enlarging the visible icon. Keep at least 8px/8dp between
-adjacent targets.
+`::after { inset: -10px }`, never by enlarging the visible icon. Put the expansion on the `<label>`
+wrapping an input or on the `<button>` — form controls don't render pseudo-elements reliably, and a
+wrapper that isn't the label takes the click and toggles nothing — and shrink any expansion that
+would overlap a neighbour's. Keep at least 8px/8dp between adjacent targets. Every drag ships a
+single-pointer path to the same result (2.5.7: move buttons on sortable rows, a menu on board
+cards), and every multi-point or path gesture a tap alternative (2.5.1).
 
 ## Reduced motion
 
 The single highest-convergence fact in the corpus this file draws from. `prefers-reduced-motion` is
-a required, complete state, not an add-on:
+a required, complete state, not an add-on. Author motion opt-in, so the base CSS is the finished,
+still page: wrap movement, scale, and blur in `@media (prefers-reduced-motion: no-preference)`
+(Tailwind `motion-safe:`). Reduced motion targets vestibular triggers, not feedback: drop parallax,
+autoplay and loops, large travel, zoom, and spin; swap slides and scales for a short cross-fade;
+jump instead of smooth-scrolling; start carousels paused. Keep spinners and progress indicators
+running, plus hover color, focus-ring transitions, and brief press feedback. Design may author a
+calmer-but-not-zero variant per moment (`design` `motion.md` "Reduced motion").
+
+The blanket kill-switch is a last-resort net for motion you can't scope, not the default:
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -216,20 +255,52 @@ a required, complete state, not an add-on:
 }
 ```
 
-This is a default kill-switch, not the only valid response. Design may author a calmer-but-not-zero
-variant for motion that carries meaning (see design-skill's `motion.md` for the duration/easing
-scale); absent that decision, ship the kill-switch. The same principle expressed per platform:
-SwiftUI's `accessibilityReduceMotion` environment value swapping to an opacity crossfade instead of
-parallax/large motion (`swiftui.md`); an equivalent state swap in Compose/Android. No content
-flashes above 3Hz (WCAG 2.3.1, seizure risk) regardless of the reduced-motion setting.
+- It freezes indeterminate spinners, skeleton pulses, and progress bars at one iteration, which
+  erases their "busy" meaning: re-declare essential indicators inside the block, or swap them for
+  an opacity pulse. It also makes meaning-carrying state fades instant; audit for lost feedback.
+- `0.01ms`, not `0s`, so code waiting on `transitionend`/`animationend` still runs.
+- It does not stop scroll-driven animations (their timeline ignores duration): reset those with
+  `animation: none` (`scroll-animation` `accessibility.md` "Per engine and API").
 
-## Forced colors and prefers-contrast
+**Pause control (WCAG 2.2.2):** anything that moves on its own for more than five seconds beside
+other content — marquee, carousel, ticker, ambient loop, muted background video — ships a visible,
+focusable pause control (rendered only when script runs, since without script the loop never
+starts), pauses on hover and `:focus-within`, runs only while on screen, and stops in CSS, not only
+JS, under reduced motion. Auto-updating content gets pause or frequency control. No content flashes
+above 3Hz (WCAG 2.3.1, seizure risk) regardless of the reduced-motion setting.
+
+The same principle per platform: SwiftUI's `accessibilityReduceMotion` swapping to an opacity
+crossfade instead of parallax or large motion (`swiftui.md`); an equivalent state swap in Compose.
+Implementation patterns for motion code (gestures keep tracking, registry components, animated
+text): `ui-motion.md`.
+
+## Text spacing and reflow
+
+- **Text spacing (WCAG 1.4.12), runnable:** inject `* { line-height: 1.5 !important;
+  letter-spacing: .12em !important; word-spacing: .16em !important } p { margin-bottom: 2em
+  !important }` and screenshot. Nothing may clip, overlap, or vanish; fixed `height` with
+  `overflow: hidden` and fixed-width buttons fail first — use `min-height` and intrinsic sizing.
+  Contrast, 200% zoom, and text spacing fail independently.
+- **Reflow:** write breakpoints in `rem`/`em` so enlarged default text triggers the narrow layout
+  (px queries don't). Two-dimensional content (tables, maps, code) may scroll inside its own box;
+  nothing else scrolls sideways at 320px. A modal is `max-height: 100dvh` with a scrolling body and
+  its action row outside the scroll.
+
+## Forced colors, prefers-contrast, reduced transparency
 
 `prefers-contrast: more` is macOS/iOS "Increase Contrast"; `forced-colors: active` is Windows High
 Contrast Mode. It overrides your colors, so respect it with system color keywords (`ButtonText`,
-`ButtonFace`, `ButtonBorder`) rather than fighting it. Declare `color-scheme: light dark` so native
-form controls and scrollbars match the active theme (the CSS mechanism for dark-mode theming lives
-in `web-platform-css.md`).
+`ButtonFace`, `ButtonBorder`, `Highlight`) rather than fighting it; use `forced-color-adjust: none`
+only after checking the result. Declare `color-scheme: light dark` so native form controls and
+scrollbars match the active theme (the CSS mechanism for dark-mode theming lives in
+`web-platform-css.md`).
+
+- Forced colors strips `box-shadow`: an edge or focus ring drawn with a shadow needs a
+  `border: 1px solid transparent` (or a real outline) beneath it, which the mode paints.
+- Write increased-contrast overrides per appearance (`(prefers-color-scheme: dark) and
+  (prefers-contrast: more)` separately); one shared block darkens colors on dark backgrounds too.
+- `prefers-reduced-transparency: reduce` turns glass solid: near-opaque background, no
+  `backdrop-filter`. Under `prefers-contrast: more`, a near-solid surface with a defined border.
 
 ## Boundary and routing
 
@@ -243,4 +314,4 @@ in `web-platform-css.md`).
 - SPA focus-on-route-change, scroll restoration, History API: `web-platform-runtime.md`.
 - Dataviz charting-library selection and its a11y-fallback pairing: `shadcn.md`.
 
-<!-- sources: ehmo_platform-design-skills (MIT) - semantic HTML table, ARIA quick-reference, forms/touch/dark-mode sections; cuellarfr_design-skills (MIT) - modal focus-trap, roving-tabindex, ARIA live-region roles; dembrandt_dembrandt-skills (no license, facts re-expressed; MDN/WCAG/web.dev cited) - modal/overlay hierarchy, tabs ARIA spec, focus-ring CSS; pbakaus_impeccable (Apache-2.0, NOTICE credits ehmo) - :focus-visible rule, inert attribute, Popover API, native <dialog> vs manual trap; millionco/react-doctor (Modified MIT, recommendation strings re-expressed) - aria-hidden-and-focusability family, disabled-but-explained pattern, data-table a11y; accessibility skill (MIT, web-quality-skills) - WCAG 2.2 new criteria (focus-not-obscured), visually-hidden CSS, live-region re-trigger recipe; saadeghi/daisyui (MIT) - native <dialog> vs Popover-API modal decision; swiftui-pro/twostraws (MIT) - reduced-motion opacity-crossfade pattern; WCAG 2.2 (W3C), MDN cited for numeric floors and API references, no verbatim prose copied; x-bookmarks.md #10 (@tak_dcxi) - :where([id], :focus) scroll-margin-block-start default recipe; Sara Soueidan (X + blog) - CSS generated-content accessible name strategy; Sara Soueidan / authors-architecture - container-query art direction, alt cannot change with active source. -->
+<!-- sources: ehmo_platform-design-skills (MIT) - semantic HTML table, ARIA quick-reference, forms/touch/dark-mode sections; cuellarfr_design-skills (MIT) - modal focus-trap, roving-tabindex, ARIA live-region roles; dembrandt_dembrandt-skills (no license, facts re-expressed; MDN/WCAG/web.dev cited) - modal/overlay hierarchy, tabs ARIA spec, focus-ring CSS; pbakaus_impeccable (Apache-2.0, NOTICE credits ehmo) - :focus-visible rule, inert attribute, Popover API, native <dialog> vs manual trap; millionco/react-doctor (Modified MIT, recommendation strings re-expressed) - aria-hidden-and-focusability family, disabled-but-explained pattern, data-table a11y; accessibility skill (MIT, web-quality-skills) - WCAG 2.2 new criteria (focus-not-obscured), visually-hidden CSS, live-region re-trigger recipe; saadeghi/daisyui (MIT) - native <dialog> vs Popover-API modal decision; swiftui-pro/twostraws (MIT) - reduced-motion opacity-crossfade pattern; design-fold 2026-11 (MIT unless noted; detail in SOURCES.md): jakubkrehel/skills - large-text and 2.5.8 corrections, focus token, hit-area placement, live-region ladder, ARIA defects, skip link, reflow, forced-colors shadows, opt-in reduced motion; emilkowalski/skills + iart-ai/web-animation-skills - kill-switch casualties, reduced transparency; pbakaus/impeccable (Apache-2.0) - circle test; jpoindexter/typography-skills - 1.4.12 check; Nutlope/hallmark + Leonxlnx/taste-skill - pause control; majestic-ui-skill - scroll region; juliobsz/skills, MengTo/skills, wheresryan22/anatomy, benjitaylor/skills - duplicate text, state attributes, live figures, embedded demos; WCAG 2.2 (W3C), MDN cited for numeric floors and API references, no verbatim prose copied; x-bookmarks.md #10 (@tak_dcxi) - :where([id], :focus) scroll-margin-block-start default recipe; Sara Soueidan (X + blog) - CSS generated-content accessible name strategy; Sara Soueidan / authors-architecture - container-query art direction, alt cannot change with active source. -->
