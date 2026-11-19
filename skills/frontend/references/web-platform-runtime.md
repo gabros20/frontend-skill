@@ -10,7 +10,8 @@ Read when:
 - Fixing mobile browser-chrome, viewport, or safe-area bugs (especially iOS Safari).
 - Adding an installable PWA, offline caching, or a background/hero video.
 - Wiring scroll-scrubbed or seek-driven media (client traps only — not choreography).
-- Wiring `document.startViewTransition()` or React `<ViewTransition>` for a route or state change.
+- Wiring `document.startViewTransition()` or React `<ViewTransition>` for a component state change
+  (a route-level transition is `scroll-animation`'s).
 
 Skip when:
 - The question is CSS layout, breakpoints, or container queries — read `web-platform-css.md`.
@@ -597,48 +598,38 @@ Animating a popover or dialog in and out of the top layer (`@starting-style`, `o
 
 ## View Transitions wiring (browser + React layer)
 
+**Who owns which.** A route-level view transition and its wiring (a navigation's
+`startViewTransition`, React `<ViewTransition>` on pages, cross-document `@view-transition`, types,
+curtains, verification) is `scroll-animation`'s: `page-transitions.md` "The view-transitions block",
+which holds the one browser-support matrix and the measured React and Next requirements. This file
+owns a view transition for a UI state change inside a component (a tab or view swap, a toggle, a
+list reorder or filter) and the mechanism both share.
+
 ### Browser API
 
-`document.startViewTransition(updateCallback)` for same-document (SPA) transitions;
-`@view-transition { navigation: auto }` for cross-document (MPA) transitions. Assign
-`view-transition-name` to elements that should morph between states — names must be unique per
-active snapshot, a duplicate breaks the transition. Wrap the trigger in a
-`prefers-reduced-motion` check so reduced-motion becomes an instant swap or an in-place crossfade
-(`scroll-animation` `page-transitions.md` "8. Reduced motion and pointer events"), not a suppressed animation
-attempt (cite `accessibility.md`'s reduced-motion doctrine — don't restate the media query here).
-The keyframes/easing/duration values applied inside `::view-transition-*` pseudo-elements are
-motion values (`design` `motion.md`); route-change transition craft is `scroll-animation`'s
-(`page-transitions.md`); this file owns only the mechanism.
-
-Browser floor (verify current support before relying): Chromium 111+, Firefox 144+, Safari 18.2+;
-**graceful no-op elsewhere** — never polyfill. Unsupported engines simply apply the DOM update
-without a transition. Same-document landed earlier than cross-document; Level 2 types /
-`:active-view-transition-type` / object-form `startViewTransition({update, types})` lag on some
-engines — don't rely on types without fallback CSS. Safari 18 has reported canvas/WebGL VT bugs;
-feature-detect and progressive enhance.
+`document.startViewTransition(update)` snapshots, runs the DOM update, then animates between the
+snapshots; elements sharing a `view-transition-name` morph. Names must be unique per active
+snapshot: a duplicate aborts the transition. Feature-detect and let unsupported engines apply the
+update without a transition; never polyfill, and never rely on transition types without fallback
+CSS. Reduced motion becomes an instant swap or an in-place crossfade (`accessibility.md`), not a
+suppressed attempt. Keyframes, easing and durations inside `::view-transition-*` are `design`
+`motion.md` values.
 
 ### React `<ViewTransition>` layer
 
-React's `<ViewTransition>` auto-assigns `view-transition-name` and calls `startViewTransition` for
-you. **Never call `document.startViewTransition` yourself when using the component** — double-start
-races cancel or corrupt the transition. Without Next: needs `react@canary` / `react-dom@canary`
-(not in stable React). **With Next App Router: do not install canary-react** — Next already ships
-canary-react; `npm ls react` can report a stable-looking version while VT still works. Agents that
-force-install canary on Next fight the framework's dependency tree.
+React's `<ViewTransition>` assigns the names and starts the transition. **Never call
+`document.startViewTransition` yourself when using the component**: a double start cancels or
+corrupts the transition. Never force-install canary React into a Next app to get it; the versions
+it needs are in `scroll-animation` `page-transitions.md` "Which tool".
 
 Placement and silent-failure modes:
 - **`default="none"` liberally.** A bare VT without `default="none"` fires a cross-fade on *every*
   sibling transition. Type-keyed enter/exit maps require a `default` key (TypeScript); missing
   falls back to `"auto"` and surprises you with cross-fades.
-- **Nested VT under a layout VT kills page enter/exit.** A parent layout VT wrapping `{children}`
-  means nested page-level VTs never fire enter/exit. Agents add both and see "nothing animates."
-  Structure so page enter/exit is not nested under an always-mounted layout VT, or isolate names
-  deliberately.
 - **Only one mounted VT per `name`.** Reusable components rendered in a modal *and* on the page
   break shared morphs. Scope names by ID (`hero-${id}`), never a static component-local string.
 - **`share` takes precedence over `enter`/`exit`.** When a pair exists, share wins; when no pair,
-  enter/exit fire. Plan fallbacks. Do not fade-out exit on pages that rely on shared morphs (use a
-  directional slide recipe from `scroll-animation` `page-transitions.md`).
+  enter/exit fire. Plan the fallback.
 - **Force re-enter via remounting `key` on Suspense with caution** — remounts the boundary and
   **refetches**.
 - **Persistent chrome / floating UI** (header, popover, tooltip): assign a unique
@@ -655,14 +646,9 @@ Placement and silent-failure modes:
 - **Shared-element morphs are raster snapshots.** Large text size morphs (`h3` → `h1`) scale a
   bitmap ghost. Prefer a text-morph recipe that hides the old and shows a full-res new, not plain
   share of large type.
-- Curtain craft, driver choice, and transition verification: `scroll-animation`
-  `page-transitions.md`.
 
-Next wiring: `experimental.viewTransition: true` (Next 15+ canary / 16+). `addTransitionType` and
-programmatic navigation that participates in VT require Client Components.
-
-For full depth on React/Next View Transitions (placement recipes, TypeScript maps, Next flags),
-install optionally: `npx skills add vercel-labs/agent-skills@vercel-react-view-transitions`.
+For React placement recipes and TypeScript maps, install optionally:
+`npx skills add vercel-labs/agent-skills@vercel-react-view-transitions`.
 
 <!-- sources: ehmo_platform-design-skills web/SKILL.md + rules/_sections.md (MIT, attribution
 required) - triage-cuellarfr-dembrandt-ehmo.md, triage-pbakaus-ehmo-web.md; dembrandt-skills

@@ -17,8 +17,8 @@ Skip when:
 - Scroll-linked motion, scroll reveals and entrances, page transitions, smooth scroll:
   `scroll-animation`.
 - The reduced-motion floor and pause-control rule themselves: `accessibility.md` (Reduced motion).
-- React Native / Expo motion: `react-native.md` (Gesture and animation threading). View Transitions
-  API wiring: `web-platform-runtime.md`.
+- React Native / Expo motion: `react-native.md` (Gesture and animation threading). A view transition
+  for a component state change: `web-platform-runtime.md`; route-level ones: `scroll-animation`.
 
 Inputs: design's motion spec or the project's motion tokens, the stack and any installed motion
 library, the target devices.
@@ -204,8 +204,9 @@ Compositor-safe properties, `will-change`, and paint traps: `performance.md` and
 ## Animated text and numbers
 
 - Rolling numbers, scrambles, split text, and typewriters expose the final value once
-  (`aria-label` on the wrapper or an `sr-only` copy) and `aria-hidden` the moving pieces; ten spans
-  per digit otherwise read "0123456789".
+  (an `sr-only` copy, or `aria-label` only on an element whose role allows a name; ARIA prohibits
+  naming a generic `span` or `div`) and `aria-hidden` the moving pieces; ten spans per digit
+  otherwise read "0123456789".
 - Digit reel: one `1ch` `tabular-nums` column per digit, clipped vertically, taking the shortest
   way round 0–9; roll on a value change, never on mount; the currency sign sits outside the rolling
   digits. Split by grapheme (`Intl.Segmenter`), never `split('')`.

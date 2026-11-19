@@ -7,8 +7,19 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 
 ## [Unreleased]
 
-### Added
-- Queue unreleased changes here.
+### Changed
+- View transitions split by the family seam ruling: route-level transitions and their wiring are
+  `scroll-animation`'s, a component's state transition is frontend's. `web-platform-runtime.md`
+  "View Transitions wiring" keeps the shared mechanism and the component-level React placement
+  traps, and points to `scroll-animation` `page-transitions.md` "The view-transitions block" for
+  the one browser-support matrix and "Which tool" for React and Next requirements. Removed the
+  duplicated browser floor, the Next flag line and the nested-layout trap (route-level);
+  `nextjs.md` and `ui-motion.md` point the same way.
+
+### Fixed
+- `ui-motion.md` "Animated text and numbers": expose the final value through an `sr-only` copy, or
+  `aria-label` only on an element whose role allows a name (ARIA prohibits naming a generic `span`
+  or `div`); was "`aria-label` on the wrapper".
 
 ## [0.5.0] — 2026-11-19
 
