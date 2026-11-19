@@ -115,9 +115,10 @@ The code side of layered, collage, and poster-led sections; design specifies the
 stages (`design` `composition-layers.md` "The plane stack", "Text and image interleave",
 "Responsive stage or flow", "Floors and performance").
 
-- **Stage:** a size container with a locked `aspect-ratio`; place and size layers in container
-  units (`cqi`/`cqw`) so the picture scales as one, and swap stages (wide, tall) with a container
-  query. When text inside hits its size floor, switch stage — never shrink text further.
+- **Stage:** a wrapper is the size container (`container-type: inline-size`); the stage inside it
+  takes the locked `aspect-ratio`, and layers are placed and sized in container units (`cqi`/`cqw`)
+  so the picture scales as one. A container query styles only descendants, so swap stages (wide,
+  tall) from the wrapper's query, never on the stage itself. When text inside hits its size floor, switch stage — never shrink text further.
 - **Flow:** overlap through shared grid cells (Grid single-cell stacking above), not absolute
   offsets, so layers restack in reading order on narrow screens.
 - **Interleave:** type behind a subject is real text under an alpha image, never text baked into
