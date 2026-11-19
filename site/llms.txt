@@ -35,11 +35,13 @@ SKILL.md is a faceted router: one primary job, at most one platform overlay (nat
 - `design-handoff-and-tokens.md` — handoff.yaml / DESIGN.md consumption
 - `client-architecture.md` — feature folders, import zones, section registries
 - `site-rebuild.md` — faithful rebuild/migration of a site the client owns: render capture, asset harvest, no substitution, pixel-diff fidelity gate
+- `ui-motion.md` — UI and component motion: driver ladder, enter/exit, height-auto and FLIP, springs, gestures and drag, verification
 
 ### Platform · web
 - `web-platform-css.md` — layout, stacking, color-gamut / color-management
 - `web-platform-runtime.md` — Safari/iOS, dual-codec video Pattern A, scrub traps, View Transitions
 - `css-craft.md` — blur/backdrop/will-change craft, scrollbars, micro-patterns
+- `typography-css.md` — unitless leading, synthesis, OpenType features, text-box trim, wrapping
 - `js-dom-craft.md` — observers, AbortController, media IO abort, timing
 
 ### Platform · native
