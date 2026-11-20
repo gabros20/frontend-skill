@@ -7,6 +7,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 
 ## [Unreleased]
 
+### Added
+- Queue unreleased changes here.
+
+## [0.5.1] — 2026-11-20
+
 ### Changed
 - View transitions split by the family seam ruling: route-level transitions and their wiring are
   `scroll-animation`'s, a component's state transition is frontend's. `web-platform-runtime.md`
@@ -224,6 +229,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 - Evaluation fixtures across four dimensions — activation, traversal, output, and
   compression-ablation — replacing the placeholder sets.
 
+[0.5.1]: https://github.com/gabros20/frontend-skill/releases/tag/v0.5.1
 [0.5.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.5.0
 [0.4.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.4.0
 [0.3.0]: https://github.com/gabros20/frontend-skill/releases/tag/v0.3.0
